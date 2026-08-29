@@ -47,48 +47,18 @@
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                     </div>
                     <div class="flex items-center gap-1.5">
-                        <span class="font-extrabold text-lg tracking-tight text-navy">LAPAK<span class="text-blue-600">OTP</span></span>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">GATEWAY</span>
+                        <span class="font-extrabold text-lg tracking-tight text-navy">WHATSAPP<span class="text-blue-600">GATEWAY</span></span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">ENTERPRISE</span>
                     </div>
                 </a>
 
                 <!-- Nav Menu Items -->
                 <nav class="space-y-1 text-xs font-semibold">
-                    <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        Workspace
-                    </div>
-
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
-                        <span>Dashboard Overview</span>
-                    </a>
-
-                    <a href="{{ route('devices.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('devices.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                        <div class="flex items-center gap-2.5">
-                            <i data-lucide="smartphone" class="w-4 h-4 flex-shrink-0"></i>
-                            <span>Perangkat WA</span>
-                        </div>
-                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700 border border-blue-200/50' }}">v7.0</span>
-                    </a>
-
-                    <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                        <i data-lucide="send" class="w-4 h-4 flex-shrink-0"></i>
-                        <span>Kirim & Log Pesan</span>
-                    </a>
-
-                    <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                        <i data-lucide="key" class="w-4 h-4 flex-shrink-0"></i>
-                        <span>API Keys & Docs</span>
-                    </a>
-
-                    <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                        <i data-lucide="webhook" class="w-4 h-4 flex-shrink-0"></i>
-                        <span>Webhook Callbacks</span>
-                    </a>
-
-                    @if(auth()->user()->isAdmin())
-                        <div class="pt-4 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-t border-slate-100 mt-3">
-                            Administrator Panel
+                    @if(request()->routeIs('admin.*'))
+                        <!-- ADMIN PANEL NAVIGATION -->
+                        <div class="px-3 py-1 text-[10px] font-bold text-blue-600 uppercase tracking-wider flex items-center justify-between">
+                            <span>Administrator Panel</span>
+                            <span class="px-1.5 py-0.5 rounded text-[9px] bg-blue-100 text-blue-700 font-extrabold">ADMIN</span>
                         </div>
 
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
@@ -110,6 +80,62 @@
                             <i data-lucide="bot" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Server Bot OTP</span>
                         </a>
+
+                        <!-- Button Switch Back to User Workspace -->
+                        <div class="pt-4 border-t border-slate-100 mt-4">
+                            <a href="{{ route('dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-xs border border-slate-200/80 group">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="arrow-left" class="w-4 h-4 text-slate-500 group-hover:-translate-x-0.5 transition-transform"></i>
+                                    <span>Workspace User</span>
+                                </div>
+                            </a>
+                        </div>
+                    @else
+                        <!-- USER WORKSPACE NAVIGATION -->
+                        <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            Workspace
+                        </div>
+
+                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Dashboard Overview</span>
+                        </a>
+
+                        <a href="{{ route('devices.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('devices.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="smartphone" class="w-4 h-4 flex-shrink-0"></i>
+                                <span>Perangkat WA</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700 border border-blue-200/50' }}">v7.0</span>
+                        </a>
+
+                        <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="send" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Kirim & Log Pesan</span>
+                        </a>
+
+                        <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="key" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>API Keys & Docs</span>
+                        </a>
+
+                        <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="webhook" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Webhook Callbacks</span>
+                        </a>
+
+                        @if(auth()->user()->isAdmin())
+                            <!-- Button Switch to Admin Panel (Only for Admin User) -->
+                            <div class="pt-4 border-t border-slate-100 mt-4">
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold shadow-sm shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 transition-all text-xs group">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="shield" class="w-4 h-4 text-blue-200"></i>
+                                        <span>Dashboard Admin</span>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-blue-200 group-hover:translate-x-0.5 transition-transform"></i>
+                                </a>
+                            </div>
+                        @endif
                     @endif
                 </nav>
 
@@ -186,8 +212,22 @@
                     </div>
                 </div>
 
-                <!-- Right: Telemetry Engine Badge -->
-                <div class="flex items-center gap-3">
+                <!-- Right: Telemetry Engine Badge & Quick Switcher -->
+                <div class="flex items-center gap-2.5">
+                    @if(auth()->user()->isAdmin())
+                        @if(request()->routeIs('admin.*'))
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors border border-slate-200/80" title="Beralih ke Panel Workspace User">
+                                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-600"></i>
+                                <span class="hidden sm:inline">Panel User</span>
+                            </a>
+                        @else
+                            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-colors border border-blue-200/70" title="Beralih ke Dashboard Admin">
+                                <i data-lucide="shield" class="w-3.5 h-3.5 text-blue-600"></i>
+                                <span class="hidden sm:inline">Dashboard Admin</span>
+                            </a>
+                        @endif
+                    @endif
+
                     <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/70 rounded-full text-xs font-semibold shadow-2xs">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                         <span class="hidden sm:inline">Engine v7.0 Ready</span>
@@ -258,38 +298,12 @@
                 </div>
 
                 <nav class="space-y-1 text-xs font-semibold">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                        <span>Dashboard Overview</span>
-                    </a>
-
-                    <a href="{{ route('devices.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('devices.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                        <div class="flex items-center gap-2.5">
-                            <i data-lucide="smartphone" class="w-4 h-4"></i>
-                            <span>Device WhatsApp</span>
+                    @if(request()->routeIs('admin.*'))
+                        <div class="px-2 text-[10px] font-bold text-blue-600 uppercase tracking-wider flex items-center justify-between">
+                            <span>Administrator Panel</span>
+                            <span class="px-1.5 py-0.5 rounded text-[9px] bg-blue-100 text-blue-700 font-extrabold">ADMIN</span>
                         </div>
-                        <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700' }}">Live</span>
-                    </a>
 
-                    <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                        <i data-lucide="send" class="w-4 h-4"></i>
-                        <span>Kirim Pesan & Log</span>
-                    </a>
-
-                    <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                        <i data-lucide="key" class="w-4 h-4"></i>
-                        <span>API Keys & Docs</span>
-                    </a>
-
-                    <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                        <i data-lucide="webhook" class="w-4 h-4"></i>
-                        <span>Webhook Callback</span>
-                    </a>
-
-                    @if(auth()->user()->isAdmin())
-                        <div class="pt-3 px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Administrator Panel
-                        </div>
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
                             <i data-lucide="shield" class="w-4 h-4"></i>
                             <span>Admin Overview</span>
@@ -306,6 +320,59 @@
                             <i data-lucide="bot" class="w-4 h-4"></i>
                             <span>Server Bot OTP</span>
                         </a>
+
+                        <div class="pt-3 border-t border-slate-100 mt-3">
+                            <a href="{{ route('dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-xs border border-slate-200/80">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="arrow-left" class="w-4 h-4 text-slate-500"></i>
+                                    <span>Workspace User</span>
+                                </div>
+                            </a>
+                        </div>
+                    @else
+                        <div class="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            Workspace
+                        </div>
+
+                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                            <span>Dashboard Overview</span>
+                        </a>
+
+                        <a href="{{ route('devices.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('devices.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="smartphone" class="w-4 h-4"></i>
+                                <span>Device WhatsApp</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700' }}">Live</span>
+                        </a>
+
+                        <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span>Kirim Pesan & Log</span>
+                        </a>
+
+                        <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="key" class="w-4 h-4"></i>
+                            <span>API Keys & Docs</span>
+                        </a>
+
+                        <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="webhook" class="w-4 h-4"></i>
+                            <span>Webhook Callback</span>
+                        </a>
+
+                        @if(auth()->user()->isAdmin())
+                            <div class="pt-3 border-t border-slate-100 mt-3">
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold shadow-sm shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 transition-all text-xs">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="shield" class="w-4 h-4 text-blue-200"></i>
+                                        <span>Dashboard Admin</span>
+                                    </div>
+                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-blue-200"></i>
+                                </a>
+                            </div>
+                        @endif
                     @endif
                 </nav>
             </div>

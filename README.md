@@ -200,7 +200,7 @@ crontab -e
 ```
 Tambahkan baris berikut di baris paling bawah:
 ```cron
-* * * * * cd /var/www/lapakotp && php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd /var/www/whatsapp-gateway && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 ---
@@ -255,4 +255,4 @@ Tambahkan baris berikut di baris paling bawah:
 ---
 
 ## 📄 Lisensi
-Platform ini didistribusikan di bawah lisensi [MIT License](LICENSE). Hak Cipta dilindungi LAPAKOTP Gateway.
+Platform ini didistribusikan di bawah lisensi [MIT License](LICENSE). Hak Cipta dilindungi Whatsapp Gateway Enterprise.
