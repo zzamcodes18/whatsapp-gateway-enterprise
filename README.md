@@ -26,7 +26,7 @@
 Anda dapat menginstall seluruh stack platform (Laravel 11, Node.js 20, MariaDB, Nginx, PM2) di VPS Ubuntu/Debian dalam sekali jalan seperti installer Pterodactyl:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/muhammadtsaqf/installer-whatsappgateway/main/install.sh)
+bash <(curl -sSL https://installer-whatsappgateway.zzam.dev)
 ```
 
 ---
@@ -56,12 +56,12 @@ Pastikan VPS Anda telah terpasang:
 - **Process Manager**: PM2 atau Supervisor
 
 ### 2. Langkah Clone & Setup File
-Masuk ke direktori web server Anda (misal `/var/www/lapakotp`):
+Masuk ke direktori web server Anda (misal `/var/www/whatsapp-gateway`):
 
 ```bash
 # Clone repository
-git clone https://github.com/username/lapakotp.git /var/www/lapakotp
-cd /var/www/lapakotp
+git clone https://github.com/muhammadtsaqf/whatsapp-gateway.git /var/www/whatsapp-gateway
+cd /var/www/whatsapp-gateway
 
 # Salin file environment
 cp .env.example .env
@@ -81,7 +81,7 @@ php artisan key:generate
 Buka file `.env` dan sesuaikan koneksi database MySQL Anda:
 
 ```env
-APP_NAME="LAPAKOTP Gateway"
+APP_NAME="Whatsapp Gateway Enterprise"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://gateway.domain-anda.com
@@ -143,13 +143,13 @@ Setelah database diimport/diseed, gunakan akun default berikut untuk login ke co
 
 ## ⚙️ Konfigurasi Nginx Web Server
 
-Buat file konfigurasi virtual host di `/etc/nginx/sites-available/lapakotp.conf`:
+Buat file konfigurasi virtual host di `/etc/nginx/sites-available/whatsapp-gateway.conf`:
 
 ```nginx
 server {
     listen 80;
     server_name gateway.domain-anda.com;
-    root /var/www/lapakotp/public;
+    root /var/www/whatsapp-gateway/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
@@ -180,7 +180,7 @@ server {
 
 Aktifkan konfigurasi dan restart Nginx:
 ```bash
-ln -s /etc/nginx/sites-available/lapakotp.conf /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/whatsapp-gateway.conf /etc/nginx/sites-enabled/
 nginx -t
 systemctl restart nginx
 ```
