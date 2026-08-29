@@ -21,12 +21,14 @@ class AdminBotServerController extends Controller
         $selectedDeviceId = SystemSetting::get('otp_server_device_id');
         $botDevice = $selectedDeviceId ? Device::with('user')->find($selectedDeviceId) : null;
         $otpTemplate = SystemSetting::get('otp_template', 'Kode verifikasi OTP WhatsApp Gateway Anda adalah: {otp}. Berlaku selama 5 menit. Jangan berikan kepada siapapun.');
+        $enableRegisterOtp = SystemSetting::get('enable_register_otp', 'true') === 'true';
 
         return view('admin.bot-server.index', [
             'connectedDevices' => $connectedDevices,
             'allDevices' => $allDevices,
             'botDevice' => $botDevice,
             'otpTemplate' => $otpTemplate,
+            'enableRegisterOtp' => $enableRegisterOtp,
         ]);
     }
 
@@ -35,6 +37,7 @@ class AdminBotServerController extends Controller
         $validated = $request->validate([
             'device_id' => ['nullable', 'exists:devices,id'],
             'otp_template' => ['required', 'string', 'max:500'],
+            'enable_register_otp' => ['nullable'],
         ]);
 
         // Reset previous bot devices
@@ -49,6 +52,7 @@ class AdminBotServerController extends Controller
         }
 
         SystemSetting::set('otp_template', $validated['otp_template']);
+        SystemSetting::set('enable_register_otp', $request->has('enable_register_otp') ? 'true' : 'false');
 
         auth()->user()->logActivity('admin.bot_server_update', 'Admin memperbarui konfigurasi WhatsApp Bot Server OTP');
 

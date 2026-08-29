@@ -48,6 +48,14 @@ Route::middleware('guest')->group(function () {
         ->middleware(AntiBruteForce::class.':5,1')
         ->name('register.submit');
 
+    Route::get('/register/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('register.otp');
+    Route::post('/register/verify-otp', [AuthController::class, 'verifyOtp'])
+        ->middleware(AntiBruteForce::class.':10,1')
+        ->name('register.verify-otp');
+    Route::post('/register/resend-otp', [AuthController::class, 'resendOtp'])
+        ->middleware(AntiBruteForce::class.':3,1')
+        ->name('register.resend-otp');
+
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])
         ->middleware(AntiBruteForce::class.':3,1')

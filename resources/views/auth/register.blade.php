@@ -3,6 +3,12 @@
 @section('title', 'Sign Up')
 
 @section('content')
+@php
+    $enableRegisterOtp = \App\Models\SystemSetting::get('enable_register_otp', 'true') === 'true';
+    $botDeviceId = \App\Models\SystemSetting::get('otp_server_device_id');
+    $botDevice = $botDeviceId ? \App\Models\Device::find($botDeviceId) : null;
+    $isBotActive = $enableRegisterOtp && $botDevice && $botDevice->isConnected();
+@endphp
 <div class="space-y-6">
     
     <!-- Title -->
@@ -56,7 +62,16 @@
 
         <!-- Phone Number -->
         <div class="space-y-1.5">
-            <label for="phone_number" class="block text-xs font-bold uppercase tracking-wider text-slate-700">WhatsApp Phone (Opsional)</label>
+            <div class="flex items-center justify-between">
+                <label for="phone_number" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    WhatsApp Phone @if($isBotActive)<span class="text-rose-500">*</span>@else<span class="text-slate-400 font-normal">(Opsional)</span>@endif
+                </label>
+                @if($isBotActive)
+                    <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                        <i data-lucide="shield-check" class="w-3 h-3"></i> OTP Active
+                    </span>
+                @endif
+            </div>
             <div class="relative flex items-center">
                 <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
@@ -65,9 +80,13 @@
                     id="phone_number" 
                     value="{{ old('phone_number') }}" 
                     placeholder="08123456789 atau 628123456789" 
+                    @if($isBotActive) required @endif
                     class="input-text py-2.5 sm:py-3 text-xs font-mono pl-10 pr-3.5"
                 >
             </div>
+            @if($isBotActive)
+                <p class="text-[11px] text-slate-500 font-medium">Kode OTP verifikasi akan dikirimkan otomatis ke WhatsApp ini.</p>
+            @endif
         </div>
 
         <!-- Password -->

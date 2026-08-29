@@ -48,6 +48,21 @@
                         <p class="text-[11px] text-slate-500">Hanya perangkat dengan status <strong>CONNECTED</strong> yang dapat dipilih.</p>
                     </div>
 
+                    <!-- OTP Register Toggle Switch -->
+                    <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between gap-4">
+                        <div class="space-y-0.5">
+                            <label for="enable_register_otp" class="font-bold text-xs text-slate-800 cursor-pointer flex items-center gap-1.5">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                                <span>Verifikasi OTP WhatsApp Saat Registrasi</span>
+                            </label>
+                            <p class="text-[11px] text-slate-500 font-medium">Jika aktif, pendaftar baru wajib memverifikasi 6 digit kode OTP WhatsApp sebelum akun dibuat.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                            <input type="checkbox" name="enable_register_otp" id="enable_register_otp" value="1" {{ $enableRegisterOtp ? 'checked' : '' }} class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                        </label>
+                    </div>
+
                     <!-- OTP Template -->
                     <div class="space-y-1.5">
                         <label for="otp_template" class="block font-bold text-xs uppercase tracking-wider text-slate-600">Format Template Pesan OTP</label>
