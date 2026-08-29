@@ -1,0 +1,379 @@
+@extends('layouts.app')
+
+@section('title', 'Profil & Keamanan Akun')
+
+@section('content')
+<div class="space-y-6 max-w-6xl mx-auto pb-12">
+    
+    <!-- ================= TOP HERO PROFILE BANNER ================= -->
+    <div class="app-card p-6 bg-white overflow-hidden relative">
+        <!-- Accent Glow background -->
+        <div class="absolute -top-12 -right-12 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+            
+            <!-- User Avatar & Identity -->
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+                
+                <!-- Avatar Circle with Edit Indicator -->
+                <div class="relative group flex-shrink-0">
+                    @if($user->avatar)
+                        <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-2xl object-cover shadow-md border-2 border-white ring-2 ring-blue-100">
+                    @else
+                        <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-extrabold text-2xl uppercase shadow-md border-2 border-white ring-2 ring-blue-100">
+                            {{ substr($user->name ?? 'U', 0, 2) }}
+                        </div>
+                    @endif
+                    <a href="#avatar-section" class="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-md hover:bg-blue-700 hover:scale-110 transition-all" title="Ubah Foto Profil">
+                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+
+                <!-- User Information Text -->
+                <div class="space-y-1.5">
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">{{ $user->name }}</h1>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase {{ $user->isAdmin() ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200' }}">
+                            {{ $user->role }}
+                        </span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                            ID #{{ $user->id }}
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-500 font-medium flex items-center justify-center sm:justify-start gap-2">
+                        <span class="flex items-center gap-1">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-400"></i>
+                            <span>{{ $user->email }}</span>
+                        </span>
+                        @if($user->phone_number)
+                            <span>•</span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i>
+                                <span>+{{ $user->phone_number }}</span>
+                            </span>
+                        @endif
+                    </p>
+
+                    <div class="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-3 text-[11px] text-slate-400 font-mono">
+                        <span>Bergabung: <strong class="text-slate-700 font-semibold">{{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}</strong></span>
+                        <span>•</span>
+                        <span>Login Terakhir: <strong class="text-slate-700 font-semibold">{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Baru saja' }}</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Telemetry Badges -->
+            <div class="w-full md:w-auto grid grid-cols-2 gap-3 flex-shrink-0 text-xs">
+                <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Device Terhubung</span>
+                    <div class="flex items-center gap-1.5">
+                        <i data-lucide="smartphone" class="w-4 h-4 text-blue-600"></i>
+                        <span class="font-extrabold text-sm text-slate-900">{{ $user->devices_count ?? 0 }}</span>
+                        <span class="text-[10px] text-slate-400 font-mono">/ {{ $user->device_limit ? $user->device_limit . ' dev' : '∞' }}</span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Pesan Hari Ini</span>
+                    <div class="flex items-center gap-1.5">
+                        <i data-lucide="send" class="w-4 h-4 text-emerald-600"></i>
+                        <span class="font-extrabold text-sm text-slate-900">{{ $user->messages_sent_today ?? 0 }}</span>
+                        <span class="text-[10px] text-slate-400 font-mono">/ {{ $user->daily_message_limit ? $user->daily_message_limit : '∞' }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= MAIN SETTINGS SECTIONS GRID ================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- 1. INFORMASI PROFIL FORM -->
+        <div class="app-card p-6 bg-white space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">Informasi Diri & Kontak</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Perbarui nama lengkap, email, dan kontak WhatsApp Anda.</p>
+                    </div>
+                </div>
+            </div>
+
+            <form action="{{ route('profile.update-information') }}" method="POST" class="space-y-4">
+                @csrf
+                @method('PUT')
+
+                <!-- Nama Lengkap -->
+                <div class="space-y-1.5">
+                    <label for="name" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <span>Nama Lengkap</span>
+                        <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required class="input-text text-xs" placeholder="Masukkan nama lengkap Anda">
+                    @error('name')
+                        <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-1.5">
+                    <label for="email" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <span>Alamat Email</span>
+                        <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required class="input-text text-xs" placeholder="email@domain.com">
+                    @error('email')
+                        <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nomor WhatsApp / Telepon -->
+                <div class="space-y-1.5">
+                    <label for="phone_number" class="text-xs font-bold text-slate-700">
+                        <span>Nomor WhatsApp / Telepon</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400 select-none">+</span>
+                        <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" class="input-text text-xs pl-7" placeholder="6281234567890 (Contoh format internasional tanpa tanda +)">
+                    </div>
+                    <p class="text-[10px] text-slate-400 font-medium">Digunakan untuk notifikasi sistem dan autentikasi WhatsApp.</p>
+                    @error('phone_number')
+                        <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-4 cursor-pointer">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                        <span>Simpan Informasi</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2. KELOLA FOTO PROFIL / AVATAR -->
+        <div id="avatar-section" class="app-card p-6 bg-white space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                        <i data-lucide="image" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">Kelola Foto Profil</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Unggah foto avatar baru (PNG, JPG, WEBP maks 2MB).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div x-data="{ previewUrl: null }" class="space-y-4">
+                
+                <!-- Preview Avatar Display -->
+                <div class="flex items-center gap-4 p-3 bg-slate-50 border border-slate-200/70 rounded-xl">
+                    <template x-if="previewUrl">
+                        <img :src="previewUrl" class="w-16 h-16 rounded-xl object-cover border border-blue-200 shadow-2xs">
+                    </template>
+                    <template x-if="!previewUrl">
+                        <div>
+                            @if($user->avatar)
+                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-2xs">
+                            @else
+                                <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-xl uppercase shadow-2xs">
+                                    {{ substr($user->name ?? 'U', 0, 2) }}
+                                </div>
+                            @endif
+                        </div>
+                    </template>
+
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-bold text-slate-900" x-text="previewUrl ? 'Pratinjau Foto Baru' : 'Foto Profil Saat Ini'">Foto Profil</h4>
+                        <p class="text-[10px] text-slate-500 font-medium">Format yang didukung: PNG, JPG, JPEG, WEBP. Ukuran maksimal 2MB.</p>
+                    </div>
+                </div>
+
+                <!-- Form Upload Avatar -->
+                <form action="{{ route('profile.update-avatar') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="space-y-1.5">
+                        <label for="avatar_input" class="text-xs font-bold text-slate-700">Pilih File Gambar Baru</label>
+                        <input type="file" id="avatar_input" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" 
+                               @change="const file = $event.target.files[0]; if(file) { previewUrl = URL.createObjectURL(file) }"
+                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        @error('avatar')
+                            <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="pt-2 flex items-center justify-between">
+                        @if($user->avatar)
+                            <button type="submit" name="remove_avatar" value="1" onclick="return confirm('Apakah Anda yakin ingin menghapus foto profil ini?')" class="app-btn app-btn-secondary text-xs text-rose-600 hover:bg-rose-50 border-rose-200 py-1.5 px-3 cursor-pointer">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                <span>Hapus Foto</span>
+                            </button>
+                        @else
+                            <div></div>
+                        @endif
+
+                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-4 cursor-pointer">
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                            <span>Unggah Foto Profil</span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- 3. KEAMANAN & GANTI PASSWORD -->
+        <div class="app-card p-6 bg-white space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">Ubah Kata Sandi (Password)</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Pastikan kata sandi baru Anda rumit dan tidak dipakai di tempat lain.</p>
+                    </div>
+                </div>
+            </div>
+
+            <form action="{{ route('profile.update-password') }}" method="POST" class="space-y-4" x-data="{ showPass: false }">
+                @csrf
+                @method('PUT')
+
+                <!-- Password Saat Ini -->
+                <div class="space-y-1.5">
+                    <label for="current_password" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <span>Password Saat Ini</span>
+                        <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input :type="showPass ? 'text' : 'password'" id="current_password" name="current_password" required class="input-text text-xs pr-9" placeholder="••••••••">
+                        <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                            <i data-lucide="eye" class="w-3.5 h-3.5" x-show="!showPass"></i>
+                            <i data-lucide="eye-off" class="w-3.5 h-3.5" x-show="showPass"></i>
+                        </button>
+                    </div>
+                    @error('current_password')
+                        <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password Baru -->
+                <div class="space-y-1.5">
+                    <label for="password" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <span>Password Baru</span>
+                        <span class="text-rose-500">*</span>
+                    </label>
+                    <input :type="showPass ? 'text' : 'password'" id="password" name="password" required class="input-text text-xs" placeholder="Minimal 8 karakter (kombinasi huruf besar, kecil & angka)">
+                    @error('password')
+                        <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Konfirmasi Password Baru -->
+                <div class="space-y-1.5">
+                    <label for="password_confirmation" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <span>Konfirmasi Password Baru</span>
+                        <span class="text-rose-500">*</span>
+                    </label>
+                    <input :type="showPass ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" required class="input-text text-xs" placeholder="Ulangi password baru">
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-4 cursor-pointer">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                        <span>Perbarui Password</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 4. TELEMETRI & STATISTIK KUOTA AKUN -->
+        <div class="app-card p-6 bg-white space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-slate-900">Batas Kuota & Spesifikasi Akun</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Informasi kapasitas harian dan limit akun Anda saat ini.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                
+                <!-- Limit Pesan Harian Progress -->
+                <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-slate-700">Kuota Pesan Harian</span>
+                        <span class="font-mono font-bold text-blue-600">
+                            {{ $user->messages_sent_today }} / {{ $user->daily_message_limit ? $user->daily_message_limit : 'Unlimited' }}
+                        </span>
+                    </div>
+
+                    @php
+                        $dailyLimit = $user->daily_message_limit ?? 0;
+                        $percent = $dailyLimit > 0 ? min(100, round(($user->messages_sent_today / $dailyLimit) * 100)) : 0;
+                    @endphp
+                    
+                    @if($dailyLimit > 0)
+                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: {{ $percent }}%;"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-medium">Batas kuota di-reset otomatis setiap hari pada pukul 00:00 WIB.</p>
+                    @else
+                        <div class="flex items-center gap-1.5 text-emerald-600 font-bold text-[11px]">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                            <span>Akun Anda memiliki akses kirim pesan tanpa batas (Unlimited).</span>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Limit Perangkat WhatsApp -->
+                <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between">
+                    <div>
+                        <span class="font-bold text-slate-700 block">Kapasitas Perangkat (Devices)</span>
+                        <span class="text-[10px] text-slate-500 font-medium">Jumlah nomor WA yang dapat dihubungkan bersamaan.</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-extrabold text-sm text-slate-900 block">{{ $user->devices_count ?? 0 }} Device</span>
+                        <span class="text-[10px] text-slate-400 font-mono">Batas: {{ $user->device_limit ? $user->device_limit : 'Unlimited' }}</span>
+                    </div>
+                </div>
+
+                <!-- Detail Login Terakhir & Keamanan IP -->
+                <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1 font-mono text-[11px]">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Alamat IP Terakhir:</span>
+                        <span class="font-bold text-slate-800">{{ $user->last_login_ip ?? '127.0.0.1' }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-500">Waktu Login Terakhir:</span>
+                        <span class="font-bold text-slate-800">{{ $user->last_login_at ? $user->last_login_at->format('d M Y H:i:s') : 'Baru saja' }}</span>
+                    </div>
+                </div>
+
+                <!-- Support Note -->
+                <div class="p-3 bg-blue-50/60 border border-blue-100 rounded-xl flex items-start gap-2.5 text-[11px] text-blue-900 font-medium">
+                    <i data-lucide="info" class="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                    <span>Membutuhkan peningkatan limit pesan atau kuota device? Hubungi administrator atau tim dukungan kami.</span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@endsection

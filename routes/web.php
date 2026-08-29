@@ -12,6 +12,7 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InternalEngineController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
@@ -87,6 +88,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('api-keys.index');
     Route::post('/api-keys', [ApiKeyController::class, 'store'])->name('api-keys.store');
     Route::delete('/api-keys/{apiKey}', [ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
+
+    // Profile & Account Settings
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/information', [ProfileController::class, 'updateInformation'])->name('profile.update-information');
+    Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
     // Webhook Settings
     Route::get('/webhooks', [WebhookController::class, 'index'])->name('webhooks.index');

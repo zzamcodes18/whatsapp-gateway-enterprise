@@ -133,6 +133,11 @@
                             <i data-lucide="webhook" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Webhook Callbacks</span>
                         </a>
+
+                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('profile.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="user-cog" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Profil & Keamanan</span>
+                        </a>
                     @endif
                 </nav>
 
@@ -200,9 +205,13 @@
                         
                         <!-- Profile Trigger Button -->
                         <button @click="profileOpen = !profileOpen" type="button" class="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 shadow-2xs transition-all cursor-pointer focus:outline-none" aria-expanded="false">
-                            <div class="w-8 h-8 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs uppercase shadow-2xs flex-shrink-0">
-                                {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
-                            </div>
+                            @if(auth()->user()->avatar)
+                                <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-8 h-8 rounded-lg object-cover border border-slate-200 shadow-2xs flex-shrink-0">
+                            @else
+                                <div class="w-8 h-8 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs uppercase shadow-2xs flex-shrink-0">
+                                    {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                                </div>
+                            @endif
                             <div class="hidden md:flex flex-col text-left">
                                 <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px]">{{ auth()->user()->name }}</span>
                                 <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{{ auth()->user()->role }}</span>
@@ -225,9 +234,13 @@
                             <!-- Header Info -->
                             <div class="px-4 py-2.5 border-b border-slate-100 bg-slate-50/60">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center font-extrabold text-xs uppercase shadow-xs flex-shrink-0">
-                                        {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
-                                    </div>
+                                    @if(auth()->user()->avatar)
+                                        <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" class="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-xs flex-shrink-0">
+                                    @else
+                                        <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center font-extrabold text-xs uppercase shadow-xs flex-shrink-0">
+                                            {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                                        </div>
+                                    @endif
                                     <div class="flex flex-col text-left truncate">
                                         <span class="font-extrabold text-slate-900 truncate leading-tight">{{ auth()->user()->name }}</span>
                                         <span class="text-[10px] text-slate-500 font-mono truncate">{{ auth()->user()->email }}</span>
@@ -257,8 +270,8 @@
                                     @endif
                                 @endif
 
-                                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                                    <i data-lucide="user" class="w-4 h-4 text-slate-500"></i>
+                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                    <i data-lucide="user-cog" class="w-4 h-4 text-slate-500"></i>
                                     <span>Profil & Workspace</span>
                                 </a>
 
