@@ -13,14 +13,14 @@ class CreateMasterAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'make:admin {--name=Master Admin} {--email=admin@example.com} {--password=password123} {--phone=}';
+    protected $signature = 'make:admin {--name=} {--email=} {--password=} {--phone=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a master admin account with unlimited limits';
+    protected $description = 'Create or update a master admin account with unlimited limits';
 
     /**
      * Execute the console command.
@@ -31,6 +31,19 @@ class CreateMasterAdmin extends Command
         $email = $this->option('email');
         $password = $this->option('password');
         $phone = $this->option('phone');
+
+        // Interaktif jika parameter tidak diberikan di command
+        if (empty($email)) {
+            $email = $this->ask('Masukkan Email Admin', 'admin@wagateway.com');
+        }
+
+        if (empty($name)) {
+            $name = $this->ask('Masukkan Nama Admin', 'Master Admin');
+        }
+
+        if (empty($password)) {
+            $password = $this->secret('Masukkan Kata Sandi Admin (tekan Enter untuk default password123)') ?: 'password123';
+        }
 
         $user = User::updateOrCreate(
             ['email' => $email],
@@ -46,7 +59,12 @@ class CreateMasterAdmin extends Command
             ]
         );
 
-        $this->info("Master admin account created successfully for {$email}");
+        $this->info("=================================================");
+        $this->info(" 🎉 Master Admin Berhasil Dibuat / Diperbarui!");
+        $this->info("=================================================");
+        $this->info(" Email    : {$email}");
+        $this->info(" Role     : Admin (Unlimited Limits)");
+        $this->info("=================================================");
         return 0;
     }
 }
