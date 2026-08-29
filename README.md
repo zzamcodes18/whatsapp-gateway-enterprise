@@ -6,7 +6,7 @@
   </a>
   <p align="center">
     <strong>High-Performance Multi-Device WhatsApp Gateway & Developer REST API Engine</strong><br>
-    Powered by Laravel 11 (PHP 8.3), Node.js 20 (Baileys v1.0.0 Microservice), & Tailwind CSS v4
+    Powered by Laravel 11 (PHP 8.3), Node.js 20 (WA Microservice Engine), & Tailwind CSS v4
   </p>
 </p>
 
@@ -14,7 +14,7 @@
   <a href="https://php.net"><img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3"></a>
   <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 11"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js 20"></a>
-  <a href="https://github.com/WhiskeySockets/Baileys"><img src="https://img.shields.io/badge/Engine-Baileys%20v1.0-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Baileys v1.0"></a>
+  <img src="https://img.shields.io/badge/Engine-WA%20Engine%20v1.0-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WA Engine v1.0">
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind-v4.0-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License"></a>
 </p>
@@ -23,7 +23,7 @@
 
 ## 📋 Ikhtisar Produk (Overview)
 
-**WhatsApp Gateway Enterprise** adalah platform pengiriman pesan WhatsApp otomatis skala enterprise yang memadukan keandalan **Laravel 11** untuk manajemen pengguna, autentikasi REST API Key, dan kuota harian, serta kecepatan microservice **Node.js (Baileys Engine)** untuk konektivitas WhatsApp Multi-Device secara realtime.
+**WhatsApp Gateway Enterprise** adalah platform pengiriman pesan WhatsApp otomatis skala enterprise yang memadukan keandalan **Laravel 11** untuk manajemen pengguna, autentikasi REST API Key, dan kuota harian, serta kecepatan microservice **Node.js (WA Engine)** untuk konektivitas WhatsApp Multi-Device secara realtime.
 
 Dirancang untuk developer, startup, dan enterprise yang membutuhkan solusi pengiriman OTP cepat (<800ms), notifikasi tagihan/invoice, serta receiver Webhook realtime tanpa bergantung pada vendor pihak ketiga yang mahal.
 
@@ -34,7 +34,7 @@ Dirancang untuk developer, startup, dan enterprise yang membutuhkan solusi pengi
 Pasang seluruh stack platform (Laravel 11, Node.js 20, MariaDB, Nginx, PM2, Cronjob) di VPS Ubuntu/Debian dalam sekali jalan dengan perintah berikut:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/install.sh)
+bash <(curl -sSL "https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/install.sh?v=$(date +%s)")
 ```
 
 ---
@@ -45,7 +45,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gatewa
 graph TD
     UserClient[Aplikasi / Developer Client] -->|HTTP REST API / Bearer Token| LaravelAPI[Laravel 11 API Gateway]
     LaravelAPI -->|Validasi API Key & Quota| DB[(MariaDB Database)]
-    LaravelAPI -->|HTTP Dispatcher| WAEngine[Node.js Baileys Microservice]
+    LaravelAPI -->|HTTP Dispatcher| WAEngine[Node.js WA Microservice Engine]
     WAEngine -->|Multi-Device WebSockets| WAServer[WhatsApp Web Servers]
     WAServer -->|Realtime Message Incoming| WAEngine
     WAEngine -->|Webhook HMAC Signature| UserWebhook[Webhook Receiver Server Client]
@@ -122,5 +122,5 @@ graph TD
 
 Platform ini didistribusikan di bawah lisensi [MIT License](LICENSE).  
 Hak Cipta © 2026 **WhatsApp Gateway Enterprise** — Developed by:
-- **Muhammad Zaki** ([`jakisoft`](https://github.com/jakisoft) / `kiicodeofficial@gmail.com`) — Original Developer & Baileys Core Engine
+- **Muhammad Zaki** ([`jakisoft`](https://github.com/jakisoft) / `kiicodeofficial@gmail.com`) — Original Developer & Core Engine
 - **Muhammad Tsaqif Noor Az Zamil** ([`zzamcode`](https://github.com/muhammadtsaqf)) — Co-Developer & Enterprise Maintainer

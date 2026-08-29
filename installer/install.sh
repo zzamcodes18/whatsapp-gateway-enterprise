@@ -15,6 +15,9 @@ export GITHUB_BASE_URL="https://raw.githubusercontent.com/muhammadtsaqf/whatsapp
 export INSTALL_DIR="/var/www/whatsapp-gateway"
 export REPO_URL="https://github.com/muhammadtsaqf/whatsapp-gateway.git"
 
+# Auto-clean any previous stale/corrupted temporary installer files
+rm -f /tmp/lib.sh /tmp/mod_*.sh 2>/dev/null || true
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Load Core Library
