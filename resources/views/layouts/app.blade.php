@@ -128,13 +128,13 @@
                         </a>
 
                         <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                            <i data-lucide="key" class="w-4 h-4 flex-shrink-0"></i>
-                            <span>API Keys & Docs</span>
+                            <i data-lucide="key-round" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Integrasi & Callback</span>
                         </a>
 
-                        <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
-                            <i data-lucide="webhook" class="w-4 h-4 flex-shrink-0"></i>
-                            <span>Webhook Callbacks</span>
+                        <a href="{{ route('docs.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('docs.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="book-open" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Dokumentasi API</span>
                         </a>
                     @endif
                 </nav>
@@ -413,13 +413,13 @@
                         </a>
 
                         <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                            <i data-lucide="key" class="w-4 h-4"></i>
-                            <span>API Keys & Docs</span>
+                            <i data-lucide="key-round" class="w-4 h-4"></i>
+                            <span>Integrasi & Callback</span>
                         </a>
 
-                        <a href="{{ route('webhooks.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('webhooks.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
-                            <i data-lucide="webhook" class="w-4 h-4"></i>
-                            <span>Webhook Callback</span>
+                        <a href="{{ route('docs.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('docs.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
+                            <span>Dokumentasi API</span>
                         </a>
 
                         @if(auth()->user()->isAdmin())

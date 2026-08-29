@@ -9,6 +9,7 @@ use App\Http\Controllers\ApiKeyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InternalEngineController;
 use App\Http\Controllers\MessageController;
@@ -84,10 +85,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send');
 
-    // API Keys
+    // API Keys & Integrasi
     Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('api-keys.index');
     Route::post('/api-keys', [ApiKeyController::class, 'store'])->name('api-keys.store');
     Route::delete('/api-keys/{apiKey}', [ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
+
+    // Interactive API Documentation
+    Route::get('/docs', [DocsController::class, 'index'])->name('docs.index');
 
     // Profile & Account Settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -96,7 +100,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
     // Webhook Settings
-    Route::get('/webhooks', [WebhookController::class, 'index'])->name('webhooks.index');
+    Route::get('/webhooks', function () {
+        return redirect()->route('api-keys.index', ['tab' => 'webhooks']);
+    })->name('webhooks.index');
     Route::post('/webhooks', [WebhookController::class, 'store'])->name('webhooks.store');
     Route::post('/webhooks/test', [WebhookController::class, 'test'])->name('webhooks.test');
 });

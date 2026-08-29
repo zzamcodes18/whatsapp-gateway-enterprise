@@ -12,9 +12,11 @@ class ApiKeyController extends Controller
     {
         $user = Auth::user();
         $apiKeys = $user->apiKeys()->latest()->get();
+        $webhook = $user->webhooks()->first();
 
         return view('api-keys.index', [
             'apiKeys' => $apiKeys,
+            'webhook' => $webhook,
         ]);
     }
 

@@ -1,199 +1,328 @@
 @extends('layouts.app')
 
-@section('title', 'API Keys & Dokumentasi')
+@section('title', 'Developer Credentials & Webhooks')
 
 @section('content')
-<div class="space-y-6" x-data="{ showNewModal: false, docTab: 'curl' }">
+<div class="space-y-6" x-data="{ 
+    activeTab: (new URLSearchParams(window.location.search)).get('tab') === 'webhooks' ? 'webhooks' : 'api-keys',
+    showNewModal: false 
+}">
 
-    <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-4">
+    <!-- Header & Action Bar -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200/80 pb-4">
         <div>
             <div class="flex items-center gap-2">
-                <span class="app-tag app-tag-blue">REST API CREDENTIALS</span>
-                <span class="font-mono text-[11px] font-semibold text-slate-500">SHA-256 HASHED</span>
+                <span class="app-tag app-tag-blue">DEVELOPER GATEWAY</span>
+                <span class="font-mono text-[11px] font-semibold text-slate-500">API KEYS & WEBHOOKS</span>
             </div>
-            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-navy">API Keys & Integrasi</h1>
-            <p class="text-xs text-slate-500 font-medium">Gunakan API Key untuk mengintegrasikan pengiriman WhatsApp dengan sistem aplikasi Anda.</p>
+            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900">Integrasi & Callback</h1>
+            <p class="text-xs text-slate-500 font-medium">Kelola kunci akses REST API dan URL callback Webhook realtime dalam satu tempat.</p>
         </div>
 
-        <button @click="showNewModal = true" class="btn-xl btn-primary text-xs py-2.5 px-4 flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="key" class="w-4 h-4"></i>
-            <span>Generate API Key Baru</span>
-        </button>
+        <!-- Documentation CTA Button -->
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('docs.index') }}" class="app-btn app-btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="book-open" class="w-4 h-4 text-blue-600"></i>
+                <span>Buka Dokumentasi API</span>
+            </a>
+            
+            <button x-show="activeTab === 'api-keys'" @click="showNewModal = true" class="app-btn app-btn-primary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="key" class="w-4 h-4"></i>
+                <span>Buat API Key Baru</span>
+            </button>
+
+            @if($webhook)
+                <form x-show="activeTab === 'webhooks'" method="POST" action="{{ route('webhooks.test') }}">
+                    @csrf
+                    <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                        <span>Test Ping Webhook</span>
+                    </button>
+                </form>
+            @endif
+        </div>
     </div>
 
-    <!-- Plain Text Token Reveal Banner -->
-    @if(session('plain_text_token'))
-        <div class="app-card p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 border-blue-200 space-y-3 shadow-sm">
-            <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                <h3 class="font-bold text-sm text-navy">Kunci API Baru: {{ session('key_name') }}</h3>
+    <!-- Documentation Hero Callout Banner -->
+    <div class="app-card p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="relative z-10 space-y-1 text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start gap-2">
+                <span class="px-2 py-0.5 rounded-full bg-white/20 text-white font-extrabold text-[10px] uppercase tracking-wider">REST API v1.0</span>
+                <span class="text-blue-100 text-xs font-mono">End-to-End JSON SDK</span>
             </div>
-            <p class="text-xs font-medium text-slate-600">
-                Salin token API di bawah ini sekarang. Demi alasan keamanan, token rahasia ini hanya ditampilkan satu kali.
+            <h3 class="font-extrabold text-base sm:text-lg">Panduan Integrasi Developer & Webhook Payload</h3>
+            <p class="text-xs text-blue-100 max-w-xl font-medium">
+                Lihat spesifikasi endpoint pengiriman pesan, cURL, PHP Guzzle, Node.js Axios, Python, serta contoh payload webhook HMAC Signature di halaman dokumentasi interaktif.
             </p>
-            
-            <div class="flex items-center gap-2 p-2 bg-white border border-blue-200 rounded-xl">
-                <code class="font-mono font-bold text-xs text-blue-700 flex-1 select-all break-all px-2" id="plainToken">
-                    {{ session('plain_text_token') }}
-                </code>
-                <button type="button" onclick="copyToClipboard(document.getElementById('plainToken').innerText.trim(), 'Token API berhasil disalin!')" class="btn-xl btn-primary text-xs py-2 px-3 flex items-center gap-1 cursor-pointer">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                    <span>Salin</span>
-                </button>
-            </div>
-        </div>
-    @endif
-
-    <!-- API Keys List Table -->
-    <div class="space-y-3.5">
-        <div class="flex items-center justify-between">
-            <h2 class="font-bold text-base text-navy">Daftar API Keys Aktif</h2>
-            <span class="app-tag app-tag-slate text-[10px]">{{ $apiKeys->count() }} KUNCI</span>
         </div>
 
-        @if($apiKeys->isEmpty())
-            <div class="app-card p-8 text-center text-xs text-slate-400 font-medium bg-white">
-                Belum ada API Key yang dibuat. Klik tombol di atas untuk membuat API Key baru.
-            </div>
-        @else
-            <!-- Responsive Table Wrapper with Horizontal Scroll -->
-            <div class="app-table-wrapper">
-                <table class="w-full text-left text-xs font-medium app-table min-w-[650px]">
-                    <thead>
-                        <tr>
-                            <th class="p-3.5">Nama Kunci</th>
-                            <th class="p-3.5">Prefix Token</th>
-                            <th class="p-3.5">Rate Limit</th>
-                            <th class="p-3.5">Terakhir Digunakan</th>
-                            <th class="p-3.5">Dibuat Pada</th>
-                            <th class="p-3.5 text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($apiKeys as $key)
-                            <tr>
-                                <td class="p-3.5 font-bold text-slate-900">{{ $key->name }}</td>
-                                <td class="p-3.5 font-mono text-slate-700"><code>{{ $key->key_prefix }}...</code></td>
-                                <td class="p-3.5 font-mono">{{ $key->rate_limit_per_minute }} req/min</td>
-                                <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}</td>
-                                <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->created_at->format('d M Y') }}</td>
-                                <td class="p-3.5 text-right whitespace-nowrap">
-                                    <button type="button" @click="$confirm({
-                                        title: 'Revoke API Key',
-                                        message: 'Apakah Anda yakin ingin menghapus API Key \'{{ $key->name }}\'? Aplikasi yang menggunakan kunci ini akan kehilangan akses.',
-                                        confirmText: 'Revoke Key',
-                                        type: 'danger',
-                                        onConfirm: () => document.getElementById('delete-key-{{ $key->id }}').submit()
-                                    })" class="app-btn app-btn-soft-danger text-[11px] py-1 px-2.5 cursor-pointer">
-                                        Revoke
-                                    </button>
-                                    <form id="delete-key-{{ $key->id }}" method="POST" action="{{ route('api-keys.destroy', $key) }}" class="hidden">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <a href="{{ route('docs.index') }}" class="relative z-10 px-4 py-2.5 bg-white text-blue-700 font-extrabold text-xs rounded-xl shadow-lg hover:bg-blue-50 hover:scale-105 transition-all flex items-center gap-2 flex-shrink-0">
+            <i data-lucide="file-code-2" class="w-4 h-4"></i>
+            <span>Buka Dokumentasi Lengkap</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+    </div>
+
+    <!-- Navigation Tabs Switcher -->
+    <div class="border-b border-slate-200/80">
+        <div class="flex gap-4 text-xs font-bold">
+            <button @click="activeTab = 'api-keys'" 
+                    :class="activeTab === 'api-keys' ? 'border-blue-600 text-blue-600 border-b-2 pb-2.5' : 'text-slate-500 hover:text-slate-800 pb-2.5'"
+                    class="flex items-center gap-2 transition-colors cursor-pointer">
+                <i data-lucide="key" class="w-4 h-4"></i>
+                <span>API Keys ({{ $apiKeys->count() }})</span>
+            </button>
+
+            <button @click="activeTab = 'webhooks'" 
+                    :class="activeTab === 'webhooks' ? 'border-blue-600 text-blue-600 border-b-2 pb-2.5' : 'text-slate-500 hover:text-slate-800 pb-2.5'"
+                    class="flex items-center gap-2 transition-colors cursor-pointer">
+                <i data-lucide="webhook" class="w-4 h-4"></i>
+                <span>Webhook Callback {{ $webhook ? '(Aktif)' : '(Belum Diatur)' }}</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= TAB 1: API KEYS MANAGEMENT ================= -->
+    <div x-show="activeTab === 'api-keys'" class="space-y-5">
+
+        <!-- Plain Text Token Reveal Banner -->
+        @if(session('plain_text_token'))
+            <div class="app-card p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 border-blue-200 space-y-3 shadow-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                    <h3 class="font-bold text-sm text-slate-900">Kunci API Baru Dibuat: {{ session('key_name') }}</h3>
+                </div>
+                <p class="text-xs font-medium text-slate-600">
+                    Salin token API di bawah ini sekarang. Demi alasan keamanan, token rahasia ini hanya ditampilkan **satu kali**.
+                </p>
+                
+                <div class="flex items-center gap-2 p-2 bg-white border border-blue-200 rounded-xl">
+                    <code class="font-mono font-bold text-xs text-blue-700 flex-1 select-all break-all px-2" id="plainToken">
+                        {{ session('plain_text_token') }}
+                    </code>
+                    <button type="button" onclick="copyToClipboard(document.getElementById('plainToken').innerText.trim(), 'Token API berhasil disalin!')" class="app-btn app-btn-primary text-xs py-2 px-3 flex items-center gap-1 cursor-pointer">
+                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                        <span>Salin Token</span>
+                    </button>
+                </div>
             </div>
         @endif
-    </div>
 
-    <!-- Documentation Section -->
-    <div class="app-card p-6 bg-slate-950 text-white space-y-4 font-mono text-xs shadow-lg border-slate-800">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
-            <div>
-                <span class="app-tag app-tag-blue text-[9px]">REST API v1</span>
-                <h3 class="font-bold text-base mt-1 text-white">Panduan Integrasi REST API</h3>
+        <!-- Active API Keys Table -->
+        <div class="app-card p-6 bg-white space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div>
+                    <h2 class="font-bold text-base text-slate-900">Kunci API Aktif Anda</h2>
+                    <p class="text-xs text-slate-500">Kunci ini digunakan pada header HTTP Authorization (Bearer token) atau parameter X-API-KEY.</p>
+                </div>
+                <span class="app-tag app-tag-blue text-[10px] font-mono">{{ $apiKeys->count() }} ACTIVE KEYS</span>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button @click="docTab = 'curl'" :class="docTab === 'curl' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white bg-slate-900'" class="px-3 py-1.5 text-xs rounded-lg border border-slate-700 cursor-pointer transition-colors">cURL</button>
-                <button @click="docTab = 'js'" :class="docTab === 'js' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white bg-slate-900'" class="px-3 py-1.5 text-xs rounded-lg border border-slate-700 cursor-pointer transition-colors">JavaScript</button>
-                <button @click="docTab = 'php'" :class="docTab === 'php' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white bg-slate-900'" class="px-3 py-1.5 text-xs rounded-lg border border-slate-700 cursor-pointer transition-colors">PHP</button>
-            </div>
+            @if($apiKeys->isEmpty())
+                <div class="p-8 text-center text-xs text-slate-400 font-medium bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    Belum ada API Key yang dibuat. Klik tombol <strong>"Buat API Key Baru"</strong> di atas.
+                </div>
+            @else
+                <div class="app-table-wrapper overflow-x-auto">
+                    <table class="w-full text-left text-xs font-medium app-table min-w-[650px]">
+                        <thead>
+                            <tr>
+                                <th class="p-3.5">Nama Kunci</th>
+                                <th class="p-3.5">Prefix Token</th>
+                                <th class="p-3.5">Rate Limit</th>
+                                <th class="p-3.5">Terakhir Digunakan</th>
+                                <th class="p-3.5">Dibuat Pada</th>
+                                <th class="p-3.5 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($apiKeys as $key)
+                                <tr>
+                                    <td class="p-3.5 font-bold text-slate-900">{{ $key->name }}</td>
+                                    <td class="p-3.5 font-mono text-slate-700"><code>{{ $key->key_prefix }}...</code></td>
+                                    <td class="p-3.5 font-mono">{{ $key->rate_limit_per_minute }} req/min</td>
+                                    <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}</td>
+                                    <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->created_at->format('d M Y') }}</td>
+                                    <td class="p-3.5 text-right whitespace-nowrap">
+                                        <button type="button" @click="$confirm({
+                                            title: 'Revoke API Key',
+                                            message: 'Apakah Anda yakin ingin menghapus API Key \'{{ $key->name }}\'? Aplikasi yang menggunakan kunci ini akan kehilangan akses.',
+                                            confirmText: 'Hapus Key',
+                                            type: 'danger',
+                                            onConfirm: () => document.getElementById('delete-key-{{ $key->id }}').submit()
+                                        })" class="app-btn app-btn-secondary text-rose-600 hover:bg-rose-50 border-rose-200 text-[11px] py-1 px-2.5 cursor-pointer">
+                                            Revoke Key
+                                        </button>
+                                        <form id="delete-key-{{ $key->id }}" method="POST" action="{{ route('api-keys.destroy', $key) }}" class="hidden">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
 
-        <!-- Endpoints List -->
-        <div class="space-y-4">
-            <!-- Endpoint: Send Text -->
-            <div class="p-4 bg-slate-900/90 border border-slate-800 rounded-xl space-y-2.5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <span class="bg-emerald-500 text-slate-950 px-2 py-0.5 font-bold rounded text-[10px]">POST</span>
-                        <span class="text-white font-bold">/api/v1/messages/send-text</span>
+    </div>
+
+    <!-- ================= TAB 2: WEBHOOK CALLBACK CONFIGURATION ================= -->
+    <div x-show="activeTab === 'webhooks'" class="space-y-5">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Webhook Form (7 cols) -->
+            <div class="lg:col-span-7 space-y-4">
+                <div class="app-card p-6 bg-white space-y-4">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h2 class="font-bold text-base text-slate-900">Konfigurasi Target Webhook</h2>
+                        <p class="text-xs text-slate-500 font-medium">Tentukan URL target HTTPS yang akan menerima kiriman data event WhatsApp secara realtime.</p>
                     </div>
-                    <span class="text-slate-400 text-[11px] font-sans">Kirim Pesan Teks</span>
-                </div>
 
-                <div x-show="docTab === 'curl'">
-                    <pre class="text-emerald-400 overflow-x-auto p-2.5 bg-black/60 rounded-lg"><code>curl -X POST "{{ url('/api/v1/messages/send-text') }}" \
-  -H "X-API-Key: lpk_live_your_key_here" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "device_id": 1,
-    "phone": "6281234567890",
-    "message": "Kode OTP Anda: 902-192. Berlaku 5 menit."
-  }'</code></pre>
-                </div>
+                    <form method="POST" action="{{ route('webhooks.store') }}" class="space-y-4">
+                        @csrf
 
-                <div x-show="docTab === 'js'" style="display: none;">
-                    <pre class="text-sky-300 overflow-x-auto p-2.5 bg-black/60 rounded-lg"><code>const res = await fetch("{{ url('/api/v1/messages/send-text') }}", {
-  method: "POST",
-  headers: {
-    "X-API-Key": "lpk_live_your_key_here",
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    device_id: 1,
-    phone: "6281234567890",
-    message: "Kode OTP Anda: 902-192. Berlaku 5 menit."
-  })
-});</code></pre>
-                </div>
+                        <!-- Target URL -->
+                        <div class="space-y-1.5">
+                            <label for="target_url" class="block font-bold text-xs text-slate-700">Target Webhook URL <span class="text-rose-500">*</span></label>
+                            <input 
+                                type="url" 
+                                name="target_url" 
+                                id="target_url" 
+                                value="{{ old('target_url', $webhook->target_url ?? '') }}" 
+                                placeholder="https://api.domain-anda.com/webhook/whatsapp" 
+                                required 
+                                class="input-text text-xs font-mono font-bold"
+                            >
+                        </div>
 
-                <div x-show="docTab === 'php'" style="display: none;">
-                    <pre class="text-amber-300 overflow-x-auto p-2.5 bg-black/60 rounded-lg"><code>use Illuminate\Support\Facades\Http;
+                        <!-- Secret Key -->
+                        <div class="space-y-1.5">
+                            <label for="secret_key" class="block font-bold text-xs text-slate-700">Secret Signature Key (Opsional)</label>
+                            <input 
+                                type="text" 
+                                name="secret_key" 
+                                id="secret_key" 
+                                value="{{ old('secret_key', $webhook->secret_key ?? '') }}" 
+                                placeholder="whsec_xxxxxxxxxxxx" 
+                                class="input-text text-xs font-mono"
+                            >
+                            <p class="text-[10px] text-slate-400 font-medium">Dikirim melalui header <code>X-WAGateway-Secret</code> untuk verifikasi keaslian payload.</p>
+                        </div>
 
-$res = Http::withHeaders(['X-API-Key' => 'lpk_live_your_key_here'])
-    ->post("{{ url('/api/v1/messages/send-text') }}", [
-        'device_id' => 1,
-        'phone' => '6281234567890',
-        'message' => 'Kode OTP Anda: 902-192.',
-    ]);</code></pre>
+                        <!-- Events Subscription Checkboxes -->
+                        <div class="space-y-2.5 pt-2 border-t border-slate-100">
+                            <label class="block font-bold text-xs text-slate-700">Berlangganan Event Realtime</label>
+                            
+                            @php
+                                $subscribedEvents = $webhook->events ?? ['message.received', 'device.connected', 'device.disconnected'];
+                            @endphp
+
+                            <div class="space-y-2 text-xs">
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="events[]" value="message.received" {{ in_array('message.received', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <strong class="text-slate-900 font-mono text-xs">message.received</strong>
+                                        <div class="text-[11px] text-slate-500">Dipicu saat ada pesan WhatsApp masuk dari kontak atau grup.</div>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="events[]" value="device.connected" {{ in_array('device.connected', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <strong class="text-slate-900 font-mono text-xs">device.connected</strong>
+                                        <div class="text-[11px] text-slate-500">Dipicu saat nomor WhatsApp berhasil terhubung (Scan QR / Pairing Code).</div>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                    <input type="checkbox" name="events[]" value="device.disconnected" {{ in_array('device.disconnected', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <strong class="text-slate-900 font-mono text-xs">device.disconnected</strong>
+                                        <div class="text-[11px] text-slate-500">Dipicu jika koneksi WhatsApp terputus atau logout.</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-2">
+                            <button type="submit" class="app-btn app-btn-primary py-2.5 px-5 text-xs flex items-center gap-2 cursor-pointer">
+                                <i data-lucide="save" class="w-4 h-4"></i>
+                                <span>Simpan Konfigurasi Webhook</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
+
+            <!-- Webhook Sample Payload Card (5 cols) -->
+            <div class="lg:col-span-5 space-y-4">
+                <div class="app-card p-6 bg-slate-950 text-white space-y-3.5 font-mono text-xs shadow-lg border-slate-800">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-blue-400 font-bold text-xs">Sample Payload (JSON)</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">HTTP POST</span>
+                    </div>
+
+                    <pre class="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 text-[11px] overflow-x-auto text-slate-300">
+{
+  <span class="text-blue-400">"event"</span>: <span class="text-emerald-300">"message.received"</span>,
+  <span class="text-blue-400">"timestamp"</span>: <span class="text-emerald-300">"{{ now()->toIso8601String() }}"</span>,
+  <span class="text-blue-400">"device_id"</span>: <span class="text-amber-300">1</span>,
+  <span class="text-blue-400">"sender"</span>: <span class="text-emerald-300">"6281234567890@s.whatsapp.net"</span>,
+  <span class="text-blue-400">"push_name"</span>: <span class="text-emerald-300">"Budi Santoso"</span>,
+  <span class="text-blue-400">"message"</span>: {
+    <span class="text-blue-400">"text"</span>: <span class="text-emerald-300">"Halo, saya ingin menanyakan status pesanan #1049"</span>
+  }
+}</pre>
+                    <p class="text-[11px] text-slate-400 font-sans">
+                        Server Anda harus mengembalikan kode status <code>HTTP 200 OK</code> untuk mengonfirmasi penerimaan webhook.
+                    </p>
+                </div>
+            </div>
+
         </div>
+
     </div>
 
-    <!-- Create API Key Modal -->
-    <div x-show="showNewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs" style="display: none;" x-cloak>
-        <div class="app-card bg-white max-w-sm w-full p-6 space-y-4 shadow-2xl border-slate-100 custom-scrollbar" @click.away="showNewModal = false">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <h3 class="font-bold text-base text-navy">Buat API Key Baru</h3>
-                <button @click="showNewModal = false" class="p-1 text-slate-400 hover:text-slate-800 rounded-lg">
+    <!-- ================= GENERATE API KEY MODAL ================= -->
+    <div x-show="showNewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 transition-opacity" @click="showNewModal = false"></div>
+
+        <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-6 space-y-4 z-10">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold">
+                        <i data-lucide="key" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-slate-900">Buat API Key Baru</h3>
+                </div>
+                <button @click="showNewModal = false" class="text-slate-400 hover:text-slate-600 p-1">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
 
-            <form method="POST" action="{{ route('api-keys.store') }}" class="space-y-3.5">
+            <form method="POST" action="{{ route('api-keys.store') }}" class="space-y-4 text-xs">
                 @csrf
+
                 <div class="space-y-1.5">
-                    <label for="key_name" class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nama / Label Kunci</label>
-                    <input type="text" name="name" id="key_name" placeholder="Contoh: Server Webhook / POS Toko" required class="input-text text-xs">
+                    <label for="name" class="font-bold text-slate-700">Nama Aplikasi / Kunci <span class="text-rose-500">*</span></label>
+                    <input type="text" name="name" id="name" required placeholder="Contoh: Website Main Server, Apps Node.js" class="input-text text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label for="rate_limit" class="block font-bold text-xs uppercase tracking-wider text-slate-600">Rate Limit (Req / Menit)</label>
-                    <input type="number" name="rate_limit" id="rate_limit" value="60" min="10" max="1000" class="input-text text-xs font-mono font-bold">
+                    <label for="rate_limit" class="font-bold text-slate-700">Batas Request (Per Menit)</label>
+                    <input type="number" name="rate_limit" id="rate_limit" value="60" min="10" max="1000" class="input-text text-xs">
+                    <p class="text-[10px] text-slate-400">Default: 60 request per menit per API key.</p>
                 </div>
 
-                <div class="pt-1">
-                    <button type="submit" class="btn-xl btn-primary w-full py-2.5 text-xs flex items-center justify-center gap-1.5 cursor-pointer">
-                        <span>Generate & Simpan</span>
-                        <i data-lucide="check" class="w-4 h-4"></i>
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" @click="showNewModal = false" class="app-btn app-btn-secondary py-2 px-3 text-xs cursor-pointer">Batal</button>
+                    <button type="submit" class="app-btn app-btn-primary py-2 px-4 text-xs cursor-pointer flex items-center gap-1.5">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        <span>Generate Key</span>
                     </button>
                 </div>
             </form>
