@@ -80,8 +80,6 @@
                 @endif
                 <span class="font-extrabold text-lg tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">{{ $siteName }}</span>
             </a>
-                @endif
-            </a>
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-600">
