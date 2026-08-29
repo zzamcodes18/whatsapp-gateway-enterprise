@@ -138,7 +138,7 @@
 
             </div>
 
-            <!-- Bottom: Quota Widget & User Card -->
+            <!-- Bottom: Quota Widget -->
             <div class="p-4 border-t border-slate-200/80 space-y-3 bg-slate-50/50">
                 
                 <!-- Quota Widget -->
@@ -158,32 +158,9 @@
                     </div>
                 </div>
 
-                <!-- User Profile & Logout -->
-                <div class="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs uppercase flex-shrink-0 shadow-2xs">
-                            {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
-                        </div>
-                        <div class="flex flex-col text-left truncate">
-                            <span class="text-xs font-bold text-slate-900 truncate leading-tight">{{ auth()->user()->name }}</span>
-                            <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{{ auth()->user()->role }}</span>
-                        </div>
-                    </div>
-
-                    <button type="button" @click="$confirm({
-                        title: 'Konfirmasi Keluar',
-                        message: 'Apakah Anda yakin ingin mengakhiri sesi console ini?',
-                        confirmText: 'Keluar',
-                        cancelText: 'Batal',
-                        type: 'danger',
-                        onConfirm: () => document.getElementById('logout-form').submit()
-                    })" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer flex-shrink-0" title="Logout">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                    </button>
-                    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                        @csrf
-                    </form>
-                </div>
+                <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+                    @csrf
+                </form>
 
             </div>
 
