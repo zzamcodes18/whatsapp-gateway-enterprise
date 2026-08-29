@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # Whatsapp Gateway Enterprise Installer Sub-Module: Gateway & Engine Uninstaller
-# Developer: Muhammad Tsaqif Noor Az Zamil (zzamcode)
+# Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
 set -e

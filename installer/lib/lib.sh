@@ -3,7 +3,7 @@
 # ==============================================================================
 # Whatsapp Gateway Enterprise Installer
 # Library & Helper Utilities
-# Developer: Muhammad Tsaqif Noor Az Zamil (zzamcode)
+# Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
 set -e
@@ -29,7 +29,7 @@ print_banner() {
   echo "  ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝    ╚═╝   ╚═╝     "
   echo -e "${C_RESET}"
   echo -e "${C_BOLD}     Whatsapp Gateway Enterprise Modular Installer${C_RESET}"
-  echo -e "${C_BLUE}           Built by zzamcode (Muhammad Tsaqif Noor Az Zamil)${C_RESET}"
+  echo -e "${C_BLUE}           Built by jakisoft (Muhammad Zaki) & zzamcode (Muhammad Tsaqif)${C_RESET}"
   echo "================================================================================"
   echo ""
 }

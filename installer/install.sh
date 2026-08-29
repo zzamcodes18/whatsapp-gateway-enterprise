@@ -3,7 +3,7 @@
 # ==============================================================================
 # Whatsapp Gateway Enterprise Installer
 # Main Interactive CLI Launcher (Pterodactyl Architecture Inspired)
-# Developer: Muhammad Tsaqif Noor Az Zamil (zzamcode)
+# Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
 set -e

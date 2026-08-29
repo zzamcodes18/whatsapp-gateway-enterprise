@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # LAPAKOTP Installer Sub-Module: Main Gateway Panel & Microservice Engine
-# Developer: Muhammad Tsaqif Noor Az Zamil (zzamcode)
+# Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
 set -e

@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # Whatsapp Gateway Enterprise Sub-Module: Platform Updater
-# Developer: Muhammad Tsaqif Noor Az Zamil (zzamcode)
+# Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
 set -e
