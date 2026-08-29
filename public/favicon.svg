@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+    <defs>
+        <linearGradient id="favGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2563EB" />
+            <stop offset="50%" stop-color="#3B82F6" />
+            <stop offset="100%" stop-color="#1D4ED8" />
+        </linearGradient>
+        <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1D4ED8" flood-opacity="0.35"/>
+        </filter>
+    </defs>
+    <!-- Background rounded squircle -->
+    <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#favGradient)" filter="url(#softShadow)"/>
+    <!-- Subtle Inner Highlight -->
+    <rect x="9" y="9" width="110" height="110" rx="27" fill="none" stroke="#93C5FD" stroke-width="1.5" stroke-opacity="0.4"/>
+    <!-- WhatsApp / Chat Bubble SVG Shape -->
+    <path d="M64 28C44.12 28 28 43.68 28 63C28 70.08 30.16 76.68 33.88 82.2L30 98L46.68 93.6C51.84 96.4 57.72 98 64 98C83.88 98 100 82.32 100 63C100 43.68 83.88 28 64 28Z" fill="#FFFFFF" fill-opacity="0.95"/>
+    <!-- Zap / OTP Icon inside -->
+    <path d="M66 42L52 62H63L61 82L76 60H65L66 42Z" fill="#2563EB"/>
+</svg>

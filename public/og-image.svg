@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F8FAFC" />
+            <stop offset="50%" stop-color="#EFF6FF" />
+            <stop offset="100%" stop-color="#E0F2FE" />
+        </linearGradient>
+        <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2563EB" />
+            <stop offset="100%" stop-color="#1D4ED8" />
+        </linearGradient>
+        <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1E40AF" />
+            <stop offset="50%" stop-color="#2563EB" />
+            <stop offset="100%" stop-color="#0284C7" />
+        </linearGradient>
+        <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+            <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#1E3A8A" flood-opacity="0.08"/>
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1E3A8A" flood-opacity="0.04"/>
+        </filter>
+        <filter id="brandShadow" x="-10%" y="-10%" width="125%" height="125%">
+            <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#2563EB" flood-opacity="0.3"/>
+        </filter>
+    </defs>
+
+    <!-- Background Canvas -->
+    <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+    <!-- Subtle Grid Lines -->
+    <g stroke="#CBD5E1" stroke-width="0.75" stroke-opacity="0.4">
+        <line x1="100" y1="0" x2="100" y2="630" />
+        <line x1="300" y1="0" x2="300" y2="630" />
+        <line x1="500" y1="0" x2="500" y2="630" />
+        <line x1="700" y1="0" x2="700" y2="630" />
+        <line x1="900" y1="0" x2="900" y2="630" />
+        <line x1="1100" y1="0" x2="1100" y2="630" />
+        <line x1="0" y1="100" x2="1200" y2="100" />
+        <line x1="0" y1="250" x2="1200" y2="250" />
+        <line x1="0" y1="400" x2="1200" y2="400" />
+        <line x1="0" y1="550" x2="1200" y2="550" />
+    </g>
+
+    <!-- Radial Ambient Glow -->
+    <circle cx="1050" cy="150" r="320" fill="#3B82F6" fill-opacity="0.12" filter="blur(60px)" />
+    <circle cx="150" cy="500" r="260" fill="#0284C7" fill-opacity="0.1" filter="blur(50px)" />
+
+    <!-- Main Container Card -->
+    <g filter="url(#cardShadow)">
+        <rect x="70" y="60" width="1060" height="510" rx="28" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5" />
+    </g>
+
+    <!-- Top Brand Row -->
+    <g transform="translate(120, 115)">
+        <!-- Logo Squircle -->
+        <rect x="0" y="0" width="56" height="56" rx="16" fill="url(#primaryGrad)" filter="url(#brandShadow)"/>
+        <!-- Zap icon -->
+        <path d="M30 14L20 30H28L26 44L38 28H30L30 14Z" fill="#FFFFFF"/>
+
+        <!-- Brand Text -->
+        <text x="72" y="38" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="28" fill="#0F172A" letter-spacing="-0.02em">
+            LAPAK<tspan fill="#2563EB">OTP</tspan>
+        </text>
+
+        <!-- Badge -->
+        <rect x="235" y="16" width="135" height="26" rx="13" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+        <text x="302" y="33" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11" fill="#1D4ED8" text-anchor="middle" letter-spacing="0.05em">GATEWAY v7.0</text>
+
+        <!-- Online Indicator (Right) -->
+        <rect x="800" y="14" width="140" height="30" rx="15" fill="#ECFDF5" stroke="#A7F3D0" stroke-width="1"/>
+        <circle cx="820" cy="29" r="4.5" fill="#10B981" />
+        <text x="834" y="34" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="11.5" fill="#047857">99.9% UPTIME</text>
+    </g>
+
+    <!-- Hero Title -->
+    <text x="120" y="245" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="44" fill="#0F172A" letter-spacing="-0.03em">
+        WhatsApp Gateway &amp;
+    </text>
+    <text x="120" y="305" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="44" fill="url(#textGrad)" letter-spacing="-0.03em">
+        Multi-Device REST API
+    </text>
+
+    <!-- Subtitle Description -->
+    <text x="120" y="360" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="500" font-size="17" fill="#64748B">
+        Infrastruktur pesan berkecepatan tinggi untuk Verifikasi OTP, Notifikasi Transaksi &amp; CS Otomatis.
+    </text>
+
+    <!-- Feature Badges -->
+    <g transform="translate(120, 400)">
+        <!-- Pill 1 -->
+        <rect x="0" y="0" width="205" height="42" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+        <circle cx="24" cy="21" r="5" fill="#2563EB"/>
+        <text x="38" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#334155">Pairing Code 8-Digit</text>
+
+        <!-- Pill 2 -->
+        <rect x="220" y="0" width="185" height="42" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+        <circle cx="244" cy="21" r="5" fill="#0284C7"/>
+        <text x="258" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#334155">Scan QR Resolusi</text>
+
+        <!-- Pill 3 -->
+        <rect x="420" y="0" width="195" height="42" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+        <circle cx="444" cy="21" r="5" fill="#10B981"/>
+        <text x="458" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#334155">Realtime Webhook</text>
+
+        <!-- Pill 4 -->
+        <rect x="630" y="0" width="185" height="42" rx="12" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+        <circle cx="654" cy="21" r="5" fill="#8B5CF6"/>
+        <text x="668" y="26" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#334155">UUIDv4 Sessions</text>
+    </g>
+
+    <!-- Bottom Footer Meta inside Card -->
+    <g transform="translate(120, 485)">
+        <line x1="0" y1="0" x2="960" y2="0" stroke="#F1F5F9" stroke-width="1.5" />
+        <text x="0" y="32" font-family="'JetBrains Mono', monospace" font-weight="600" font-size="12" fill="#94A3B8">
+            ENGINE: BAILEYS v7.0.0-RC.14 • LATENCY: &lt; 1s • SECURE SHA-256 REST API
+        </text>
+        <text x="960" y="32" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="13" fill="#2563EB" text-anchor="end">
+            lapakotp.com
+        </text>
+    </g>
+</svg>
