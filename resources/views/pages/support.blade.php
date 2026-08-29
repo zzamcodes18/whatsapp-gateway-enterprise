@@ -86,7 +86,7 @@
                     Untuk kebutuhan enterprise atau kendala darurat, Anda dapat menghubungi email langsung:
                 </p>
                 <div class="font-mono text-xs font-bold text-blue-700 p-2.5 bg-blue-50/70 border border-blue-100 rounded-xl">
-                    support@lapakotp.com
+                    support@zzam.dev
                 </div>
             </div>
 

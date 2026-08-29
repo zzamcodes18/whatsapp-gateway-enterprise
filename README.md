@@ -89,13 +89,13 @@ APP_URL=https://gateway.domain-anda.com
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=lapakotp_db
-DB_USERNAME=lapakotp_user
+DB_DATABASE=wagateway_db
+DB_USERNAME=wagateway_user
 DB_PASSWORD=PasswordDatabaseKuat123!
 
 # URL & Secret Microservice Engine Baileys
 WA_ENGINE_URL=http://127.0.0.1:3000
-WA_ENGINE_SECRET=lapakotp_secret_key_change_me
+WA_ENGINE_SECRET=wagateway_secret_key_change_me
 ```
 
 ---
@@ -106,38 +106,31 @@ Tersedia file database siap pakai di: **`database/schema/database.sql`**
 
 ### Opsi A: Import Menggunakan phpMyAdmin
 1. Buka dashboard **phpMyAdmin** di browser Anda.
-2. Klik tombol **New** / **Baru** pada sidebar kiri dan buat database baru bernama `lapakotp_db` dengan Collation `utf8mb4_unicode_ci`.
-3. Klik database `lapakotp_db` yang baru dibuat, lalu pilih tab **Import** di menu atas.
+2. Klik tombol **New** / **Baru** pada sidebar kiri dan buat database baru bernama `wagateway_db` dengan Collation `utf8mb4_unicode_ci`.
+3. Klik database `wagateway_db` yang baru dibuat, lalu pilih tab **Import** di menu atas.
 4. Klik **Choose File** / **Pilih Berkas**, lalu pilih file **`database/schema/database.sql`** dari folder proyek.
-5. Klik tombol **Import** / **Go** di bagian bawah halaman. Seluruh tabel dan data awal admin akan otomatis terpasang.
+5. Klik tombol **Import** / **Go** di bagian bawah halaman.
 
 ### Opsi B: Import Melalui Terminal VPS (MySQL CLI)
 ```bash
 # Masuk ke MySQL console dan buat database
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS lapakotp_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS wagateway_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # Import file SQL langsung ke database
-mysql -u root -p lapakotp_db < /var/www/lapakotp/database/schema/database.sql
-```
-
-### Opsi C: Menjalankan Migration & Seeder Bawaan Laravel
-```bash
-php artisan migrate --force
-php artisan db:seed --force
+mysql -u root -p wagateway_db < /var/www/whatsapp-gateway/database/schema/database.sql
 ```
 
 ---
 
-## 🔑 Akun Default Login
+## 👤 Akun Admin
 
-Setelah database diimport/diseed, gunakan akun default berikut untuk login ke console:
+Untuk membuat akun Administrator pertama Anda, jalankan command Artisan berikut di terminal:
 
-| Akun | Email | Password | Role | Hak Akses |
-| :--- | :--- | :--- | :--- | :--- |
-| **Super Admin** | `admin@lapakotp.com` | `password123` | `admin` | Full Control, Limit Unlimited, Atur Bot Server & Kuota Pengguna |
-| **Demo User** | `demo@lapakotp.com` | `password123` | `user` | Mengelola Device Pribadi, Kirim Pesan, Webhooks & API Keys |
+```bash
+php artisan make:admin
+```
 
-> ⚠️ **PENTING**: Segera ubah kata sandi default setelah berhasil masuk pertama kali di menu console.
+Ikuti petunjuk di layar untuk memasukkan nama, email, dan kata sandi admin. Akun admin ini akan secara otomatis mendapatkan akses penuh dan limit *unlimited*.
 
 ---
 
@@ -195,7 +188,7 @@ systemctl restart nginx
 npm install -g pm2
 
 # Jalankan engine dari direktori engine (jika ada file engine.js / server.js)
-pm2 start artisan --name "lapakotp-queue" -- queue:work --sleep=3 --tries=3
+pm2 start artisan --name "wagateway-queue" -- queue:work --sleep=3 --tries=3
 pm2 save
 pm2 startup
 ```

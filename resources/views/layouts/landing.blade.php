@@ -33,7 +33,7 @@
     <meta name="twitter:title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
     <meta name="twitter:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v7.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta name="twitter:image" content="{{ asset('og-image.svg') }}">
-    <meta name="twitter:site" content="@lapakotp">
+    <meta name="twitter:site" content="@wagateway">
 
     <!-- SVG Favicon & Icons -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">

@@ -46,7 +46,7 @@ class AdminUserController extends Controller
             'phone_number' => ['nullable', 'string', 'max:30'],
             'role' => ['required', 'in:user,admin'],
             'password' => ['required', Password::min(8)],
-            'device_limit' => ['required', 'integer', 'min:1', 'max:100'],
+            'device_limit' => ['required', 'integer', 'min:0', 'max:100000'],
             'daily_message_limit' => ['required', 'integer', 'min:0', 'max:100000'],
         ]);
 
@@ -73,7 +73,7 @@ class AdminUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'phone_number' => ['nullable', 'string', 'max:30'],
             'role' => ['required', 'in:user,admin'],
-            'device_limit' => ['required', 'integer', 'min:1', 'max:100'],
+            'device_limit' => ['required', 'integer', 'min:0', 'max:100000'],
             'daily_message_limit' => ['required', 'integer', 'min:0', 'max:100000'],
             'is_active' => ['required', 'boolean'],
             'password' => ['nullable', Password::min(8)],

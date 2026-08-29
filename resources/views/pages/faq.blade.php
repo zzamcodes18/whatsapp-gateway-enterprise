@@ -8,7 +8,7 @@
     <div class="border-b border-slate-200/80 pb-4 space-y-2">
         <span class="app-tag app-tag-blue text-[9px]">KNOWLEDGE BASE</span>
         <h1 class="font-extrabold text-2xl sm:text-4xl text-slate-900">Pertanyaan yang Sering Diajukan (FAQ)</h1>
-        <p class="text-xs sm:text-sm text-slate-500 font-medium">Temukan panduan teknis dan jawaban seputar integrasi LAPAKOTP Gateway.</p>
+        <p class="text-xs sm:text-sm text-slate-500 font-medium">Temukan panduan teknis dan jawaban seputar integrasi Whatsapp Gateway Enterprise.</p>
     </div>
 
     <!-- Search Box -->

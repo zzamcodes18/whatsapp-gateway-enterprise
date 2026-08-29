@@ -14,7 +14,7 @@
             </div>
             <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900">Perangkat WhatsApp</h1>
             <p class="text-xs text-slate-500 font-medium">
-                Kelola sesi nomor WhatsApp Anda. Kuota: <strong class="text-slate-800" x-text="devicesList.length"></strong> / <strong class="text-slate-800">{{ auth()->user()->device_limit ?? 3 }} Unit</strong>.
+                Kelola sesi nomor WhatsApp Anda. Kuota: <strong class="text-slate-800" x-text="devicesList.length"></strong> / <strong class="text-slate-800">{{ auth()->user()->device_limit > 0 ? auth()->user()->device_limit . ' Unit' : 'Unlimited' }}</strong>.
             </p>
         </div>
 

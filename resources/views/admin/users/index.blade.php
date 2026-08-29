@@ -78,7 +78,7 @@
                             </span>
                         </td>
                         <td class="p-3.5 font-mono">
-                            <strong class="text-slate-900">{{ $user->devices_count }}</strong> / {{ $user->device_limit ?? 3 }} Unit
+                            <strong class="text-slate-900">{{ $user->devices_count }}</strong> / {{ $user->device_limit > 0 ? $user->device_limit . ' Unit' : 'Unlimited' }}
                         </td>
                         <td class="p-3.5 font-mono">
                             <span class="text-blue-600 font-bold">{{ $user->messages_sent_today }}</span> / {{ $user->daily_message_limit ? $user->daily_message_limit . ' msg/hari' : 'Unlimited' }}
@@ -177,7 +177,8 @@
                     </div>
                     <div class="space-y-1.5">
                         <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Limit Device</label>
-                        <input type="number" name="device_limit" value="3" min="1" max="100" class="input-text text-xs font-mono font-bold">
+                        <input type="number" name="device_limit" value="3" min="0" max="100000" class="input-text text-xs font-mono font-bold">
+                        <p class="text-[11px] text-slate-500">Masukkan 0 jika ingin kuota tanpa batas.</p>
                     </div>
                 </div>
 
@@ -257,13 +258,14 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div class="space-y-1.5">
                         <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Limit Device</label>
-                        <input type="number" name="device_limit" x-model="editForm.device_limit" min="1" max="100" class="input-text text-xs font-mono font-bold">
+                        <input type="number" name="device_limit" x-model="editForm.device_limit" min="0" max="100000" class="input-text text-xs font-mono font-bold">
                     </div>
                     <div class="space-y-1.5">
                         <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Limit Pesan / Hari</label>
                         <input type="number" name="daily_message_limit" x-model="editForm.daily_message_limit" min="0" max="100000" class="input-text text-xs font-mono font-bold">
                     </div>
                 </div>
+                <p class="text-[11px] text-slate-500">Masukkan 0 jika ingin limit device / pesan tanpa batas (unlimited).</p>
 
                 <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
                     <button type="button" @click="showEditModal = false" class="app-btn app-btn-secondary text-xs py-2 px-3.5">

@@ -45,8 +45,8 @@
                             <i class="fa-brands fa-whatsapp text-lg"></i>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-lg tracking-tight text-navy">LAPAK<span class="text-blue-600">OTP</span></span>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">GATEWAY</span>
+                            <span class="font-extrabold text-lg tracking-tight text-navy">WHATSAPP<span class="text-blue-600">GATEWAY</span></span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">ENTERPRISE</span>
                         </div>
                     </a>
 

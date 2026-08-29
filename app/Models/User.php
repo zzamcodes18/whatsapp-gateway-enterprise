@@ -85,6 +85,10 @@ class User extends Authenticatable
             return true;
         }
 
+        if (($this->device_limit ?? 3) <= 0) {
+            return true; // 0 = unlimited
+        }
+
         return $this->devices()->count() < ($this->device_limit ?? 3);
     }
 

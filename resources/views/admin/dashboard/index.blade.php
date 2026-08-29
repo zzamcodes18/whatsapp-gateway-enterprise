@@ -140,7 +140,7 @@
                                         {{ strtoupper($usr->role) }}
                                     </span>
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-slate-800">{{ $usr->device_limit ?? 3 }} Unit</td>
+                                <td class="p-3.5 font-mono font-bold text-slate-800">{{ $usr->device_limit > 0 ? $usr->device_limit . ' Unit' : 'Unlimited' }}</td>
                                 <td class="p-3.5 font-mono font-bold text-slate-800">{{ $usr->daily_message_limit ? $usr->daily_message_limit . ' msg' : 'Unlimited' }}</td>
                                 <td class="p-3.5">
                                     <span class="app-tag text-[9px] {{ $usr->is_active ? 'app-tag-emerald' : 'app-tag-rose' }}">

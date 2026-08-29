@@ -15,7 +15,7 @@
         <section class="space-y-2">
             <h2 class="font-bold text-base sm:text-lg text-slate-900">1. Ketentuan Umum</h2>
             <p>
-                Dengan mengakses dan menggunakan platform LAPAKOTP WhatsApp Gateway, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh seluruh Syarat dan Ketentuan yang berlaku.
+                Dengan mengakses dan menggunakan platform Whatsapp Gateway Enterprise, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh seluruh Syarat dan Ketentuan yang berlaku.
             </p>
         </section>
 
@@ -41,7 +41,7 @@
         <section class="space-y-2">
             <h2 class="font-bold text-base sm:text-lg text-slate-900">4. Tanggung Jawab Keamanan Akun</h2>
             <p>
-                Pengguna bertanggung jawab penuh atas kerahasiaan API Key dan kredensial akun masing-masing. LAPAKOTP tidak bertanggung jawab atas penyalahgunaan akibat kelalaian dalam mengamankan kunci akses API.
+                Pengguna bertanggung jawab penuh atas kerahasiaan API Key dan kredensial akun masing-masing. Whatsapp Gateway Enterprise tidak bertanggung jawab atas penyalahgunaan akibat kelalaian dalam mengamankan kunci akses API.
             </p>
         </section>
     </div>
