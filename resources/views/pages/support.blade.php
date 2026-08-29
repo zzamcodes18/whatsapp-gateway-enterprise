@@ -80,13 +80,18 @@
             <div class="app-card p-5 bg-white space-y-3">
                 <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
                     <i data-lucide="mail" class="w-4 h-4 text-blue-600"></i>
-                    <span>Email Resmi</span>
+                    <span>Dukungan Kontak</span>
                 </div>
                 <p class="text-xs text-slate-600 font-medium leading-relaxed">
-                    Untuk kebutuhan enterprise atau kendala darurat, Anda dapat menghubungi email langsung:
+                    Untuk kebutuhan enterprise atau kendala darurat, Anda dapat menghubungi kami melalui:
                 </p>
-                <div class="font-mono text-xs font-bold text-blue-700 p-2.5 bg-blue-50/70 border border-blue-100 rounded-xl">
-                    support@zzam.dev
+                <div class="font-mono text-xs font-bold text-blue-700 p-2.5 bg-blue-50/70 border border-blue-100 rounded-xl space-y-1.5">
+                    <div>Email: {{ !empty($supportEmail) ? $supportEmail : 'support@zzam.dev' }}</div>
+                    @if(!empty($supportWhatsapp))
+                        <div>
+                            WhatsApp CS: <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $supportWhatsapp) }}" target="_blank" class="underline hover:text-blue-800">+{{ $supportWhatsapp }}</a>
+                        </div>
+                    @endif
                 </div>
             </div>
 

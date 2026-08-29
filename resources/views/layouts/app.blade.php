@@ -6,23 +6,29 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- SEO Meta Tags -->
-    <title>@yield('title', 'Console · Whatsapp Gateway Enterprise')</title>
-    <meta name="title" content="@yield('meta_title', 'Console · Whatsapp Gateway Enterprise')">
-    <meta name="description" content="Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.">
+    <title>@yield('title', 'Console · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))</title>
+    <meta name="title" content="@yield('meta_title', 'Console · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))">
+    <meta name="description" content="{{ $siteDescription ?? 'Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.' }}">
+    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp' }}">
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#2563EB">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Console · Whatsapp Gateway Enterprise">
-    <meta property="og:description" content="Console manajemen gateway WhatsApp terpadu.">
+    <meta property="og:title" content="Console · {{ $siteName ?? 'Whatsapp Gateway Enterprise' }}">
+    <meta property="og:description" content="{{ $siteDescription ?? 'Console manajemen gateway WhatsApp terpadu.' }}">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
 
-    <!-- SVG Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    <!-- Favicon -->
+    @if(!empty($siteFavicon))
+        <link rel="icon" href="{{ $siteFavicon }}">
+        <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+        <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,13 +49,16 @@
                 
                 <!-- Brand Logo -->
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 group">
-                    <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                        <i class="fa-brands fa-whatsapp text-lg"></i>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="font-extrabold text-lg tracking-tight text-navy">WHATSAPP<span class="text-blue-600">GATEWAY</span></span>
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">ENTERPRISE</span>
-                    </div>
+                    @if(!empty($siteLogo))
+                        <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
+                    @else
+                        <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-base tracking-tight text-slate-900 truncate max-w-[150px]">{{ $siteName }}</span>
+                        </div>
+                    @endif
                 </a>
 
                 <!-- Nav Menu Items -->

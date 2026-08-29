@@ -6,11 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Primary Meta SEO Tags -->
-    <title>@yield('title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')</title>
-    <meta name="title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta name="description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
-    <meta name="keywords" content="whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise">
-    <meta name="author" content="Whatsapp Gateway Enterprise">
+    <title>@yield('title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')</title>
+    <meta name="title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
+    <meta name="description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise' }}">
+    <meta name="author" content="{{ $siteName }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#2563EB">
     <link rel="canonical" href="{{ url()->current() }}">
@@ -18,27 +18,32 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta property="og:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta property="og:title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
+    <meta property="og:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:site_name" content="Whatsapp Gateway Enterprise">
+    <meta property="og:site_name" content="{{ $siteName }}">
     <meta property="og:locale" content="id_ID">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url()->current() }}">
-    <meta name="twitter:title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta name="twitter:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="twitter:title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
+    <meta name="twitter:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta name="twitter:image" content="{{ asset('og-image.svg') }}">
-    <meta name="twitter:site" content="@wagateway">
+    <meta name="twitter:site" content="{{ $siteName }}">
 
-    <!-- SVG Favicon & Icons -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    <!-- Favicon -->
+    @if(!empty($siteFavicon))
+        <link rel="icon" href="{{ $siteFavicon }}">
+        <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+        <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,13 +67,16 @@
             
             <!-- Brand Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
-                <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="font-extrabold text-lg tracking-tight text-slate-900">LAPAK<span class="text-blue-600">OTP</span></span>
-                    <span class="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60 ml-1">GATEWAY</span>
-                </div>
+                @if(!empty($siteLogo))
+                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
+                @else
+                    <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-extrabold text-lg tracking-tight text-slate-900">{{ $siteName }}</span>
+                    </div>
+                @endif
             </a>
 
             <!-- Navigation Links -->
@@ -142,13 +150,17 @@
                 <!-- Brand & Description -->
                 <div class="col-span-2 space-y-3.5">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </div>
-                        <span class="font-extrabold text-base tracking-tight text-slate-900">WHATSAPP GATEWAY ENTERPRISE</span>
+                        @if(!empty($siteLogo))
+                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-8 w-auto max-w-[150px] object-contain">
+                        @else
+                            <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <span class="font-extrabold text-base tracking-tight text-slate-900">{{ strtoupper($siteName) }}</span>
+                        @endif
                     </div>
                     <p class="text-xs font-medium text-slate-600 max-w-sm leading-relaxed">
-                        Infrastruktur WhatsApp Business & Multi-Device REST API berkecepatan tinggi untuk kebutuhan verifikasi OTP, notifikasi transaksi, dan otomasi pengiriman pesan.
+                        {{ $siteDescription }}
                     </p>
                     <div class="flex items-center gap-2 pt-1">
                         <span class="app-tag app-tag-emerald text-[10px]">Uptime 99.9%</span>
@@ -192,7 +204,7 @@
             </div>
 
             <div class="border-t border-slate-100 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-medium text-slate-500">
-                <p>&copy; {{ date('Y') }} Whatsapp Gateway Enterprise. Hak cipta dilindungi.</p>
+                <p>&copy; {{ date('Y') }} {{ $siteName }}. Hak cipta dilindungi.</p>
                 <div class="flex items-center gap-3 font-mono text-[11px] text-slate-400">
                     <span class="text-emerald-600 font-semibold flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> SYSTEM ONLINE</span>
                     <span>•</span>

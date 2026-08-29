@@ -15,7 +15,7 @@
         <section class="space-y-2">
             <h2 class="font-bold text-base sm:text-lg text-slate-900">1. Ketentuan Umum</h2>
             <p>
-                Dengan mengakses dan menggunakan platform Whatsapp Gateway Enterprise, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh seluruh Syarat dan Ketentuan yang berlaku.
+                Dengan mengakses dan menggunakan platform {{ $siteName }}, Anda menyatakan telah membaca, memahami, dan menyetujui untuk terikat oleh seluruh Syarat dan Ketentuan yang berlaku.
             </p>
         </section>
 

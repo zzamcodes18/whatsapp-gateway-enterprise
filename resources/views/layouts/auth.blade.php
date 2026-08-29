@@ -6,23 +6,28 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- SEO Meta Tags -->
-    <title>@yield('title', 'Autentikasi · Whatsapp Gateway Enterprise')</title>
-    <meta name="title" content="@yield('meta_title', 'Autentikasi · Whatsapp Gateway Enterprise')">
-    <meta name="description" content="Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.">
+    <title>@yield('title', 'Autentikasi · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))</title>
+    <meta name="title" content="@yield('meta_title', 'Autentikasi · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))">
+    <meta name="description" content="{{ $siteDescription ?? 'Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.' }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#2563EB">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="@yield('title', 'Autentikasi · Whatsapp Gateway Enterprise')">
-    <meta property="og:description" content="Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.">
+    <meta property="og:title" content="@yield('title', 'Autentikasi · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))">
+    <meta property="og:description" content="{{ $siteDescription ?? 'Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.' }}">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
 
-    <!-- SVG Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    <!-- Favicon -->
+    @if(!empty($siteFavicon))
+        <link rel="icon" href="{{ $siteFavicon }}">
+        <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
+    @else
+        <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+        <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
+    @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,13 +46,16 @@
                 <!-- Top Brand Header -->
                 <div class="w-full flex items-center justify-between">
                     <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
-                        <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-lg tracking-tight text-navy">WHATSAPP<span class="text-blue-600">GATEWAY</span></span>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">ENTERPRISE</span>
-                        </div>
+                        @if(!empty($siteLogo))
+                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
+                        @else
+                            <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-extrabold text-base tracking-tight text-slate-900">{{ $siteName }}</span>
+                            </div>
+                        @endif
                     </a>
 
                     <a href="{{ route('home') }}" class="text-xs font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
@@ -86,7 +94,7 @@
 
                 <!-- Footer Text -->
                 <div class="w-full text-center text-xs text-slate-400 font-medium pt-4">
-                    <p>&copy; {{ date('Y') }} Whatsapp Gateway Enterprise. Hak cipta dilindungi.</p>
+                    <p>&copy; {{ date('Y') }} {{ $siteName }}. Hak cipta dilindungi.</p>
                 </div>
 
             </section>
