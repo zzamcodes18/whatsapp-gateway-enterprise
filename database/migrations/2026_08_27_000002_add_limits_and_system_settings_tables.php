@@ -30,7 +30,7 @@ return new class extends Migration
             Schema::create('system_settings', function (Blueprint $table) {
                 $table->id();
                 $table->string('key', 100)->unique();
-                $table->text('value')->nullable();
+                $table->longText('value')->nullable();
                 $table->string('type', 50)->default('string');
                 $table->timestamps();
             });

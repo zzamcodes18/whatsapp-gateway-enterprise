@@ -115,7 +115,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-xs text-slate-800">Logo Utama Application</h4>
-                                <p class="text-[11px] text-slate-500">Upload File atau Masukkan Direct URL</p>
+                                <p class="text-[11px] text-slate-500">Upload file logo dari komputer/HP (disimpan langsung ke database)</p>
                             </div>
                             <i data-lucide="image" class="w-5 h-5 text-blue-600"></i>
                         </div>
@@ -123,7 +123,7 @@
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-xl border border-slate-200 bg-white p-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
                                 @if(!empty($settings['site_logo']))
-                                    <img src="{{ str_starts_with($settings['site_logo'], 'http') ? $settings['site_logo'] : asset(ltrim($settings['site_logo'], '/')) }}" alt="Logo Saat Ini" class="max-h-full max-w-full object-contain">
+                                    <img src="{{ (str_starts_with($settings['site_logo'], 'http') || str_starts_with($settings['site_logo'], 'data:')) ? $settings['site_logo'] : asset(ltrim($settings['site_logo'], '/')) }}" alt="Logo Saat Ini" class="max-h-full max-w-full object-contain">
                                 @else
                                     <div class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs">
                                         WA
@@ -131,15 +131,9 @@
                                 @endif
                             </div>
 
-                            <div class="flex-1 space-y-2">
-                                <div class="space-y-1">
-                                    <label for="site_logo" class="app-label">Pilih File Logo Baru (Otomatis Kompres)</label>
-                                    <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="compressImageOnUpload($event, 500)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-                                </div>
-                                <div class="space-y-1">
-                                    <label for="site_logo_url" class="app-label text-[11px]">Atau Input Direct URL Logo (Opsional)</label>
-                                    <input type="url" id="site_logo_url" name="site_logo_url" value="{{ old('site_logo_url', filter_var($settings['site_logo'] ?? '', FILTER_VALIDATE_URL) ? $settings['site_logo'] : '') }}" class="app-input text-xs py-1.5" placeholder="https://domain.com/logo.png">
-                                </div>
+                            <div class="flex-1 space-y-1">
+                                <label for="site_logo" class="app-label">Pilih File Logo Baru (Otomatis Kompres)</label>
+                                <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="compressImageOnUpload($event, 500)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -149,7 +143,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-xs text-slate-800">Icon Browser (Favicon)</h4>
-                                <p class="text-[11px] text-slate-500">Upload File atau Masukkan Direct URL</p>
+                                <p class="text-[11px] text-slate-500">Upload file icon/favicon dari komputer/HP (disimpan langsung ke database)</p>
                             </div>
                             <i data-lucide="bookmark" class="w-5 h-5 text-indigo-600"></i>
                         </div>
@@ -157,21 +151,15 @@
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-xl border border-slate-200 bg-white p-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
                                 @if(!empty($settings['site_favicon']))
-                                    <img src="{{ str_starts_with($settings['site_favicon'], 'http') ? $settings['site_favicon'] : asset(ltrim($settings['site_favicon'], '/')) }}" alt="Favicon Saat Ini" class="w-8 h-8 object-contain">
+                                    <img src="{{ (str_starts_with($settings['site_favicon'], 'http') || str_starts_with($settings['site_favicon'], 'data:')) ? $settings['site_favicon'] : asset(ltrim($settings['site_favicon'], '/')) }}" alt="Favicon Saat Ini" class="w-8 h-8 object-contain">
                                 @else
                                     <i data-lucide="message-square" class="w-7 h-7 text-blue-600"></i>
                                 @endif
                             </div>
 
-                            <div class="flex-1 space-y-2">
-                                <div class="space-y-1">
-                                    <label for="site_favicon" class="app-label">Pilih File Favicon Baru (Otomatis Kompres)</label>
-                                    <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="compressImageOnUpload($event, 128)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
-                                </div>
-                                <div class="space-y-1">
-                                    <label for="site_favicon_url" class="app-label text-[11px]">Atau Input Direct URL Favicon (Opsional)</label>
-                                    <input type="url" id="site_favicon_url" name="site_favicon_url" value="{{ old('site_favicon_url', filter_var($settings['site_favicon'] ?? '', FILTER_VALIDATE_URL) ? $settings['site_favicon'] : '') }}" class="app-input text-xs py-1.5" placeholder="https://domain.com/favicon.png">
-                                </div>
+                            <div class="flex-1 space-y-1">
+                                <label for="site_favicon" class="app-label">Pilih File Favicon Baru (Otomatis Kompres)</label>
+                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="compressImageOnUpload($event, 128)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
                             </div>
                         </div>
                     </div>

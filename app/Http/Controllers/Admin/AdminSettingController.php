@@ -32,8 +32,6 @@ class AdminSettingController extends Controller
             'allow_registration' => ['required', 'in:true,false'],
             'wa_engine_url' => ['nullable', 'url', 'max:255'],
             'wa_engine_secret' => ['nullable', 'string', 'max:255'],
-            'site_logo_url' => ['nullable', 'url', 'max:500'],
-            'site_favicon_url' => ['nullable', 'url', 'max:500'],
             'site_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:2048'],
             'site_favicon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,ico,webp', 'max:1024'],
         ]);
@@ -57,22 +55,20 @@ class AdminSettingController extends Controller
             }
         }
 
-        if ($request->filled('site_logo_url')) {
-            SystemSetting::set('site_logo', (string) $request->input('site_logo_url'));
-        }
-
-        if ($request->filled('site_favicon_url')) {
-            SystemSetting::set('site_favicon', (string) $request->input('site_favicon_url'));
-        }
-
         if ($request->hasFile('site_logo')) {
-            $logoPath = $request->file('site_logo')->store('settings', 'public');
-            SystemSetting::set('site_logo', Storage::url($logoPath));
+            $file = $request->file('site_logo');
+            $mime = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $dataUri = 'data:' . $mime . ';base64,' . $base64;
+            SystemSetting::set('site_logo', $dataUri);
         }
 
         if ($request->hasFile('site_favicon')) {
-            $faviconPath = $request->file('site_favicon')->store('settings', 'public');
-            SystemSetting::set('site_favicon', Storage::url($faviconPath));
+            $file = $request->file('site_favicon');
+            $mime = $file->getMimeType();
+            $base64 = base64_encode(file_get_contents($file->getRealPath()));
+            $dataUri = 'data:' . $mime . ';base64,' . $base64;
+            SystemSetting::set('site_favicon', $dataUri);
         }
 
         /** @var User $user */

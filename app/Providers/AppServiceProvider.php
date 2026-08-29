@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
             
             $rawLogo = $settings['site_logo'] ?? null;
             if ($rawLogo) {
-                $siteLogo = (str_starts_with($rawLogo, 'http://') || str_starts_with($rawLogo, 'https://')) 
+                $siteLogo = (str_starts_with($rawLogo, 'data:') || str_starts_with($rawLogo, 'http://') || str_starts_with($rawLogo, 'https://')) 
                     ? $rawLogo 
                     : asset(ltrim($rawLogo, '/'));
             } else {
@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
 
             $rawFavicon = $settings['site_favicon'] ?? null;
             if ($rawFavicon) {
-                $siteFavicon = (str_starts_with($rawFavicon, 'http://') || str_starts_with($rawFavicon, 'https://')) 
+                $siteFavicon = (str_starts_with($rawFavicon, 'data:') || str_starts_with($rawFavicon, 'http://') || str_starts_with($rawFavicon, 'https://')) 
                     ? $rawFavicon 
                     : asset(ltrim($rawFavicon, '/'));
             } else {
