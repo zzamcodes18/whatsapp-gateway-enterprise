@@ -11,24 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('device_limit')->default(3)->after('is_active');
-            $table->unsignedInteger('daily_message_limit')->default(500)->after('device_limit');
-            $table->unsignedInteger('messages_sent_today')->default(0)->after('daily_message_limit');
-            $table->date('last_limit_reset_at')->nullable()->after('messages_sent_today');
-        });
+        if (!Schema::hasColumn('users', 'device_limit')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->unsignedInteger('device_limit')->default(3)->after('is_active');
+                $table->unsignedInteger('daily_message_limit')->default(500)->after('device_limit');
+                $table->unsignedInteger('messages_sent_today')->default(0)->after('daily_message_limit');
+                $table->date('last_limit_reset_at')->nullable()->after('messages_sent_today');
+            });
+        }
 
-        Schema::table('devices', function (Blueprint $table) {
-            $table->boolean('is_system_bot')->default(false)->after('status');
-        });
+        if (!Schema::hasColumn('devices', 'is_system_bot')) {
+            Schema::table('devices', function (Blueprint $table) {
+                $table->boolean('is_system_bot')->default(false)->after('status');
+            });
+        }
 
-        Schema::create('system_settings', function (Blueprint $table) {
-            $table->id();
-            $table->string('key', 100)->unique();
-            $table->text('value')->nullable();
-            $table->string('type', 50)->default('string');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('system_settings')) {
+            Schema::create('system_settings', function (Blueprint $table) {
+                $table->id();
+                $table->string('key', 100)->unique();
+                $table->text('value')->nullable();
+                $table->string('type', 50)->default('string');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
