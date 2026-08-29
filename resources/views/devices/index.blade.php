@@ -194,7 +194,7 @@
                         <span x-show="!isLoading">Mulai Sesi WhatsApp &rarr;</span>
                         <span x-show="isLoading" class="flex items-center gap-2">
                             <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
-                            <span>Memproses sesi Baileys Engine...</span>
+                            <span>Memproses sesi WhatsApp Engine...</span>
                         </span>
                     </button>
                 </div>

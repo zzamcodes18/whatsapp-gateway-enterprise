@@ -22,7 +22,7 @@ class HomeController extends Controller
 
         return view('landing.index', [
             'engineOnline' => $engineOnline,
-            'engineVersion' => $engineHealth['engine'] ?? '@whiskeysockets/baileys v1.0.0',
+            'engineVersion' => $engineHealth['engine'] ?? 'Enterprise Engine Core v1.0.0',
             'stats' => [
                 'active_devices' => $totalDevices,
                 'messages_delivered' => max(12480, $totalMessages + 12000),

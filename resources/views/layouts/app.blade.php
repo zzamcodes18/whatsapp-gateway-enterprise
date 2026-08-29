@@ -9,7 +9,7 @@
     <title>@yield('title', 'Console') · {{ $siteName }}</title>
     <meta name="title" content="@yield('meta_title', 'Console · ' . $siteName)">
     <meta name="description" content="{{ $siteDescription ?? 'Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.' }}">
-    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp' }}">
+    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, whatsapp bot api, rest api whatsapp' }}">
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#2563EB">
 
@@ -48,23 +48,23 @@
             <div class="p-5 space-y-6">
                 
                 <!-- Brand Logo -->
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 group">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
                     @if(!empty($siteLogo))
-                        <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
-                        <div class="hidden items-center gap-2.5">
-                            <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                                <i class="fa-brands fa-whatsapp text-lg"></i>
-                            </div>
-                            <span class="font-extrabold text-base tracking-tight text-slate-900 truncate max-w-[150px]">{{ $siteName }}</span>
+                        <div class="w-10 h-10 rounded-xl bg-white border border-slate-200/90 shadow-xs p-1 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:border-blue-300 transition-all">
+                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="max-h-full max-w-full object-contain rounded-lg" onerror="this.parentElement.style.display='none'; this.parentElement.nextElementSibling.classList.remove('hidden'); this.parentElement.nextElementSibling.classList.add('flex');">
+                        </div>
+                        <div class="hidden w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform flex-shrink-0">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
                         </div>
                     @else
-                        <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
-                        </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-base tracking-tight text-slate-900 truncate max-w-[150px]">{{ $siteName }}</span>
+                        <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform flex-shrink-0">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
                         </div>
                     @endif
+                    <div class="flex flex-col truncate">
+                        <span class="font-extrabold text-base tracking-tight text-slate-900 truncate leading-tight group-hover:text-blue-600 transition-colors">{{ $siteName }}</span>
+                        <span class="text-[10px] font-semibold text-slate-400 tracking-wide uppercase">WhatsApp Gateway</span>
+                    </div>
                 </a>
 
                 <!-- Nav Menu Items -->

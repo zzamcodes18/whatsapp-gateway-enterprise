@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
             $siteName = $settings['site_name'] ?? 'Whatsapp Gateway Enterprise';
             $siteDescription = $settings['site_description'] ?? 'Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.';
-            $siteKeywords = $settings['site_keywords'] ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp';
+            $siteKeywords = $settings['site_keywords'] ?? 'whatsapp gateway, wa gateway api, whatsapp otp, whatsapp bot api, rest api whatsapp';
             
             $rawLogo = $settings['site_logo'] ?? null;
             if ($rawLogo) {

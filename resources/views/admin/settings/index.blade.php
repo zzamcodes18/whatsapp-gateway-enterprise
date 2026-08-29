@@ -91,13 +91,13 @@
 
                     <div class="space-y-1.5">
                         <label for="site_keywords" class="app-label">SEO Keywords</label>
-                        <input type="text" id="site_keywords" name="site_keywords" value="{{ old('site_keywords', $settings['site_keywords'] ?? 'whatsapp gateway, wa api, whatsapp otp, baileys, REST API') }}" class="app-input" placeholder="whatsapp gateway, wa api, REST API">
+                        <input type="text" id="site_keywords" name="site_keywords" value="{{ old('site_keywords', $settings['site_keywords'] ?? 'whatsapp gateway, wa api, whatsapp otp, REST API') }}" class="app-input" placeholder="whatsapp gateway, wa api, REST API">
                     </div>
                 </div>
 
                 <div class="space-y-1.5">
                     <label for="site_description" class="app-label">Deskripsi Website (Meta Description)</label>
-                    <textarea id="site_description" name="site_description" rows="3" class="app-input" placeholder="Deskripsi singkat aplikasi untuk tampilan SEO Google & Open Graph...">{{ old('site_description', $settings['site_description'] ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys Core. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.') }}</textarea>
+                    <textarea id="site_description" name="site_description" rows="3" class="app-input" placeholder="Deskripsi singkat aplikasi untuk tampilan SEO Google & Open Graph...">{{ old('site_description', $settings['site_description'] ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Enterprise Engine Core. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.') }}</textarea>
                 </div>
             </div>
 
@@ -203,7 +203,7 @@
             <!-- TAB 4: ENGINE & MICROSERVICE -->
             <div x-show="tab === 'engine'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 pb-3">
-                    <h3 class="font-bold text-sm text-slate-900">Integrasi Microservice Baileys Node.js</h3>
+                    <h3 class="font-bold text-sm text-slate-900">Integrasi Microservice Engine Node.js</h3>
                     <p class="text-xs text-slate-500">Pengaturan alamat internal microservice WhatsApp engine (port 3000).</p>
                 </div>
 
@@ -211,7 +211,7 @@
                     <div class="space-y-1.5">
                         <label for="wa_engine_url" class="app-label">URL Backend Engine</label>
                         <input type="text" id="wa_engine_url" name="wa_engine_url" value="{{ old('wa_engine_url', $settings['wa_engine_url'] ?? 'http://127.0.0.1:3000') }}" class="app-input font-mono text-xs" placeholder="http://127.0.0.1:3000">
-                        <p class="text-[11px] text-slate-400">Alamat internal server Node.js Baileys yang berjalan pada port 3000.</p>
+                        <p class="text-[11px] text-slate-400">Alamat internal server Node.js Engine yang berjalan pada port 3000.</p>
                     </div>
 
                     <div class="space-y-1.5">

@@ -8,8 +8,8 @@
     <!-- Primary Meta SEO Tags -->
     <title>@yield('title', 'Multi-Device REST API') · {{ $siteName }}</title>
     <meta name="title" content="@yield('meta_title', $siteName . ' & Multi-Device REST API')">
-    <meta name="description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
-    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise' }}">
+    <meta name="description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Enterprise Core v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise' }}">
     <meta name="author" content="{{ $siteName }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#2563EB">
@@ -19,7 +19,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
-    <meta property="og:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta property="og:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Enterprise Core v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url()->current() }}">
     <meta name="twitter:title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
-    <meta name="twitter:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="twitter:description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Enterprise Core v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta name="twitter:image" content="{{ asset('og-image.svg') }}">
     <meta name="twitter:site" content="{{ $siteName }}">
 
@@ -68,16 +68,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             
             <!-- Brand Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
+            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                 @if(!empty($siteLogo))
-                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
+                    <div class="w-10 h-10 rounded-xl bg-white border border-slate-200/90 shadow-xs p-1 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:border-blue-300 transition-all">
+                        <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="max-h-full max-w-full object-contain rounded-lg">
+                    </div>
                 @else
-                    <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform flex-shrink-0">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
                     </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="font-extrabold text-lg tracking-tight text-slate-900">{{ $siteName }}</span>
-                    </div>
+                @endif
+                <span class="font-extrabold text-lg tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">{{ $siteName }}</span>
+            </a>
                 @endif
             </a>
 
@@ -166,7 +168,7 @@
                     </p>
                     <div class="flex items-center gap-2 pt-1">
                         <span class="app-tag app-tag-emerald text-[10px]">Uptime 99.9%</span>
-                        <span class="app-tag app-tag-blue text-[10px]">Baileys v1.0 Core</span>
+                        <span class="app-tag app-tag-blue text-[10px]">Enterprise WA Core</span>
                     </div>
                 </div>
 
@@ -197,7 +199,7 @@
                     <h4 class="font-bold text-xs uppercase tracking-wider text-slate-900 mb-3.5">Infrastruktur</h4>
                     <ul class="space-y-2 text-xs font-medium text-slate-600 font-mono text-[11px]">
                         <li><span>Laravel 11 PHP 8.3</span></li>
-                        <li><span>Node.js Baileys v1.0</span></li>
+                        <li><span>Node.js Engine Core v1.0</span></li>
                         <li><span>Multi-Device Sockets</span></li>
                         <li><span>Webhook Dispatcher</span></li>
                     </ul>

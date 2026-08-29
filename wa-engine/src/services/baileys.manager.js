@@ -196,7 +196,7 @@ class BaileysManager {
           id: user?.id,
           name: user?.name,
           phone: user?.id ? user.id.split(':')[0] : null,
-          platform: 'Baileys Multi-Device v1.0.0',
+          platform: 'Enterprise Multi-Device v1.0.0',
         };
 
         this.logger.info(`Session ${sessionId} successfully connected as ${user?.name || user?.id}`);

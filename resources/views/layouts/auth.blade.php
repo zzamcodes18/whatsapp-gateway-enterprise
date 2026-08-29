@@ -47,17 +47,18 @@
                 
                 <!-- Top Brand Header -->
                 <div class="w-full flex items-center justify-between">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
+                    <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                         @if(!empty($siteLogo))
-                            <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
-                        @else
-                            <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
-                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200/90 shadow-xs p-1 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:border-blue-300 transition-all">
+                                <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="max-h-full max-w-full object-contain rounded-lg">
                             </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="font-extrabold text-base tracking-tight text-slate-900">{{ $siteName }}</span>
+                        @else
+                            <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform flex-shrink-0">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
                             </div>
                         @endif
+                        <span class="font-extrabold text-base tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">{{ $siteName }}</span>
+                    </a>
                     </a>
 
                     <a href="{{ route('home') }}" class="text-xs font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1 transition-colors">
@@ -113,7 +114,7 @@
                 <div class="relative z-10">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-blue-200 shadow-sm">
                         <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span>Baileys Engine v1.0 Ready</span>
+                        <span>Enterprise Engine v1.0 Ready</span>
                     </div>
                 </div>
 

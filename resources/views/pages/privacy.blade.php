@@ -22,7 +22,7 @@
         <section class="space-y-2">
             <h2 class="font-bold text-base sm:text-lg text-slate-900">2. Penyimpanan Sesi & Kredensial</h2>
             <p>
-                Data autentikasi sesi WhatsApp (Baileys auth credentials) disimpan dalam direktori penyimpanan server yang terisolasi per sesi menggunakan UUIDv4. Token API Key di-hash menggunakan algoritma standar industri SHA-256 dan tidak disimpan dalam teks polos.
+                Data autentikasi sesi WhatsApp (WhatsApp auth credentials) disimpan dalam direktori penyimpanan server yang terisolasi per sesi menggunakan UUIDv4. Token API Key di-hash menggunakan algoritma standar industri SHA-256 dan tidak disimpan dalam teks polos.
             </p>
         </section>
 

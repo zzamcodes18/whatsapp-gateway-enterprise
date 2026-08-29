@@ -44,7 +44,7 @@
             </div>
             <div class="text-[11px] font-semibold text-emerald-600 flex items-center gap-1.5">
                 <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span>Baileys Socket Ready</span>
+                <span>Engine Socket Ready</span>
             </div>
         </div>
 
@@ -189,8 +189,8 @@
                     <span class="app-tag app-tag-emerald text-[9px]">ONLINE</span>
                 </div>
                 <div class="space-y-1.5 font-mono text-[11px]">
-                    <div class="text-slate-400">Library: <span class="text-white font-bold">@whiskeysockets/baileys</span></div>
-                    <div class="text-slate-400">Version: <span class="text-sky-300 font-bold">v1.0.0</span></div>
+                    <div class="text-slate-400">Engine Core: <span class="text-white font-bold">Enterprise Protocol</span></div>
+                    <div class="text-slate-400">Version: <span class="text-sky-300 font-bold">v1.0.0 Enterprise</span></div>
                     <div class="text-slate-400">Port Engine: <span class="text-emerald-400 font-bold">3000 (Internal)</span></div>
                 </div>
             </div>

@@ -61,7 +61,7 @@
             </div>
             <div class="text-[11px] font-semibold text-emerald-600 flex items-center gap-1.5">
                 <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                <span>Baileys Sockets Aktif</span>
+                <span>Engine Sockets Aktif</span>
             </div>
         </div>
 

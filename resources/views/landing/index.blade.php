@@ -12,7 +12,7 @@
             <div class="inline-flex items-center gap-2">
                 <span class="app-tag app-tag-blue">
                     <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-600"></i>
-                    <span>BAILEYS V1.0 CORE</span>
+                    <span>ENTERPRISE CORE V1.0</span>
                 </span>
                 <span class="app-tag app-tag-emerald">
                     <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
@@ -74,7 +74,7 @@
                 <div class="space-y-2.5 font-mono text-xs">
                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
                         <span class="text-slate-500 font-medium">Engine Protocol</span>
-                        <strong class="text-slate-900">@whiskeysockets/baileys</strong>
+                        <strong class="text-slate-900">Enterprise WA Protocol</strong>
                     </div>
                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
                         <span class="text-slate-500 font-medium">Versi Core</span>

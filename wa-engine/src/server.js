@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(config.port, () => {
-  console.log(`⚡ Whatsapp Gateway Enterprise Baileys Engine running on port ${config.port}`);
+  console.log(`⚡ Whatsapp Gateway Enterprise Core Engine running on port ${config.port}`);
   console.log(`🔑 Engine Secret Auth: ENABLED`);
-  console.log(`📦 Engine: @whiskeysockets/baileys v1.0.0`);
+  console.log(`📦 Engine: Enterprise Core Engine v1.0.0`);
 });

@@ -17,7 +17,7 @@ router.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     service: 'Whatsapp Gateway Enterprise Engine',
-    engine: '@whiskeysockets/baileys v1.0.0',
+    engine: 'Enterprise Engine Core v1.0.0',
     timestamp: new Date().toISOString(),
   });
 });
