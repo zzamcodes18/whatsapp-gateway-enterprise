@@ -32,6 +32,8 @@ class AdminSettingController extends Controller
             'allow_registration' => ['required', 'in:true,false'],
             'wa_engine_url' => ['nullable', 'url', 'max:255'],
             'wa_engine_secret' => ['nullable', 'string', 'max:255'],
+            'site_logo_url' => ['nullable', 'url', 'max:500'],
+            'site_favicon_url' => ['nullable', 'url', 'max:500'],
             'site_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:2048'],
             'site_favicon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,ico,webp', 'max:1024'],
         ]);
@@ -53,6 +55,14 @@ class AdminSettingController extends Controller
             if ($request->has($key)) {
                 SystemSetting::set($key, (string) $request->input($key));
             }
+        }
+
+        if ($request->filled('site_logo_url')) {
+            SystemSetting::set('site_logo', (string) $request->input('site_logo_url'));
+        }
+
+        if ($request->filled('site_favicon_url')) {
+            SystemSetting::set('site_favicon', (string) $request->input('site_favicon_url'));
         }
 
         if ($request->hasFile('site_logo')) {

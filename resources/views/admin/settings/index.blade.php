@@ -105,7 +105,7 @@
             <div x-show="tab === 'branding'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 pb-3">
                     <h3 class="font-bold text-sm text-slate-900">Logo & Favicon Website</h3>
-                    <p class="text-xs text-slate-500">Unggah logo dan favicon khusus untuk mengubah tampilan branding aplikasi.</p>
+                    <p class="text-xs text-slate-500">Unggah logo dan favicon khusus atau masukkan URL gambar untuk mengubah tampilan branding aplikasi.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -115,7 +115,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-xs text-slate-800">Logo Utama Application</h4>
-                                <p class="text-[11px] text-slate-500">Format PNG, SVG, JPG, WEBP (Maks 2MB)</p>
+                                <p class="text-[11px] text-slate-500">Upload File atau Masukkan Direct URL</p>
                             </div>
                             <i data-lucide="image" class="w-5 h-5 text-blue-600"></i>
                         </div>
@@ -131,9 +131,15 @@
                                 @endif
                             </div>
 
-                            <div class="flex-1 space-y-1.5">
-                                <label for="site_logo" class="app-label">Pilih File Logo Baru</label>
-                                <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="if ($event.target.files[0] && $event.target.files[0].size > 2 * 1024 * 1024) { alert('Ukuran file logo tidak boleh lebih dari 2MB!'); $event.target.value = ''; }" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                            <div class="flex-1 space-y-2">
+                                <div class="space-y-1">
+                                    <label for="site_logo" class="app-label">Pilih File Logo Baru (Otomatis Kompres)</label>
+                                    <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="compressImageOnUpload($event, 500)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                                </div>
+                                <div class="space-y-1">
+                                    <label for="site_logo_url" class="app-label text-[11px]">Atau Input Direct URL Logo (Opsional)</label>
+                                    <input type="url" id="site_logo_url" name="site_logo_url" value="{{ old('site_logo_url', filter_var($settings['site_logo'] ?? '', FILTER_VALIDATE_URL) ? $settings['site_logo'] : '') }}" class="app-input text-xs py-1.5" placeholder="https://domain.com/logo.png">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,7 +149,7 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <h4 class="font-bold text-xs text-slate-800">Icon Browser (Favicon)</h4>
-                                <p class="text-[11px] text-slate-500">Format ICO, PNG, SVG (Maks 1MB)</p>
+                                <p class="text-[11px] text-slate-500">Upload File atau Masukkan Direct URL</p>
                             </div>
                             <i data-lucide="bookmark" class="w-5 h-5 text-indigo-600"></i>
                         </div>
@@ -157,9 +163,15 @@
                                 @endif
                             </div>
 
-                            <div class="flex-1 space-y-1.5">
-                                <label for="site_favicon" class="app-label">Pilih File Favicon Baru</label>
-                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="if ($event.target.files[0] && $event.target.files[0].size > 1 * 1024 * 1024) { alert('Ukuran file favicon tidak boleh lebih dari 1MB!'); $event.target.value = ''; }" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                            <div class="flex-1 space-y-2">
+                                <div class="space-y-1">
+                                    <label for="site_favicon" class="app-label">Pilih File Favicon Baru (Otomatis Kompres)</label>
+                                    <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="compressImageOnUpload($event, 128)" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                                </div>
+                                <div class="space-y-1">
+                                    <label for="site_favicon_url" class="app-label text-[11px]">Atau Input Direct URL Favicon (Opsional)</label>
+                                    <input type="url" id="site_favicon_url" name="site_favicon_url" value="{{ old('site_favicon_url', filter_var($settings['site_favicon'] ?? '', FILTER_VALIDATE_URL) ? $settings['site_favicon'] : '') }}" class="app-input text-xs py-1.5" placeholder="https://domain.com/favicon.png">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -235,4 +247,52 @@
     </div>
 
 </div>
+
+<script>
+function compressImageOnUpload(event, maxDimension) {
+    const input = event.target;
+    const file = input.files[0];
+    if (!file || file.type === 'image/svg+xml' || file.name.endsWith('.ico')) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxDimension || height > maxDimension) {
+                if (width > height) {
+                    height = Math.round((height * maxDimension) / width);
+                    width = maxDimension;
+                } else {
+                    width = Math.round((width * maxDimension) / height);
+                    height = maxDimension;
+                }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob(function(blob) {
+                if (blob) {
+                    const resizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
+                    });
+                    const container = new DataTransfer();
+                    container.items.add(resizedFile);
+                    input.files = container.files;
+                }
+            }, 'image/jpeg', 0.85);
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+</script>
 @endsection
