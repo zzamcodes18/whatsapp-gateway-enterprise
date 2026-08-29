@@ -13,7 +13,7 @@ class WhatsAppGatewayTest extends TestCase
     {
         $response = $this->get('/');
         $response->assertStatus(200);
-        $response->assertSee('LAPAKOTP');
+        $response->assertSee('Whatsapp Gateway Enterprise');
         $response->assertSee('WhatsApp Gateway');
         $response->assertSee('Pairing Code');
     }

@@ -145,7 +145,7 @@
                         <div class="w-8 h-8 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30">
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
-                        <span class="font-extrabold text-base tracking-tight text-slate-900">LAPAKOTP GATEWAY</span>
+                        <span class="font-extrabold text-base tracking-tight text-slate-900">WHATSAPP GATEWAY ENTERPRISE</span>
                     </div>
                     <p class="text-xs font-medium text-slate-600 max-w-sm leading-relaxed">
                         Infrastruktur WhatsApp Business & Multi-Device REST API berkecepatan tinggi untuk kebutuhan verifikasi OTP, notifikasi transaksi, dan otomasi pengiriman pesan.

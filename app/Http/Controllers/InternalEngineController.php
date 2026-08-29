@@ -14,7 +14,7 @@ class InternalEngineController extends Controller
     public function handleEvent(Request $request)
     {
         $secret = $request->header('X-Engine-Secret');
-        $expected = config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'lapakotp_wa_secret_key_2026_x99'));
+        $expected = config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'wagateway_secret_key_2026'));
 
         if ($secret !== $expected) {
             return response()->json(['success' => false, 'message' => 'Unauthorized Engine Callback'], 401);
@@ -124,8 +124,8 @@ class InternalEngineController extends Controller
 
         try {
             Http::async()->withHeaders([
-                'X-LapakOTP-Event' => $event,
-                'X-LapakOTP-Secret' => $webhook->secret_key,
+                'X-WAGateway-Event' => $event,
+                'X-WAGateway-Secret' => $webhook->secret_key,
                 'Content-Type' => 'application/json',
             ])->timeout(3)->post($webhook->target_url, [
                 'event' => $event,

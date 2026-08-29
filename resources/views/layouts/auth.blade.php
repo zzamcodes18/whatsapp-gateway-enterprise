@@ -15,7 +15,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="@yield('title', 'Autentikasi · Whatsapp Gateway Enterprise')">
-    <meta property="og:description" content="Masuk ke console LAPAKOTP WhatsApp Gateway untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.">
+    <meta property="og:description" content="Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
 

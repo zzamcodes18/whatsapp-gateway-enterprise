@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Sign Up · LAPAKOTP WhatsApp Gateway')
+@section('title', 'Sign Up · Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="space-y-6">

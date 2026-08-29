@@ -1,5 +1,5 @@
 {
-  "name": "lapakotp-wa-engine",
+  "name": "wagateway-engine",
   "version": "1.0.0",
   "description": "WhatsApp Multi-Device Microservice Engine using Baileys v7.0.0-rc.14",
   "main": "src/server.js",

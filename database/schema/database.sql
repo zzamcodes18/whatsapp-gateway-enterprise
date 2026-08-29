@@ -1,6 +1,6 @@
 -- =========================================================================
--- LAPAKOTP WHATSAPP GATEWAY - DATABASE SCHEMA & DEFAULT SEED DUMP
--- Version: 7.0.0
+-- WHATSAPP GATEWAY ENTERPRISE - DATABASE SCHEMA
+-- Version: 1.0.0
 -- Database Driver: MySQL 8.0+ / MariaDB 10.4+
 -- Charset: utf8mb4 (utf8mb4_unicode_ci)
 -- Generated for phpMyAdmin / VPS MySQL Import
@@ -284,7 +284,7 @@ CREATE TABLE `system_settings` (
 -- Dumping data for table `system_settings`
 -- --------------------------------------------------------
 INSERT INTO `system_settings` (`id`, `key`, `value`, `type`, `created_at`, `updated_at`) VALUES
-(1, 'otp_template', 'Kode OTP LAPAKOTP Anda adalah: *{otp}*. Berlaku 5 menit. Jangan bagikan kode ini kepada siapapun.', 'string', NOW(), NOW()),
+(1, 'otp_template', 'Kode OTP WhatsApp Gateway Anda adalah: *{otp}*. Berlaku 5 menit. Jangan bagikan kode ini kepada siapapun.', 'string', NOW(), NOW()),
 (2, 'system_bot_device_id', '1', 'integer', NOW(), NOW());
 
 SET FOREIGN_KEY_CHECKS=1;

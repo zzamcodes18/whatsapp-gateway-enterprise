@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Kebijakan Privasi - LAPAKOTP WhatsApp Gateway')
+@section('title', 'Kebijakan Privasi - Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-8">
@@ -29,7 +29,7 @@
         <section class="space-y-2">
             <h2 class="font-bold text-base sm:text-lg text-slate-900">3. Kerahasiaan Kontak Pelanggan</h2>
             <p>
-                LAPAKOTP tidak memperjualbelikan, menyewakan, atau memberikan data nomor kontak pelanggan Anda kepada pihak ketiga manapun untuk kepentingan periklanan atau komersial di luar penyediaan layanan gateway.
+                Kami tidak memperjualbelikan, menyewakan, atau memberikan data nomor kontak pelanggan Anda kepada pihak ketiga manapun untuk kepentingan periklanan atau komersial di luar penyediaan layanan gateway.
             </p>
         </section>
 

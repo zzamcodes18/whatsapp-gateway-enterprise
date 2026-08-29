@@ -20,7 +20,7 @@ class AdminBotServerController extends Controller
 
         $selectedDeviceId = SystemSetting::get('otp_server_device_id');
         $botDevice = $selectedDeviceId ? Device::with('user')->find($selectedDeviceId) : null;
-        $otpTemplate = SystemSetting::get('otp_template', 'Kode verifikasi OTP LAPAKOTP Anda adalah: {otp}. Berlaku selama 5 menit. Jangan berikan kepada siapapun.');
+        $otpTemplate = SystemSetting::get('otp_template', 'Kode verifikasi OTP WhatsApp Gateway Anda adalah: {otp}. Berlaku selama 5 menit. Jangan berikan kepada siapapun.');
 
         return view('admin.bot-server.index', [
             'connectedDevices' => $connectedDevices,
@@ -78,7 +78,7 @@ class AdminBotServerController extends Controller
         }
 
         $otpCode = $validated['custom_code'] ?? rand(100000, 999999);
-        $template = SystemSetting::get('otp_template', 'Kode verifikasi OTP LAPAKOTP Anda adalah: {otp}. Berlaku selama 5 menit.');
+        $template = SystemSetting::get('otp_template', 'Kode verifikasi OTP WhatsApp Gateway Anda adalah: {otp}. Berlaku selama 5 menit.');
         $messageText = str_replace('{otp}', $otpCode, $template);
 
         $result = $this->engineService->sendTextMessage(

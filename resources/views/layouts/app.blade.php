@@ -181,7 +181,7 @@
                     <div class="flex items-center gap-2">
                         <span class="hidden sm:inline-flex text-xs font-semibold text-slate-400">Console /</span>
                         <h2 class="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                            @yield('title', 'LAPAKOTP Gateway')
+                            @yield('title', 'Whatsapp Gateway Enterprise')
                         </h2>
                     </div>
                 </div>

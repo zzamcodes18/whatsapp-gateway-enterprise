@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Seluruh Perangkat Sistem · Admin LAPAKOTP')
+@section('title', 'Seluruh Perangkat Sistem · Admin Gateway')
 
 @section('content')
 <div class="space-y-6" x-data="adminDevicesManager()">

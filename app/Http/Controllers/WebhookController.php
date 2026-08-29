@@ -56,12 +56,12 @@ class WebhookController extends Controller
 
         try {
             $response = Http::withHeaders([
-                'X-LapakOTP-Secret' => $webhook->secret_key,
+                'X-WAGateway-Secret' => $webhook->secret_key,
                 'Content-Type' => 'application/json',
-                'User-Agent' => 'LapakOTP-Webhook-Dispatcher/1.0',
+                'User-Agent' => 'WAGateway-Webhook-Dispatcher/1.0',
             ])->timeout(5)->post($webhook->target_url, [
                 'event' => 'webhook.test',
-                'message' => 'LapakOTP Webhook Test Ping Successful',
+                'message' => 'WAGateway Webhook Test Ping Successful',
                 'timestamp' => now()->toIso8601String(),
                 'user_id' => $user->id,
             ]);

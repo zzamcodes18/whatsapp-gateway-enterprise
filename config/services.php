@@ -37,7 +37,7 @@ return [
 
     'wa_engine' => [
         'url' => env('WA_ENGINE_URL', 'http://127.0.0.1:3000'),
-        'secret' => env('WA_ENGINE_SECRET', 'lapakotp_wa_secret_key_2026_x99'),
+        'secret' => env('WA_ENGINE_SECRET', 'wagateway_secret_key_2026'),
     ],
 
 ];

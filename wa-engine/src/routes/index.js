@@ -16,7 +16,7 @@ const router = Router();
 router.get('/health', (req, res) => {
   res.json({
     status: 'ok',
-    service: 'LAPAKOTP WhatsApp Engine',
+    service: 'Whatsapp Gateway Enterprise Engine',
     engine: '@whiskeysockets/baileys v7.0.0-rc.14',
     timestamp: new Date().toISOString(),
   });

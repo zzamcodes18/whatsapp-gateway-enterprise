@@ -103,7 +103,7 @@ class AuthController extends Controller
         $user->logActivity('auth.register', 'Pendaftaran akun baru');
 
         return redirect()->route('dashboard')
-            ->with('success', 'Akun berhasil dibuat! Selamat datang di LAPAKOTP Gateway.');
+            ->with('success', 'Akun berhasil dibuat! Selamat datang di Whatsapp Gateway Enterprise.');
     }
 
     public function logout(Request $request)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Perangkat WhatsApp - LAPAKOTP Gateway')
+@section('title', 'Perangkat WhatsApp - Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="space-y-6" x-data="deviceManager(@js($devices->items()))" x-init="init()">

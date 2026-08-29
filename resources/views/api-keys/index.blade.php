@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'API Keys & Dokumentasi · LAPAKOTP Gateway')
+@section('title', 'API Keys & Dokumentasi · Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="space-y-6" x-data="{ showNewModal: false, docTab: 'curl' }">

@@ -14,7 +14,7 @@ class WaEngineService
     public function __construct()
     {
         $this->baseUrl = config('services.wa_engine.url', env('WA_ENGINE_URL', 'http://127.0.0.1:3000'));
-        $this->secret = config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'lapakotp_wa_secret_key_2026_x99'));
+        $this->secret = config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'wagateway_secret_key_2026'));
     }
 
     protected function client()

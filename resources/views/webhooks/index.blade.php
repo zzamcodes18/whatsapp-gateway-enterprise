@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Webhook Callbacks - LAPAKOTP Gateway')
+@section('title', 'Webhook Callbacks - Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="space-y-6">
@@ -66,7 +66,7 @@
                             placeholder="whsec_xxxxxxxxxxxx" 
                             class="app-input text-xs font-mono"
                         >
-                        <p class="text-[11px] text-slate-500 font-medium">Dikirimkan melalui header <code>X-LapakOTP-Secret</code> untuk verifikasi keaslian payload.</p>
+                        <p class="text-[11px] text-slate-500 font-medium">Dikirimkan melalui header <code>X-WAGateway-Secret</code> untuk verifikasi keaslian payload.</p>
                     </div>
 
                     <!-- Events Subscription -->
@@ -143,8 +143,8 @@
                 <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl space-y-1 text-[11px] text-slate-400">
                     <div class="text-white font-bold">Request Headers:</div>
                     <div>Content-Type: <code>application/json</code></div>
-                    <div>X-LapakOTP-Event: <code>message.received</code></div>
-                    <div>X-LapakOTP-Secret: <code>{{ $webhook->secret_key ?? 'whsec_...' }}</code></div>
+                    <div>X-WAGateway-Event: <code>message.received</code></div>
+                    <div>X-WAGateway-Secret: <code>{{ $webhook->secret_key ?? 'whsec_...' }}</code></div>
                 </div>
             </div>
         </div>

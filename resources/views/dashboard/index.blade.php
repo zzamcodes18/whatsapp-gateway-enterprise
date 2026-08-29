@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Overview - LAPAKOTP WhatsApp Gateway')
+@section('title', 'Dashboard Overview - Whatsapp Gateway Enterprise')
 
 @section('content')
 <div class="space-y-6">
