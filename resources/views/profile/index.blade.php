@@ -16,18 +16,37 @@
             <!-- User Avatar & Identity -->
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                 
-                <!-- Avatar Circle with Edit Indicator -->
-                <div class="relative group flex-shrink-0">
-                    @if($user->avatar)
-                        <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-2xl object-cover shadow-md border-2 border-white ring-2 ring-blue-100">
-                    @else
-                        <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-extrabold text-2xl uppercase shadow-md border-2 border-white ring-2 ring-blue-100">
-                            {{ substr($user->name ?? 'U', 0, 2) }}
-                        </div>
-                    @endif
-                    <a href="#avatar-section" class="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-md hover:bg-blue-700 hover:scale-110 transition-all" title="Ubah Foto Profil">
-                        <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                    </a>
+                <!-- Avatar Circle with Interactive Direct Upload Form -->
+                <div x-data="{ uploading: false }" class="relative group flex-shrink-0">
+                    <form x-ref="avatarForm" action="{{ route('profile.update-avatar') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="file" x-ref="avatarInput" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden" 
+                               @change="if($event.target.files.length) { uploading = true; $refs.avatarForm.submit(); }">
+                        <input type="hidden" name="remove_avatar" id="direct_remove_avatar" value="0">
+                    </form>
+
+                    <div class="relative cursor-pointer" @click="$refs.avatarInput.click()">
+                        @if($user->avatar)
+                            <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-2xl object-cover shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
+                        @else
+                            <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-extrabold text-2xl uppercase shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
+                                {{ substr($user->name ?? 'U', 0, 2) }}
+                            </div>
+                        @endif
+
+                        <!-- Camera Edit Icon Badge -->
+                        <button type="button" @click.stop="$refs.avatarInput.click()" class="absolute -bottom-1 -right-1 w-7 h-7 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-md hover:bg-blue-700 hover:scale-110 transition-all cursor-pointer" title="Ubah Foto Profil">
+                            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                        </button>
+
+                        @if($user->avatar)
+                            <!-- Quick Delete Avatar Badge -->
+                            <button type="button" @click.stop="if(confirm('Hapus foto profil saat ini?')) { document.getElementById('direct_remove_avatar').value = '1'; $refs.avatarForm.submit(); }" class="absolute -top-1 -right-1 w-6 h-6 bg-rose-600 text-white rounded-lg flex items-center justify-center shadow-md hover:bg-rose-700 hover:scale-110 transition-all opacity-0 group-hover:opacity-100 cursor-pointer" title="Hapus Foto Profil">
+                                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                            </button>
+                        @endif
+                    </div>
                 </div>
 
                 <!-- User Information Text -->
@@ -157,81 +176,7 @@
             </form>
         </div>
 
-        <!-- 2. KELOLA FOTO PROFIL / AVATAR -->
-        <div id="avatar-section" class="app-card p-6 bg-white space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
-                        <i data-lucide="image" class="w-4 h-4"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-sm text-slate-900">Kelola Foto Profil</h3>
-                        <p class="text-[11px] text-slate-500 font-medium">Unggah foto avatar baru (PNG, JPG, WEBP maks 2MB).</p>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="{ previewUrl: null }" class="space-y-4">
-                
-                <!-- Preview Avatar Display -->
-                <div class="flex items-center gap-4 p-3 bg-slate-50 border border-slate-200/70 rounded-xl">
-                    <template x-if="previewUrl">
-                        <img :src="previewUrl" class="w-16 h-16 rounded-xl object-cover border border-blue-200 shadow-2xs">
-                    </template>
-                    <template x-if="!previewUrl">
-                        <div>
-                            @if($user->avatar)
-                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow-2xs">
-                            @else
-                                <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-xl uppercase shadow-2xs">
-                                    {{ substr($user->name ?? 'U', 0, 2) }}
-                                </div>
-                            @endif
-                        </div>
-                    </template>
-
-                    <div class="space-y-1">
-                        <h4 class="text-xs font-bold text-slate-900" x-text="previewUrl ? 'Pratinjau Foto Baru' : 'Foto Profil Saat Ini'">Foto Profil</h4>
-                        <p class="text-[10px] text-slate-500 font-medium">Format yang didukung: PNG, JPG, JPEG, WEBP. Ukuran maksimal 2MB.</p>
-                    </div>
-                </div>
-
-                <!-- Form Upload Avatar -->
-                <form action="{{ route('profile.update-avatar') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="space-y-1.5">
-                        <label for="avatar_input" class="text-xs font-bold text-slate-700">Pilih File Gambar Baru</label>
-                        <input type="file" id="avatar_input" name="avatar" accept="image/png, image/jpeg, image/jpg, image/webp" 
-                               @change="const file = $event.target.files[0]; if(file) { previewUrl = URL.createObjectURL(file) }"
-                               class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-                        @error('avatar')
-                            <p class="text-[11px] text-rose-600 font-medium mt-0.5">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="pt-2 flex items-center justify-between">
-                        @if($user->avatar)
-                            <button type="submit" name="remove_avatar" value="1" onclick="return confirm('Apakah Anda yakin ingin menghapus foto profil ini?')" class="app-btn app-btn-secondary text-xs text-rose-600 hover:bg-rose-50 border-rose-200 py-1.5 px-3 cursor-pointer">
-                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                <span>Hapus Foto</span>
-                            </button>
-                        @else
-                            <div></div>
-                        @endif
-
-                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-4 cursor-pointer">
-                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                            <span>Unggah Foto Profil</span>
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-
-        <!-- 3. KEAMANAN & GANTI PASSWORD -->
+        <!-- 2. KEAMANAN & GANTI PASSWORD -->
         <div class="app-card p-6 bg-white space-y-5">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
                 <div class="flex items-center gap-2.5">
@@ -297,7 +242,7 @@
             </form>
         </div>
 
-        <!-- 4. TELEMETRI & STATISTIK KUOTA AKUN -->
+        <!-- 3. TELEMETRI & STATISTIK KUOTA AKUN -->
         <div class="app-card p-6 bg-white space-y-5">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
                 <div class="flex items-center gap-2.5">
