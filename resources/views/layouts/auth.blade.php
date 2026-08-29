@@ -21,12 +21,13 @@
 
     <!-- Favicon -->
     @if(!empty($siteFavicon))
-        <link rel="shortcut icon" href="{{ $siteFavicon }}?v={{ substr(md5($siteFavicon), 0, 6) }}">
-        <link rel="icon" type="image/x-icon" href="{{ $siteFavicon }}?v={{ substr(md5($siteFavicon), 0, 6) }}">
-        <link rel="icon" type="image/png" href="{{ $siteFavicon }}?v={{ substr(md5($siteFavicon), 0, 6) }}">
-        <link rel="apple-touch-icon" href="{{ $siteFavicon }}?v={{ substr(md5($siteFavicon), 0, 6) }}">
+        <link rel="shortcut icon" href="{{ $siteFavicon }}">
+        <link rel="icon" type="image/x-icon" href="{{ $siteFavicon }}">
+        <link rel="icon" type="image/png" href="{{ $siteFavicon }}">
+        <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
     @else
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
         <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
         <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
     @endif

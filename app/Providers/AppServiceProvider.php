@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        config(['app.timezone' => 'Asia/Jakarta']);
+        date_default_timezone_set('Asia/Jakarta');
+        \Carbon\Carbon::setLocale('id');
+
         View::composer('*', function ($view) {
             try {
                 $settings = SystemSetting::all()->pluck('value', 'key')->toArray();
