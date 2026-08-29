@@ -93,12 +93,6 @@
             <!-- Actions -->
             <div class="flex items-center gap-2.5">
                 @auth
-                    @if(auth()->user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="app-btn app-btn-soft-blue text-xs py-1.5 px-3 flex items-center gap-1.5">
-                            <i data-lucide="shield" class="w-3.5 h-3.5"></i>
-                            <span>Admin Panel</span>
-                        </a>
-                    @endif
                     <a href="{{ route('dashboard') }}" class="app-btn app-btn-primary text-xs py-1.5 px-3.5 flex items-center gap-1.5">
                         <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
                         <span>Buka Console</span>
