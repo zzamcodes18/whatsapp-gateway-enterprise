@@ -12,7 +12,7 @@
             <div class="inline-flex items-center gap-2">
                 <span class="app-tag app-tag-blue">
                     <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-600"></i>
-                    <span>BAILEYS V7.0 CORE</span>
+                    <span>BAILEYS V1.0 CORE</span>
                 </span>
                 <span class="app-tag app-tag-emerald">
                     <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
                         <span class="text-slate-500 font-medium">Versi Core</span>
-                        <strong class="text-blue-600 font-bold">v7.0.0-rc.14</strong>
+                        <strong class="text-blue-600 font-bold">v1.0.0</strong>
                     </div>
                     <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
                         <span class="text-slate-500 font-medium">Metode Pairing</span>

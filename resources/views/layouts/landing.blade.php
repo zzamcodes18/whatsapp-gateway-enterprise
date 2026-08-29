@@ -8,8 +8,8 @@
     <!-- Primary Meta SEO Tags -->
     <title>@yield('title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')</title>
     <meta name="title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta name="description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v7.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
-    <meta name="keywords" content="whatsapp gateway, wa gateway api, whatsapp otp, baileys v7, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise">
+    <meta name="description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="keywords" content="whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise">
     <meta name="author" content="Whatsapp Gateway Enterprise">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#2563EB">
@@ -19,7 +19,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta property="og:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v7.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta property="og:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta property="og:image" content="{{ asset('og-image.svg') }}">
     <meta property="og:image:type" content="image/svg+xml">
     <meta property="og:image:width" content="1200">
@@ -31,7 +31,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{{ url()->current() }}">
     <meta name="twitter:title" content="@yield('meta_title', 'Whatsapp Gateway Enterprise & Developer REST API Multi-Device')">
-    <meta name="twitter:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v7.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta name="twitter:image" content="{{ asset('og-image.svg') }}">
     <meta name="twitter:site" content="@wagateway">
 
@@ -51,7 +51,7 @@
     <!-- Top Status Bar -->
     <div class="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-900 text-white py-2 px-4 text-center font-mono text-xs tracking-tight flex items-center justify-center gap-2 border-b border-blue-950">
         <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-        <span class="text-slate-300">WhatsApp Multi-Device Engine <strong class="text-white">v7.0.0</strong></span>
+        <span class="text-slate-300">WhatsApp Multi-Device Engine <strong class="text-white">v1.0.0</strong></span>
         <span class="hidden sm:inline text-slate-500">•</span>
         <span class="hidden sm:inline text-slate-300">Scan QR Code & Pairing Code 8-Digit Ready</span>
     </div>
@@ -152,7 +152,7 @@
                     </p>
                     <div class="flex items-center gap-2 pt-1">
                         <span class="app-tag app-tag-emerald text-[10px]">Uptime 99.9%</span>
-                        <span class="app-tag app-tag-blue text-[10px]">Baileys v7.0 Core</span>
+                        <span class="app-tag app-tag-blue text-[10px]">Baileys v1.0 Core</span>
                     </div>
                 </div>
 
@@ -183,7 +183,7 @@
                     <h4 class="font-bold text-xs uppercase tracking-wider text-slate-900 mb-3.5">Infrastruktur</h4>
                     <ul class="space-y-2 text-xs font-medium text-slate-600 font-mono text-[11px]">
                         <li><span>Laravel 11 PHP 8.3</span></li>
-                        <li><span>Node.js Baileys v7.0</span></li>
+                        <li><span>Node.js Baileys v1.0</span></li>
                         <li><span>Multi-Device Sockets</span></li>
                         <li><span>Webhook Dispatcher</span></li>
                     </ul>

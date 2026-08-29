@@ -190,7 +190,7 @@
                 </div>
                 <div class="space-y-1.5 font-mono text-[11px]">
                     <div class="text-slate-400">Library: <span class="text-white font-bold">@whiskeysockets/baileys</span></div>
-                    <div class="text-slate-400">Version: <span class="text-sky-300 font-bold">v7.0.0-rc.14</span></div>
+                    <div class="text-slate-400">Version: <span class="text-sky-300 font-bold">v1.0.0</span></div>
                     <div class="text-slate-400">Port Engine: <span class="text-emerald-400 font-bold">3000 (Internal)</span></div>
                 </div>
             </div>

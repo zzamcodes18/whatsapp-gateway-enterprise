@@ -80,16 +80,6 @@
                             <i data-lucide="bot" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Server Bot OTP</span>
                         </a>
-
-                        <!-- Button Switch Back to User Workspace -->
-                        <div class="pt-4 border-t border-slate-100 mt-4">
-                            <a href="{{ route('dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-all text-xs border border-slate-200/80 group">
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="arrow-left" class="w-4 h-4 text-slate-500 group-hover:-translate-x-0.5 transition-transform"></i>
-                                    <span>Workspace User</span>
-                                </div>
-                            </a>
-                        </div>
                     @else
                         <!-- USER WORKSPACE NAVIGATION -->
                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -106,7 +96,7 @@
                                 <i data-lucide="smartphone" class="w-4 h-4 flex-shrink-0"></i>
                                 <span>Perangkat WA</span>
                             </div>
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700 border border-blue-200/50' }}">v7.0</span>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('devices.*') ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-700 border border-blue-200/50' }}">v1.0</span>
                         </a>
 
                         <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
@@ -123,19 +113,6 @@
                             <i data-lucide="webhook" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Webhook Callbacks</span>
                         </a>
-
-                        @if(auth()->user()->isAdmin())
-                            <!-- Button Switch to Admin Panel (Only for Admin User) -->
-                            <div class="pt-4 border-t border-slate-100 mt-4">
-                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold shadow-sm shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 transition-all text-xs group">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="shield" class="w-4 h-4 text-blue-200"></i>
-                                        <span>Dashboard Admin</span>
-                                    </div>
-                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-blue-200 group-hover:translate-x-0.5 transition-transform"></i>
-                                </a>
-                            </div>
-                        @endif
                     @endif
                 </nav>
 
@@ -216,21 +193,21 @@
                 <div class="flex items-center gap-2.5">
                     @if(auth()->user()->isAdmin())
                         @if(request()->routeIs('admin.*'))
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors border border-slate-200/80" title="Beralih ke Panel Workspace User">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors border border-slate-200/80 shadow-xs" title="Beralih ke Panel Workspace User">
                                 <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-600"></i>
-                                <span class="hidden sm:inline">Panel User</span>
+                                <span>Panel User</span>
                             </a>
                         @else
-                            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-colors border border-blue-200/70" title="Beralih ke Dashboard Admin">
-                                <i data-lucide="shield" class="w-3.5 h-3.5 text-blue-600"></i>
-                                <span class="hidden sm:inline">Dashboard Admin</span>
+                            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm shadow-blue-500/20" title="Beralih ke Dashboard Admin">
+                                <i data-lucide="shield" class="w-3.5 h-3.5 text-blue-200"></i>
+                                <span>Dashboard Admin</span>
                             </a>
                         @endif
                     @endif
 
                     <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/70 rounded-full text-xs font-semibold shadow-2xs">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        <span class="hidden sm:inline">Engine v7.0 Ready</span>
+                        <span class="hidden sm:inline">Engine v1.0 Ready</span>
                         <span class="sm:hidden">Online</span>
                     </div>
 

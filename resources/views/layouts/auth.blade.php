@@ -103,7 +103,7 @@
                 <div class="relative z-10">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-blue-200 shadow-sm">
                         <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span>Baileys Engine v7.0 Ready</span>
+                        <span>Baileys Engine v1.0 Ready</span>
                     </div>
                 </div>
 

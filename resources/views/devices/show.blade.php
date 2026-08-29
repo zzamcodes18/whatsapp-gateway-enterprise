@@ -81,7 +81,7 @@
             <div class="space-y-1.5 font-mono text-xs">
                 <div class="flex justify-between">
                     <span class="text-slate-500">Engine:</span>
-                    <strong class="text-slate-900">Baileys v7.0.0</strong>
+                    <strong class="text-slate-900">Baileys v1.0.0</strong>
                 </div>
                 <div class="flex justify-between">
                     <span class="text-slate-500">Platform:</span>

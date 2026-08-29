@@ -8,13 +8,13 @@
 
 <p align="center">
   <strong>Enterprise WhatsApp Multi-Device Gateway & Developer REST API Engine</strong><br>
-  Built with Laravel 11 (PHP 8.3) & Node.js Baileys v7.0.0 Microservice
+  Built with Laravel 11 (PHP 8.3) & Node.js Baileys v1.0.0 Microservice
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP 8.3">
   <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel 11">
-  <img src="https://img.shields.io/badge/Engine-Baileys%20v7.0-25D366?style=flat-square&logo=whatsapp&logoColor=white" alt="Baileys v7.0">
+  <img src="https://img.shields.io/badge/Engine-Baileys%20v1.0-25D366?style=flat-square&logo=whatsapp&logoColor=white" alt="Baileys v1.0">
   <img src="https://img.shields.io/badge/TailwindCSS-v4.0-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License">
 </p>
