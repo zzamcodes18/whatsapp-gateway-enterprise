@@ -123,7 +123,7 @@
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-xl border border-slate-200 bg-white p-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
                                 @if(!empty($settings['site_logo']))
-                                    <img src="{{ asset($settings['site_logo']) }}" alt="Logo Saat Ini" class="max-h-full max-w-full object-contain">
+                                    <img src="{{ str_starts_with($settings['site_logo'], 'http') ? $settings['site_logo'] : asset(ltrim($settings['site_logo'], '/')) }}" alt="Logo Saat Ini" class="max-h-full max-w-full object-contain">
                                 @else
                                     <div class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-xs">
                                         WA
@@ -157,7 +157,7 @@
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-xl border border-slate-200 bg-white p-2 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xs">
                                 @if(!empty($settings['site_favicon']))
-                                    <img src="{{ asset($settings['site_favicon']) }}" alt="Favicon Saat Ini" class="w-8 h-8 object-contain">
+                                    <img src="{{ str_starts_with($settings['site_favicon'], 'http') ? $settings['site_favicon'] : asset(ltrim($settings['site_favicon'], '/')) }}" alt="Favicon Saat Ini" class="w-8 h-8 object-contain">
                                 @else
                                     <i data-lucide="message-square" class="w-7 h-7 text-blue-600"></i>
                                 @endif

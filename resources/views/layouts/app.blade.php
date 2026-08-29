@@ -50,7 +50,13 @@
                 <!-- Brand Logo -->
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 group">
                     @if(!empty($siteLogo))
-                        <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform">
+                        <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[170px] object-contain group-hover:scale-105 transition-transform" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                        <div class="hidden items-center gap-2.5">
+                            <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                            </div>
+                            <span class="font-extrabold text-base tracking-tight text-slate-900 truncate max-w-[150px]">{{ $siteName }}</span>
+                        </div>
                     @else
                         <div class="w-9 h-9 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-sm shadow-sm shadow-blue-500/30 group-hover:scale-105 transition-transform">
                             <i class="fa-brands fa-whatsapp text-lg"></i>
@@ -198,7 +204,7 @@
                     <div class="flex items-center gap-2">
                         <span class="hidden sm:inline-flex text-xs font-semibold text-slate-400">Console /</span>
                         <h2 class="text-xs sm:text-sm font-bold text-slate-900 truncate">
-                            @yield('title', 'Whatsapp Gateway Enterprise')
+                            @yield('title', $siteName)
                         </h2>
                     </div>
                 </div>
