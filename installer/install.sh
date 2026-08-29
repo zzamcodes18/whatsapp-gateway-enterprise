@@ -21,8 +21,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "$SCRIPT_DIR/lib/lib.sh" ]; then
   source "$SCRIPT_DIR/lib/lib.sh"
 else
-  [ -f /tmp/lib.sh ] && rm -rf /tmp/lib.sh
-  curl -sSLf -o /tmp/lib.sh "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/lib/lib.sh"
+  rm -f /tmp/lib.sh
+  curl -sSLf -o /tmp/lib.sh "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/lib/lib.sh?v=$(date +%s)"
   source /tmp/lib.sh
 fi
 
@@ -33,8 +33,8 @@ load_module() {
     source "$SCRIPT_DIR/modules/$module_name.sh"
   else
     local tmp_mod="/tmp/mod_$module_name.sh"
-    [ -f "$tmp_mod" ] && rm -rf "$tmp_mod"
-    curl -sSLf -o "$tmp_mod" "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/modules/$module_name.sh"
+    rm -f "$tmp_mod"
+    curl -sSLf -o "$tmp_mod" "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/modules/$module_name.sh?v=$(date +%s)"
     source "$tmp_mod"
   fi
 }
