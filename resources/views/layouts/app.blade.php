@@ -47,8 +47,8 @@
             <!-- Top: Brand Header & Navigation Menu -->
             <div class="p-5 space-y-6">
                 
-                <!-- Brand Logo -->
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
+                <!-- Brand Logo (Navigates to Landing Page) -->
+                <a href="{{ route('home') }}" class="flex items-center gap-3 group" title="Lihat Website Landing Page">
                     @if(!empty($siteLogo))
                         <div class="w-10 h-10 rounded-xl bg-white border border-slate-200/90 shadow-xs p-1 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:border-blue-300 transition-all">
                             <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="max-h-full max-w-full object-contain rounded-lg" onerror="this.parentElement.style.display='none'; this.parentElement.nextElementSibling.classList.remove('hidden'); this.parentElement.nextElementSibling.classList.add('flex');">
@@ -209,31 +209,106 @@
                     </div>
                 </div>
 
-                <!-- Right: Telemetry Engine Badge & Quick Switcher -->
-                <div class="flex items-center gap-2.5">
-                    @if(auth()->user()->isAdmin())
-                        @if(request()->routeIs('admin.*'))
-                            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors border border-slate-200/80 shadow-xs" title="Beralih ke Panel Workspace User">
-                                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-blue-600"></i>
-                                <span>Panel User</span>
-                            </a>
-                        @else
-                            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm shadow-blue-500/20" title="Beralih ke Dashboard Admin">
-                                <i data-lucide="shield" class="w-3.5 h-3.5 text-blue-200"></i>
-                                <span>Dashboard Admin</span>
-                            </a>
-                        @endif
-                    @endif
-
-                    <div class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/70 rounded-full text-xs font-semibold shadow-2xs">
+                <!-- Right: Telemetry Badge & Profile Dropdown -->
+                <div class="flex items-center gap-3">
+                    
+                    <!-- Engine Status Pill Badge -->
+                    <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/70 rounded-full text-xs font-semibold shadow-2xs">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                        <span class="hidden sm:inline">Engine v1.0 Ready</span>
-                        <span class="sm:hidden">Online</span>
+                        <span>Engine v1.0 Ready</span>
                     </div>
 
-                    <a href="{{ route('home') }}" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors" title="Lihat Website Landing">
-                        <i data-lucide="external-link" class="w-4 h-4"></i>
-                    </a>
+                    <!-- Profile Dropdown Component -->
+                    <div class="relative" x-data="{ profileOpen: false }" @keydown.escape.window="profileOpen = false">
+                        
+                        <!-- Profile Trigger Button -->
+                        <button @click="profileOpen = !profileOpen" type="button" class="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/80 shadow-2xs transition-all cursor-pointer focus:outline-none" aria-expanded="false">
+                            <div class="w-8 h-8 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-xs uppercase shadow-2xs flex-shrink-0">
+                                {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                            </div>
+                            <div class="hidden md:flex flex-col text-left">
+                                <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px]">{{ auth()->user()->name }}</span>
+                                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{{ auth()->user()->role }}</span>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200" :class="{ 'rotate-180': profileOpen }"></i>
+                        </button>
+
+                        <!-- Dropdown Menu Box -->
+                        <div x-show="profileOpen" 
+                             x-transition:enter="transition ease-out duration-150"
+                             x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-100"
+                             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                             @click.outside="profileOpen = false"
+                             class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200/90 py-2 z-50 text-xs font-semibold space-y-1"
+                             style="display: none;" x-cloak>
+                            
+                            <!-- Header Info -->
+                            <div class="px-4 py-2.5 border-b border-slate-100 bg-slate-50/60">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center font-extrabold text-xs uppercase shadow-xs flex-shrink-0">
+                                        {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                                    </div>
+                                    <div class="flex flex-col text-left truncate">
+                                        <span class="font-extrabold text-slate-900 truncate leading-tight">{{ auth()->user()->name }}</span>
+                                        <span class="text-[10px] text-slate-500 font-mono truncate">{{ auth()->user()->email }}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2.5 flex items-center justify-between">
+                                    <span class="px-2 py-0.5 rounded text-[9px] font-extrabold uppercase {{ auth()->user()->isAdmin() ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200' }}">
+                                        ROLE: {{ auth()->user()->role }}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 font-mono">Limit: {{ auth()->user()->daily_message_limit ? auth()->user()->daily_message_limit . ' msg' : 'Unlimited' }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Menu Links -->
+                            <div class="p-1 space-y-0.5">
+                                @if(auth()->user()->isAdmin())
+                                    @if(request()->routeIs('admin.*'))
+                                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                            <i data-lucide="layout-dashboard" class="w-4 h-4 text-blue-600"></i>
+                                            <span>Beralih ke Panel User</span>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-blue-600 transition-colors">
+                                            <i data-lucide="shield" class="w-4 h-4 text-blue-600"></i>
+                                            <span>Dashboard Admin</span>
+                                        </a>
+                                    @endif
+                                @endif
+
+                                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                    <i data-lucide="user" class="w-4 h-4 text-slate-500"></i>
+                                    <span>Profil & Workspace</span>
+                                </a>
+
+                                <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                                    <i data-lucide="globe" class="w-4 h-4 text-slate-500"></i>
+                                    <span>Lihat Landing Page</span>
+                                </a>
+                            </div>
+
+                            <!-- Logout Action -->
+                            <div class="pt-1 border-t border-slate-100 p-1">
+                                <button type="button" @click="profileOpen = false; $confirm({
+                                    title: 'Konfirmasi Keluar',
+                                    message: 'Apakah Anda yakin ingin mengakhiri sesi console ini?',
+                                    confirmText: 'Keluar',
+                                    cancelText: 'Batal',
+                                    type: 'danger',
+                                    onConfirm: () => document.getElementById('logout-form').submit()
+                                })" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer text-left font-bold">
+                                    <i data-lucide="log-out" class="w-4 h-4 text-rose-600"></i>
+                                    <span>Keluar Sesi</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
 
             </header>
