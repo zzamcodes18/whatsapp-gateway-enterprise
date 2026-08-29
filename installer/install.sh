@@ -11,7 +11,7 @@ set -e
 # Base Environment & Config
 export GITHUB_SOURCE="main"
 export SCRIPT_RELEASE="v1.0.0"
-export GITHUB_BASE_URL="https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer"
+export GITHUB_BASE_URL="https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway"
 export INSTALL_DIR="/var/www/whatsapp-gateway"
 export REPO_URL="https://github.com/muhammadtsaqf/whatsapp-gateway.git"
 
@@ -22,7 +22,7 @@ if [ -f "$SCRIPT_DIR/lib/lib.sh" ]; then
   source "$SCRIPT_DIR/lib/lib.sh"
 else
   [ -f /tmp/lib.sh ] && rm -rf /tmp/lib.sh
-  curl -sSL -o /tmp/lib.sh "$GITHUB_BASE_URL/$GITHUB_SOURCE/lib/lib.sh"
+  curl -sSLf -o /tmp/lib.sh "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/lib/lib.sh"
   source /tmp/lib.sh
 fi
 
@@ -34,7 +34,7 @@ load_module() {
   else
     local tmp_mod="/tmp/mod_$module_name.sh"
     [ -f "$tmp_mod" ] && rm -rf "$tmp_mod"
-    curl -sSL -o "$tmp_mod" "$GITHUB_BASE_URL/$GITHUB_SOURCE/modules/$module_name.sh"
+    curl -sSLf -o "$tmp_mod" "$GITHUB_BASE_URL/$GITHUB_SOURCE/installer/modules/$module_name.sh"
     source "$tmp_mod"
   fi
 }
