@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- SEO Meta Tags -->
-    <title>@yield('title', 'Console · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))</title>
-    <meta name="title" content="@yield('meta_title', 'Console · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))">
+    <title>@yield('title', 'Console') · {{ $siteName }}</title>
+    <meta name="title" content="@yield('meta_title', 'Console · ' . $siteName)">
     <meta name="description" content="{{ $siteDescription ?? 'Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.' }}">
     <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp' }}">
     <meta name="robots" content="noindex, nofollow">

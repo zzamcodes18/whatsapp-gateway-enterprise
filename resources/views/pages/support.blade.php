@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Pusat Bantuan & Support - Whatsapp Gateway Enterprise')
+@section('title', 'Pusat Bantuan & Support')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">

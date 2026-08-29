@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- SEO Meta Tags -->
-    <title>@yield('title', 'Autentikasi · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))</title>
-    <meta name="title" content="@yield('meta_title', 'Autentikasi · ' . ($siteName ?? 'Whatsapp Gateway Enterprise'))">
+    <title>@yield('title', 'Autentikasi') · {{ $siteName }}</title>
+    <meta name="title" content="@yield('meta_title', 'Autentikasi · ' . $siteName)">
     <meta name="description" content="{{ $siteDescription ?? 'Masuk ke console Whatsapp Gateway Enterprise untuk mengelola multi-device dan integrasi REST API berkecepatan tinggi.' }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#2563EB">

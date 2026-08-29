@@ -31,8 +31,25 @@ class AppServiceProvider extends ServiceProvider
             $siteName = $settings['site_name'] ?? 'Whatsapp Gateway Enterprise';
             $siteDescription = $settings['site_description'] ?? 'Console manajemen gateway WhatsApp terpadu. Pantau nomor terhubung, kirim pesan REST API, dan kelola API Key.';
             $siteKeywords = $settings['site_keywords'] ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp';
-            $siteLogo = $settings['site_logo'] ?? null;
-            $siteFavicon = $settings['site_favicon'] ?? null;
+            
+            $rawLogo = $settings['site_logo'] ?? null;
+            if ($rawLogo) {
+                $siteLogo = (str_starts_with($rawLogo, 'http://') || str_starts_with($rawLogo, 'https://')) 
+                    ? $rawLogo 
+                    : asset(ltrim($rawLogo, '/'));
+            } else {
+                $siteLogo = null;
+            }
+
+            $rawFavicon = $settings['site_favicon'] ?? null;
+            if ($rawFavicon) {
+                $siteFavicon = (str_starts_with($rawFavicon, 'http://') || str_starts_with($rawFavicon, 'https://')) 
+                    ? $rawFavicon 
+                    : asset(ltrim($rawFavicon, '/'));
+            } else {
+                $siteFavicon = null;
+            }
+
             $supportWhatsapp = $settings['support_whatsapp'] ?? '';
             $supportEmail = $settings['support_email'] ?? '';
 

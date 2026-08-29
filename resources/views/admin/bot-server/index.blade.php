@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Server Bot OTP · Admin Gateway')
+@section('title', 'Server Bot OTP')
 
 @section('content')
 <div class="space-y-6">

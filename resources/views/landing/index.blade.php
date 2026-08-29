@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Whatsapp Gateway Enterprise & Multi-Device REST API')
+@section('title', 'Home & Multi-Device REST API')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-16 pb-20 space-y-24">

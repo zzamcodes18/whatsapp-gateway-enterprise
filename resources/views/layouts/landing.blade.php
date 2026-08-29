@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Primary Meta SEO Tags -->
-    <title>@yield('title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')</title>
-    <meta name="title" content="@yield('meta_title', ($siteName ?? 'Whatsapp Gateway Enterprise') . ' & Multi-Device REST API')">
+    <title>@yield('title', 'Multi-Device REST API') · {{ $siteName }}</title>
+    <meta name="title" content="@yield('meta_title', $siteName . ' & Multi-Device REST API')">
     <meta name="description" content="@yield('meta_description', $siteDescription ?? 'Layanan Whatsapp Gateway Enterprise berkecepatan tinggi dengan Baileys v1.0. Mendukung integrasi OTP, notifikasi tagihan, webhook realtime, Scan QR Code, dan Pairing Code 8-digit.')">
     <meta name="keywords" content="{{ $siteKeywords ?? 'whatsapp gateway, wa gateway api, whatsapp otp, baileys v1, whatsapp bot api, rest api whatsapp, whatsapp multi device, webhook whatsapp, whatsapp gateway enterprise' }}">
     <meta name="author" content="{{ $siteName }}">

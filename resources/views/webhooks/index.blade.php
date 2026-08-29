@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Webhook Callbacks - Whatsapp Gateway Enterprise')
+@section('title', 'Webhook Callbacks')
 
 @section('content')
 <div class="space-y-6">

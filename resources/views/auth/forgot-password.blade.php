@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Reset Password · Whatsapp Gateway Enterprise')
+@section('title', 'Reset Password')
 
 @section('content')
 <div class="space-y-6">

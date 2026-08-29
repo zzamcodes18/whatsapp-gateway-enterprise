@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kirim Pesan & Log · Whatsapp Gateway Enterprise')
+@section('title', 'Kirim Pesan & Log')
 
 @section('content')
 <div class="space-y-6" x-data="{ messageType: 'text', msgContent: '' }">

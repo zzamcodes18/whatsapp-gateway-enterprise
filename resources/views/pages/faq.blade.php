@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'Tanya Jawab (FAQ) - Whatsapp Gateway Enterprise')
+@section('title', 'Tanya Jawab (FAQ)')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10" x-data="{ active: null, search: '' }">
