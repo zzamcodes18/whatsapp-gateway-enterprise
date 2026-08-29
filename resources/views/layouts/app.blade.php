@@ -80,6 +80,11 @@
                             <i data-lucide="bot" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Server Bot OTP</span>
                         </a>
+
+                        <a href="{{ route('admin.settings.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="settings" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Pengaturan Website</span>
+                        </a>
                     @else
                         <!-- USER WORKSPACE NAVIGATION -->
                         <div class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">

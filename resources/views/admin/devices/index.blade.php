@@ -219,7 +219,7 @@
                 </button>
             </div>
 
-            <form :action="'/admin/devices/' + editForm.id" method="POST" class="space-y-3.5">
+            <form :action="'/anjayadminwkwk/devices/' + editForm.id" method="POST" class="space-y-3.5">
                 @csrf
                 @method('PUT')
 

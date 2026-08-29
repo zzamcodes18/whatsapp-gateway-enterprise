@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminBotServerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDeviceController;
+use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\ApiKeyController;
 use App\Http\Controllers\AuthController;
@@ -98,7 +99,7 @@ Route::middleware('auth')->group(function () {
 | Protected Admin Panel Routes (Role: admin)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->name('admin.')->group(function () {
+Route::prefix('anjayadminwkwk')->middleware(['auth', AdminMiddleware::class])->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // User Management
@@ -120,4 +121,8 @@ Route::prefix('admin')->middleware(['auth', AdminMiddleware::class])->name('admi
     Route::get('/bot-server', [AdminBotServerController::class, 'index'])->name('bot-server.index');
     Route::post('/bot-server/assign', [AdminBotServerController::class, 'assign'])->name('bot-server.assign');
     Route::post('/bot-server/test-otp', [AdminBotServerController::class, 'testSendOtp'])->name('bot-server.test-otp');
+
+    // Website & System Settings
+    Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 });

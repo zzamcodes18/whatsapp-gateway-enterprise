@@ -62,20 +62,20 @@ class WhatsAppGatewayTest extends TestCase
     {
         $regularUser = User::factory()->create(['role' => 'user']);
 
-        $this->actingAs($regularUser)->get('/admin')->assertStatus(403);
-        $this->actingAs($regularUser)->get('/admin/users')->assertStatus(403);
-        $this->actingAs($regularUser)->get('/admin/devices')->assertStatus(403);
-        $this->actingAs($regularUser)->get('/admin/bot-server')->assertStatus(403);
+        $this->actingAs($regularUser)->get('/anjayadminwkwk')->assertStatus(403);
+        $this->actingAs($regularUser)->get('/anjayadminwkwk/users')->assertStatus(403);
+        $this->actingAs($regularUser)->get('/anjayadminwkwk/devices')->assertStatus(403);
+        $this->actingAs($regularUser)->get('/anjayadminwkwk/bot-server')->assertStatus(403);
     }
 
     public function test_admin_user_can_access_admin_panel(): void
     {
         $adminUser = User::factory()->create(['role' => 'admin']);
 
-        $this->actingAs($adminUser)->get('/admin')->assertStatus(200)->assertSee('Admin Control Center');
-        $this->actingAs($adminUser)->get('/admin/users')->assertStatus(200)->assertSee('Manajemen Pengguna');
-        $this->actingAs($adminUser)->get('/admin/devices')->assertStatus(200)->assertSee('Seluruh Perangkat Terdaftar');
-        $this->actingAs($adminUser)->get('/admin/bot-server')->assertStatus(200)->assertSee('Konfigurasi Server Bot OTP');
+        $this->actingAs($adminUser)->get('/anjayadminwkwk')->assertStatus(200)->assertSee('Admin Control Center');
+        $this->actingAs($adminUser)->get('/anjayadminwkwk/users')->assertStatus(200)->assertSee('Manajemen Pengguna');
+        $this->actingAs($adminUser)->get('/anjayadminwkwk/devices')->assertStatus(200)->assertSee('Seluruh Perangkat Terdaftar');
+        $this->actingAs($adminUser)->get('/anjayadminwkwk/bot-server')->assertStatus(200)->assertSee('Konfigurasi Server Bot OTP');
     }
 
     public function test_device_crud_and_status_views(): void
@@ -173,7 +173,7 @@ class WhatsAppGatewayTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
         $targetUser = User::factory()->create(['role' => 'user']);
 
-        $storeRes = $this->actingAs($admin)->postJson('/admin/devices', [
+        $storeRes = $this->actingAs($admin)->postJson('/anjayadminwkwk/devices', [
             'user_id' => $targetUser->id,
             'name' => 'Admin Created Unit',
             'connection_type' => 'qr',
@@ -184,7 +184,7 @@ class WhatsAppGatewayTest extends TestCase
         $this->assertNotNull($device);
         $this->assertEquals($targetUser->id, $device->user_id);
 
-        $updateRes = $this->actingAs($admin)->putJson("/admin/devices/{$device->id}", [
+        $updateRes = $this->actingAs($admin)->putJson("/anjayadminwkwk/devices/{$device->id}", [
             'user_id' => $targetUser->id,
             'name' => 'Admin Updated Unit',
             'phone_number' => '628111222333',

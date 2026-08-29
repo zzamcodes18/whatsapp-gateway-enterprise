@@ -74,17 +74,28 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
+        if (\App\Models\SystemSetting::get('allow_registration', 'true') === 'false') {
+            return redirect()->route('login')->with('error', 'Pendaftaran pengguna baru saat ini sedang ditutup oleh administrator.');
+        }
+
         return view('auth.register');
     }
 
     public function register(Request $request)
     {
+        if (\App\Models\SystemSetting::get('allow_registration', 'true') === 'false') {
+            return redirect()->route('login')->with('error', 'Pendaftaran pengguna baru saat ini sedang ditutup oleh administrator.');
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone_number' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
+
+        $defaultDeviceLimit = (int) \App\Models\SystemSetting::get('default_device_limit', 3);
+        $defaultDailyLimit = (int) \App\Models\SystemSetting::get('default_daily_message_limit', 500);
 
         $user = User::create([
             'name' => $validated['name'],
@@ -93,6 +104,8 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => 'user',
             'is_active' => true,
+            'device_limit' => $defaultDeviceLimit,
+            'daily_message_limit' => $defaultDailyLimit,
             'last_login_at' => now(),
             'last_login_ip' => $request->ip(),
         ]);
