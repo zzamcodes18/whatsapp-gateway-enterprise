@@ -133,7 +133,7 @@
 
                             <div class="flex-1 space-y-1.5">
                                 <label for="site_logo" class="app-label">Pilih File Logo Baru</label>
-                                <input type="file" id="site_logo" name="site_logo" accept="image/*" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                                <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="if ($event.target.files[0] && $event.target.files[0].size > 2 * 1024 * 1024) { alert('Ukuran file logo tidak boleh lebih dari 2MB!'); $event.target.value = ''; }" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
 
                             <div class="flex-1 space-y-1.5">
                                 <label for="site_favicon" class="app-label">Pilih File Favicon Baru</label>
-                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="if ($event.target.files[0] && $event.target.files[0].size > 1 * 1024 * 1024) { alert('Ukuran file favicon tidak boleh lebih dari 1MB!'); $event.target.value = ''; }" class="text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
                             </div>
                         </div>
                     </div>
