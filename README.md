@@ -26,7 +26,7 @@
 Anda dapat menginstall seluruh stack platform (Laravel 11, Node.js 20, MariaDB, Nginx, PM2) di VPS Ubuntu/Debian dalam sekali jalan seperti installer Pterodactyl:
 
 ```bash
-bash <(curl -sSL https://installer-whatsappgateway.zzam.dev)
+bash <(curl -sSL https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/install.sh)
 ```
 
 ---
