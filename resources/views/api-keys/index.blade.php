@@ -19,13 +19,8 @@
             <p class="text-xs text-slate-500 font-medium">Kelola kunci akses REST API dan URL callback Webhook realtime dalam satu tempat.</p>
         </div>
 
-        <!-- Documentation CTA Button -->
+        <!-- Action Buttons -->
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('docs.index') }}" class="app-btn app-btn-secondary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer">
-                <i data-lucide="book-open" class="w-4 h-4 text-blue-600"></i>
-                <span>Buka Dokumentasi API</span>
-            </a>
-            
             <button x-show="activeTab === 'api-keys'" @click="showNewModal = true" class="app-btn app-btn-primary text-xs py-2 px-3.5 flex items-center gap-1.5 cursor-pointer">
                 <i data-lucide="key" class="w-4 h-4"></i>
                 <span>Buat API Key Baru</span>
@@ -41,26 +36,6 @@
                 </form>
             @endif
         </div>
-    </div>
-
-    <!-- Documentation Hero Callout Banner -->
-    <div class="app-card p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="relative z-10 space-y-1 text-center md:text-left">
-            <div class="flex items-center justify-center md:justify-start gap-2">
-                <span class="px-2 py-0.5 rounded-full bg-white/20 text-white font-extrabold text-[10px] uppercase tracking-wider">REST API v1.0</span>
-                <span class="text-blue-100 text-xs font-mono">End-to-End JSON SDK</span>
-            </div>
-            <h3 class="font-extrabold text-base sm:text-lg">Panduan Integrasi Developer & Webhook Payload</h3>
-            <p class="text-xs text-blue-100 max-w-xl font-medium">
-                Lihat spesifikasi endpoint pengiriman pesan, cURL, PHP Guzzle, Node.js Axios, Python, serta contoh payload webhook HMAC Signature di halaman dokumentasi interaktif.
-            </p>
-        </div>
-
-        <a href="{{ route('docs.index') }}" class="relative z-10 px-4 py-2.5 bg-white text-blue-700 font-extrabold text-xs rounded-xl shadow-lg hover:bg-blue-50 hover:scale-105 transition-all flex items-center gap-2 flex-shrink-0">
-            <i data-lucide="file-code-2" class="w-4 h-4"></i>
-            <span>Buka Dokumentasi Lengkap</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-        </a>
     </div>
 
     <!-- Navigation Tabs Switcher -->
