@@ -94,7 +94,7 @@ class BaileysManager {
         creds: state.creds,
         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
       },
-      browser: Browsers.macOS('Chrome'),
+      browser: Browsers.macOS('Safari'),
       generateHighQualityLinkPreview: true,
       syncFullHistory: false,
       markOnlineOnConnect: true,

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -59,6 +60,10 @@ class ProfileController extends Controller
         $user = $request->user();
 
         if ($request->boolean('remove_avatar')) {
+            if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $user->avatar);
+                Storage::disk('public')->delete($oldPath);
+            }
             $user->update(['avatar' => null]);
             $user->logActivity('user.avatar_remove', 'Menghapus foto profil');
 
@@ -69,12 +74,19 @@ class ProfileController extends Controller
             'avatar' => ['required', 'image', 'mimes:png,jpg,jpeg,webp', 'max:2048'],
         ]);
 
-        $file = $request->file('avatar');
-        $mime = $file->getMimeType();
-        $base64 = base64_encode(file_get_contents($file->getRealPath()));
-        $dataUri = 'data:' . $mime . ';base64,' . $base64;
+        // Hapus foto terdahulu jika berupa file di storage public
+        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
+            $oldPath = str_replace('/storage/', '', $user->avatar);
+            Storage::disk('public')->delete($oldPath);
+        }
 
-        $user->update(['avatar' => $dataUri]);
+        $file = $request->file('avatar');
+        $extension = $file->getClientOriginalExtension() ?: 'png';
+        $filename = 'avatar_' . $user->id . '_' . time() . '.' . $extension;
+        $path = $file->storeAs('avatars', $filename, 'public');
+        $avatarUrl = '/storage/' . $path;
+
+        $user->update(['avatar' => $avatarUrl]);
         $user->logActivity('user.avatar_update', 'Memperbarui foto profil baru');
 
         return redirect()->back()->with('success', 'Foto profil berhasil diperbarui!');

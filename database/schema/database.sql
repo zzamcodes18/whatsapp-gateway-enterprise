@@ -26,7 +26,7 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_login_at` timestamp NULL DEFAULT NULL,
