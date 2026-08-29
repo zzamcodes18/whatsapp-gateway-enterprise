@@ -44,13 +44,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
--- Dumping data for table `users`
--- Default Password: password123
--- --------------------------------------------------------
-INSERT INTO `users` (`id`, `name`, `email`, `phone_number`, `role`, `avatar`, `email_verified_at`, `password`, `last_login_at`, `last_login_ip`, `is_active`, `device_limit`, `daily_message_limit`, `messages_sent_today`, `last_limit_reset_at`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'LapakOTP Master Admin', 'admin@lapakotp.com', '6281234567890', 'admin', NULL, NOW(), '$2y$10$cxoOkUK8IEFRJJAJ8EyWi.03CJJ1Y/.W64n.OEn4U1eEUplqNXzz.', NOW(), '127.0.0.1', 1, 0, 0, 0, NULL, NULL, NOW(), NOW());
-
--- --------------------------------------------------------
 -- Table structure for table `password_reset_tokens`
 -- --------------------------------------------------------
 DROP TABLE IF EXISTS `password_reset_tokens`;
