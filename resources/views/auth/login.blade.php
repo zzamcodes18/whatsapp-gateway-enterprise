@@ -15,18 +15,6 @@
         </p>
     </div>
 
-    <!-- Quick Demo helper -->
-    <div class="p-3.5 bg-blue-50/70 border border-blue-100 rounded-xl text-xs space-y-1.5">
-        <div class="font-bold text-blue-900 flex items-center gap-1.5 text-[11px]">
-            <i data-lucide="key" class="w-3.5 h-3.5 text-blue-600"></i>
-            <span>Akun Demo Cepat:</span>
-        </div>
-        <div class="font-mono text-[11px] text-slate-600 flex flex-wrap gap-2">
-            <span class="cursor-pointer hover:underline font-semibold text-blue-700 bg-white px-2.5 py-1 rounded-lg border border-blue-200 shadow-2xs" onclick="document.getElementById('email').value='demo@lapakotp.com'; document.getElementById('password').value='password123'">demo@lapakotp.com</span>
-            <span class="cursor-pointer hover:underline font-semibold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200 shadow-2xs" onclick="document.getElementById('email').value='admin@lapakotp.com'; document.getElementById('password').value='password123'">admin@lapakotp.com</span>
-        </div>
-    </div>
-
     <!-- Form -->
     <form method="POST" action="{{ route('login.submit') }}" class="space-y-4">
         @csrf
@@ -34,7 +22,8 @@
         <!-- Email Address -->
         <div class="space-y-1.5">
             <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Email Address</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="email" 
                     name="email" 
@@ -43,9 +32,8 @@
                     placeholder="nama@perusahaan.com" 
                     required 
                     autofocus
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9 font-medium"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5 font-medium"
                 >
-                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
@@ -57,16 +45,16 @@
                     Forgotten password?
                 </a>
             </div>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="password" 
                     name="password" 
                     id="password" 
                     placeholder="••••••••" 
                     required 
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5"
                 >
-                <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 

@@ -22,7 +22,8 @@
         <!-- Name -->
         <div class="space-y-1.5">
             <label for="name" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Full Name</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="text" 
                     name="name" 
@@ -31,16 +32,16 @@
                     placeholder="John Doe" 
                     required 
                     autofocus
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9 font-medium"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5 font-medium"
                 >
-                <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
         <!-- Email -->
         <div class="space-y-1.5">
             <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Email Address</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="email" 
                     name="email" 
@@ -48,57 +49,56 @@
                     value="{{ old('email') }}" 
                     placeholder="nama@perusahaan.com" 
                     required 
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9 font-medium"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5 font-medium"
                 >
-                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
         <!-- Phone Number -->
         <div class="space-y-1.5">
             <label for="phone_number" class="block text-xs font-bold uppercase tracking-wider text-slate-700">WhatsApp Phone (Opsional)</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="text" 
                     name="phone_number" 
                     id="phone_number" 
                     value="{{ old('phone_number') }}" 
                     placeholder="08123456789 atau 628123456789" 
-                    class="input-text p-2.5 sm:p-3 text-xs font-mono pl-9"
+                    class="input-text py-2.5 sm:py-3 text-xs font-mono pl-10 pr-3.5"
                 >
-                <i data-lucide="phone" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
         <!-- Password -->
         <div class="space-y-1.5">
             <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Password (Min. 8 Karakter)</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="password" 
                     name="password" 
                     id="password" 
                     placeholder="••••••••" 
                     required 
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5"
                 >
-                <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
         <!-- Confirm Password -->
         <div class="space-y-1.5">
             <label for="password_confirmation" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Confirm Password</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="shield-check" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="password" 
                     name="password_confirmation" 
                     id="password_confirmation" 
                     placeholder="••••••••" 
                     required 
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5"
                 >
-                <i data-lucide="shield-check" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 

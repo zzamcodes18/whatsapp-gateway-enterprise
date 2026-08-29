@@ -22,7 +22,8 @@
         <!-- Email -->
         <div class="space-y-1.5">
             <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Email Address</label>
-            <div class="relative">
+            <div class="relative flex items-center">
+                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
                     type="email" 
                     name="email" 
@@ -31,9 +32,8 @@
                     placeholder="nama@perusahaan.com" 
                     required 
                     autofocus
-                    class="input-text p-2.5 sm:p-3 text-xs pl-9 font-medium"
+                    class="input-text py-2.5 sm:py-3 text-xs pl-10 pr-3.5 font-medium"
                 >
-                <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5"></i>
             </div>
         </div>
 
