@@ -65,53 +65,53 @@
             </div>
         </div>
 
-        <!-- Right: Simple & Clean Gateway Engine Status Box -->
+        <!-- Right: Simple & Clean Gateway Engine Status Box (Light Theme) -->
         <div class="lg:col-span-6">
-            <div class="app-card bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 p-6 sm:p-7 space-y-6 font-sans">
+            <div class="app-card bg-white text-slate-800 rounded-2xl shadow-xl border border-slate-200/90 p-6 sm:p-7 space-y-6 font-sans">
                 <!-- Header Status Bar -->
-                <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold shadow-2xs">
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm text-white">WhatsApp Enterprise Engine</h3>
-                            <p class="text-[11px] text-slate-400 font-mono">Status Core: Operational</p>
+                            <h3 class="font-bold text-sm text-slate-900">WhatsApp Enterprise Engine</h3>
+                            <p class="text-[11px] text-slate-500 font-mono">Status Core: Operational</p>
                         </div>
                     </div>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>ONLINE</span>
                     </span>
                 </div>
 
                 <!-- Engine Highlights Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Koneksi Perangkat</div>
-                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                            <i data-lucide="qr-code" class="w-4 h-4 text-blue-400"></i>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Koneksi Perangkat</div>
+                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="qr-code" class="w-4 h-4 text-blue-600"></i>
                             <span>Scan QR & Pairing Code</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Performa Pesan</div>
-                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Performa Pesan</div>
+                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-4 h-4 text-amber-600"></i>
                             <span>High-Throughput (&lt; 20ms)</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Dukungan Format</div>
-                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Dukungan Format</div>
+                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i>
                             <span>Teks, Media & Dokumen</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Event Webhook</div>
-                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-                            <i data-lucide="webhook" class="w-4 h-4 text-indigo-400"></i>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Event Webhook</div>
+                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i data-lucide="webhook" class="w-4 h-4 text-indigo-600"></i>
                             <span>Realtime Incoming Message</span>
                         </div>
                     </div>
@@ -119,11 +119,11 @@
 
                 <!-- Clean API Endpoint Payload Summary -->
                 <div class="space-y-2 font-mono text-xs">
-                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                    <div class="flex items-center justify-between text-[11px] text-slate-500">
                         <span>API ENDPOINT PREVIEW</span>
-                        <span class="text-emerald-400 font-bold">POST /api/v1/messages/send-text</span>
+                        <span class="text-blue-700 font-bold">POST /api/v1/messages/send-text</span>
                     </div>
-                    <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 overflow-x-auto text-[11px] leading-relaxed">
+                    <div class="p-3.5 bg-slate-900 border border-slate-800 rounded-xl text-emerald-400 overflow-x-auto text-[11px] leading-relaxed shadow-inner">
 <pre><code>{
   "status": true,
   "message": "Pesan berhasil dikirim ke antrean engine",
