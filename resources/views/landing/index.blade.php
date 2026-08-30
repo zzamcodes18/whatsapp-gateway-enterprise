@@ -25,14 +25,14 @@
                 </span>
             </div>
 
-            <h1 class="font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-slate-900 leading-[1.12]">
+            <h1 class="font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-slate-900 dark:text-white leading-[1.12]">
                 WhatsApp Gateway API <br class="hidden sm:block">
                 <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 bg-clip-text text-transparent">
                     Sangat Cepat, Handal & Realtime
                 </span>
             </h1>
 
-            <p class="text-sm sm:text-base font-medium text-slate-600 leading-relaxed max-w-xl">
+            <p class="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl">
                 Infrastruktur REST API berlatensi rendah untuk otomatisasi pengiriman pesan OTP, notifikasi transaksi, reminder tagihan, dan CS. Hubungkan nomor WhatsApp secara instan dengan <strong>Pairing Code 8-Digit</strong> atau <strong>Scan QR Code</strong>.
             </p>
 
@@ -49,34 +49,34 @@
             </div>
 
             <!-- Key Metric Stats -->
-            <div class="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-4 font-mono text-xs">
+            <div class="pt-6 border-t border-slate-200/80 dark:border-slate-800 grid grid-cols-3 gap-4 font-mono text-xs">
                 <div class="space-y-1">
-                    <div class="font-extrabold text-2xl text-slate-900">99.98%</div>
-                    <div class="text-slate-500 font-semibold text-[11px] font-sans">Uptime Protocol</div>
+                    <div class="font-extrabold text-2xl text-slate-900 dark:text-white">99.98%</div>
+                    <div class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] font-sans">Uptime Protocol</div>
                 </div>
                 <div class="space-y-1">
-                    <div class="font-extrabold text-2xl text-blue-600">&lt; 20ms</div>
-                    <div class="text-slate-500 font-semibold text-[11px] font-sans">Dispatch Latency</div>
+                    <div class="font-extrabold text-2xl text-blue-600 dark:text-blue-400">&lt; 20ms</div>
+                    <div class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] font-sans">Dispatch Latency</div>
                 </div>
                 <div class="space-y-1">
-                    <div class="font-extrabold text-2xl text-emerald-600">UUIDv4</div>
-                    <div class="text-slate-500 font-semibold text-[11px] font-sans">Session Isolated</div>
+                    <div class="font-extrabold text-2xl text-emerald-600 dark:text-emerald-400">UUIDv4</div>
+                    <div class="text-slate-500 dark:text-slate-400 font-semibold text-[11px] font-sans">Session Isolated</div>
                 </div>
             </div>
         </div>
 
         <!-- Right: Simple & Clean Gateway Engine Status Box (Light Theme) -->
         <div class="lg:col-span-6">
-            <div class="app-card bg-white text-slate-800 rounded-2xl shadow-xl border border-slate-200/90 p-6 sm:p-7 space-y-6 font-sans">
+            <div class="app-card bg-white dark:bg-[#111A2E] text-slate-800 dark:text-slate-200 rounded-2xl shadow-xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 space-y-6 font-sans">
                 <!-- Header Status Bar -->
-                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold shadow-2xs">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shadow-2xs">
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm text-slate-900">WhatsApp Enterprise Engine</h3>
-                            <p class="text-[11px] text-slate-500 font-mono">Status Core: Operational</p>
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white">WhatsApp Enterprise Engine</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Status Core: Operational</p>
                         </div>
                     </div>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -87,31 +87,31 @@
 
                 <!-- Engine Highlights Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Koneksi Perangkat</div>
-                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <i data-lucide="qr-code" class="w-4 h-4 text-blue-600"></i>
+                    <div class="p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">Koneksi Perangkat</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="qr-code" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>
                             <span>Scan QR & Pairing Code</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Performa Pesan</div>
-                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <i data-lucide="zap" class="w-4 h-4 text-amber-600"></i>
+                    <div class="p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">Performa Pesan</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-4 h-4 text-amber-600 dark:text-amber-400"></i>
                             <span>High-Throughput (&lt; 20ms)</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Dukungan Format</div>
-                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-600"></i>
+                    <div class="p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">Dukungan Format</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
                             <span>Teks, Media & Dokumen</span>
                         </div>
                     </div>
-                    <div class="p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">Event Webhook</div>
-                        <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <i data-lucide="webhook" class="w-4 h-4 text-indigo-600"></i>
+                    <div class="p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider font-mono">Event Webhook</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="webhook" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i>
                             <span>Realtime Incoming Message</span>
                         </div>
                     </div>
@@ -119,9 +119,9 @@
 
                 <!-- Clean API Endpoint Payload Summary -->
                 <div class="space-y-2 font-mono text-xs">
-                    <div class="flex items-center justify-between text-[11px] text-slate-500">
+                    <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                         <span>API ENDPOINT PREVIEW</span>
-                        <span class="text-blue-700 font-bold">POST /api/v1/messages/send-text</span>
+                        <span class="text-blue-700 dark:text-blue-400 font-bold">POST /api/v1/messages/send-text</span>
                     </div>
                     <div class="p-3.5 bg-slate-900 border border-slate-800 rounded-xl text-emerald-400 overflow-x-auto text-[11px] leading-relaxed shadow-inner">
 <pre><code>{
@@ -146,13 +146,13 @@
                 <i data-lucide="cpu" class="w-3.5 h-3.5 text-blue-600"></i>
                 <span>DUAL CONNECTION PROTOCOL</span>
             </span>
-            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900">Metode Koneksi Tanpa Ribet</h2>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium">Dua pilihan metode otentikasi yang disesuaikan dengan kebutuhan infrastruktur server Anda.</p>
+            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">Metode Koneksi Tanpa Ribet</h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium">Dua pilihan metode otentikasi yang disesuaikan dengan kebutuhan infrastruktur server Anda.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
             <!-- Pairing Code Card -->
-            <div class="app-card app-card-hover p-6 sm:p-8 bg-white space-y-5 border-blue-100 shadow-sm relative overflow-hidden">
+            <div class="app-card app-card-hover p-6 sm:p-8 bg-white dark:bg-[#111A2E] space-y-5 border-blue-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 shadow-2xs">
                         <i data-lucide="key-round" class="w-6 h-6"></i>
@@ -161,8 +161,8 @@
                 </div>
 
                 <div class="space-y-2">
-                    <h3 class="font-bold text-lg text-slate-900">1. Pairing Code 8-Karakter</h3>
-                    <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">1. Pairing Code 8-Karakter</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                         Masukkan nomor WhatsApp ponsel Anda di console. Gateway secara instan meminta 8-digit kode pairing resmi dari server WhatsApp tanpa perlu scan kamera HP.
                     </p>
                 </div>
@@ -173,24 +173,24 @@
                     <div class="font-extrabold text-xl sm:text-2xl text-emerald-400 tracking-widest">4829 - 1037</div>
                 </div>
 
-                <div class="space-y-2 text-xs font-medium text-slate-700 pt-3 border-t border-slate-100">
+                <div class="space-y-2 text-xs font-medium text-slate-700 dark:text-slate-300 pt-3 border-t border-slate-100 dark:border-slate-800">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Sangat ideal untuk deploy VPS jarak jauh tanpa layar monitor</span>
                     </div>
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Input kode langsung dari menu WhatsApp &gt; Perangkat Tertaut</span>
                     </div>
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Handshake aman dan instan hanya dalam 3 detik</span>
                     </div>
                 </div>
             </div>
 
             <!-- QR Code Card -->
-            <div class="app-card app-card-hover p-6 sm:p-8 bg-white space-y-5 border-emerald-100 shadow-sm">
+            <div class="app-card app-card-hover p-6 sm:p-8 bg-white dark:bg-[#111A2E] space-y-5 border-emerald-100 dark:border-slate-800 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div class="w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-center font-bold text-emerald-600 shadow-2xs">
                         <i data-lucide="qr-code" class="w-6 h-6"></i>
@@ -199,8 +199,8 @@
                 </div>
 
                 <div class="space-y-2">
-                    <h3 class="font-bold text-lg text-slate-900">2. Scan QR Code Resolusi Tinggi</h3>
-                    <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                    <h3 class="font-bold text-lg text-slate-900 dark:text-white">2. Scan QR Code Resolusi Tinggi</h3>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                         Metode visual konvensional. Tampilkan QR Code live di dashboard console lalu scan menggunakan kamera WhatsApp di ponsel Anda.
                     </p>
                 </div>
@@ -216,17 +216,17 @@
                     </div>
                 </div>
 
-                <div class="space-y-2 text-xs font-medium text-slate-700 pt-3 border-t border-slate-100">
+                <div class="space-y-2 text-xs font-medium text-slate-700 dark:text-slate-300 pt-3 border-t border-slate-100 dark:border-slate-800">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Proses menghubungkan instan satu langkah</span>
                     </div>
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Dukungan auto reconnection saat perangkat offline</span>
                     </div>
                     <div class="flex items-center gap-2.5">
-                        <div class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">✓</div>
+                        <div class="w-4 h-4 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-[10px]">✓</div>
                         <span>Isolasi sesi mandiri per nomor WhatsApp (UUIDv4)</span>
                     </div>
                 </div>
@@ -241,73 +241,73 @@
                 <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-600"></i>
                 <span>ENTERPRISE FEATURES</span>
             </span>
-            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900">Performa Tinggi & Keamanan Produk</h2>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium">Dirancang khusus untuk skala enterprise dengan keandalan maksimal.</p>
+            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">Performa Tinggi & Keamanan Produk</h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium">Dirancang khusus untuk skala enterprise dengan keandalan maksimal.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Feature 1 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-blue-50 border border-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="smartphone" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">Multi-Device & Session Isolated</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Multi-Device & Session Isolated</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Kelola banyak nomor WhatsApp dalam satu akun console dengan session storage terisolasi berbasis UUIDv4.
                 </p>
             </div>
 
             <!-- Feature 2 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="webhook" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">Realtime Webhook Event</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Realtime Webhook Event</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Terima notifikasi pesan masuk dan status pesan (Sent, Delivered, Read) secara instant ke URL endpoint Anda.
                 </p>
             </div>
 
             <!-- Feature 3 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-indigo-50 border border-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="shield-check" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">API Key SHA-256 Security</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">API Key SHA-256 Security</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Setiap request diautentikasi dengan token hashed SHA-256 yang terenkripsi dan rate limit teratur.
                 </p>
             </div>
 
             <!-- Feature 4 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-sky-50 border border-sky-100 text-sky-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-sky-50 dark:bg-sky-500/10 border border-sky-100 dark:border-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="image" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">Support Pesan Gambar & Dokumen</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Support Pesan Gambar & Dokumen</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Kirim pesan teks biasa, pesan bergambar (JPG/PNG), serta dokumen PDF / invoice secara langsung via API.
                 </p>
             </div>
 
             <!-- Feature 5 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-amber-50 border border-amber-100 text-amber-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="clock" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">Auto Daily Limit Scheduler</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Auto Daily Limit Scheduler</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Sistem pemulihan limit harian otomatis setiap tengah malam (00:00) agar operasional pesan tidak terganggu.
                 </p>
             </div>
 
             <!-- Feature 6 -->
-            <div class="app-card app-card-hover p-6 bg-white space-y-3.5 border-slate-200/90 shadow-2xs">
-                <div class="w-10 h-10 bg-purple-50 border border-purple-100 text-purple-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
+            <div class="app-card app-card-hover p-6 bg-white dark:bg-[#111A2E] space-y-3.5 border-slate-200/90 dark:border-slate-800 shadow-2xs">
+                <div class="w-10 h-10 bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center font-bold shadow-2xs">
                     <i data-lucide="code-2" class="w-5 h-5"></i>
                 </div>
-                <h3 class="font-bold text-base text-slate-900">Dokumentasi API Lengkap</h3>
-                <p class="text-xs text-slate-600 font-medium leading-relaxed">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Dokumentasi API Lengkap</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
                     Panduan integrasi lengkap dengan contoh kode dalam bahasa cURL, Node.js, PHP Laravel, Python, dan Go.
                 </p>
             </div>
@@ -321,8 +321,8 @@
                 <i data-lucide="code" class="w-3.5 h-3.5 text-blue-600"></i>
                 <span>DEVELOPER PLAYGROUND</span>
             </span>
-            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900">Integrasi API Dalam 3 Menit</h2>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium">Pilih bahasa pemrograman favorit Anda dan langsung salin potongan kode integrasi.</p>
+            <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">Integrasi API Dalam 3 Menit</h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium">Pilih bahasa pemrograman favorit Anda dan langsung salin potongan kode integrasi.</p>
         </div>
 
         <div class="app-card bg-slate-950 text-white p-5 sm:p-7 font-mono text-xs overflow-hidden shadow-2xl border border-slate-800 rounded-2xl space-y-4">
@@ -409,40 +409,40 @@ print(response.json())</code></pre>
     <!-- FAQ ACCORDION -->
     <section class="space-y-8 max-w-4xl mx-auto" x-data="{ openFaq: null }">
         <div class="text-center space-y-2">
-            <h2 class="font-extrabold text-2xl sm:text-3xl text-slate-900">Pertanyaan yang Sering Diajukan</h2>
-            <p class="text-xs sm:text-sm text-slate-600 font-medium">Jawaban cepat seputar penggunaan WhatsApp Gateway Enterprise.</p>
+            <h2 class="font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white">Pertanyaan yang Sering Diajukan</h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-medium">Jawaban cepat seputar penggunaan WhatsApp Gateway Enterprise.</p>
         </div>
 
         <div class="space-y-3 font-sans">
             <!-- FAQ 1 -->
-            <div class="app-card bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-2xs">
-                <button @click="openFaq = openFaq === 1 ? null : 1" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 transition-colors">
+            <div class="app-card bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xs">
+                <button @click="openFaq = openFaq === 1 ? null : 1" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
                     <span>Apakah saya membutuhkan layar monitor untuk melakukan koneksi Pairing Code 8-Digit?</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" :class="openFaq === 1 ? 'rotate-180 text-blue-600' : ''"></i>
                 </button>
-                <div x-show="openFaq === 1" class="px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3" style="display: none;">
+                <div x-show="openFaq === 1" class="px-5 pb-5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3" style="display: none;">
                     Tidak perlu. Metode Pairing Code 8-Digit dirancang khusus agar dapat berjalan lancar di VPS server tanpa antarmuka GUI (Headless Server). Cukup masukkan nomor ponsel di console, lalu masukkan 8-digit kode yang muncul ke menu <em>Perangkat Tertaut</em> pada aplikasi WhatsApp HP Anda.
                 </div>
             </div>
 
             <!-- FAQ 2 -->
-            <div class="app-card bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-2xs">
-                <button @click="openFaq = openFaq === 2 ? null : 2" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 transition-colors">
+            <div class="app-card bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xs">
+                <button @click="openFaq = openFaq === 2 ? null : 2" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
                     <span>Bagaimana cara kerja Webhook event pesan masuk?</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" :class="openFaq === 2 ? 'rotate-180 text-blue-600' : ''"></i>
                 </button>
-                <div x-show="openFaq === 2" class="px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3" style="display: none;">
+                <div x-show="openFaq === 2" class="px-5 pb-5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3" style="display: none;">
                     Setiap kali nomor WhatsApp Anda menerima pesan baru atau terjadi perubahan status pengiriman (Sent/Delivered/Read), gateway secara otomatis melakukan HTTP POST request berisi JSON payload ke URL Webhook yang Anda daftarkan di dashboard.
                 </div>
             </div>
 
             <!-- FAQ 3 -->
-            <div class="app-card bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-2xs">
-                <button @click="openFaq = openFaq === 3 ? null : 3" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 transition-colors">
+            <div class="app-card bg-white dark:bg-[#111A2E] border border-slate-200/90 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xs">
+                <button @click="openFaq = openFaq === 3 ? null : 3" class="w-full p-5 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
                     <span>Apakah mendukung Single Sign-On (SSO) Google dan GitHub?</span>
                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 flex-shrink-0" :class="openFaq === 3 ? 'rotate-180 text-blue-600' : ''"></i>
                 </button>
-                <div x-show="openFaq === 3" class="px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3" style="display: none;">
+                <div x-show="openFaq === 3" class="px-5 pb-5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3" style="display: none;">
                     Ya! Platform kami telah terintegrasi penuh dengan OAuth SSO Google & GitHub. Pengguna dapat login dan mendaftar dengan aman dalam 1-klik, serta menghubungkan akun SSO di menu Profil.
                 </div>
             </div>

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4: gunakan variant dark: berbasis CLASS (.dark di <html>), bukan media query OS */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
     :root {
         --color-bg: #F8FAFC;
@@ -127,6 +130,13 @@
             radial-gradient(at 100% 100%, rgba(224, 242, 254, 0.4) 0px, transparent 45%);
     }
 
+    html.dark .soft-canvas {
+        background-color: #0B1120;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.12) 0px, transparent 45%),
+            radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.08) 0px, transparent 45%);
+    }
+
     @media (min-width: 768px) {
         .soft-canvas {
             background-attachment: fixed;
@@ -149,12 +159,27 @@
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    html.dark .app-card {
+        background-color: #111A2E;
+        border-color: #1E293B;
+        box-shadow: 
+            0 1px 2px 0 rgba(0, 0, 0, 0.3),
+            0 4px 12px 0 rgba(0, 0, 0, 0.2);
+    }
+
     .app-card-hover:hover {
         transform: translateY(-2px);
         border-color: #BFDBFE;
         box-shadow: 
             0 12px 24px -4px rgba(37, 99, 235, 0.07),
             0 4px 8px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    html.dark .app-card-hover:hover {
+        border-color: #334155;
+        box-shadow: 
+            0 12px 24px -4px rgba(0, 0, 0, 0.4),
+            0 4px 8px -2px rgba(0, 0, 0, 0.3);
     }
 
     /* Inputs - Fly.io Clean Style */
@@ -170,6 +195,14 @@
         color: #0F172A;
         box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.03);
         transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html.dark .input-text,
+    html.dark .app-input {
+        background-color: #0F172A;
+        border-color: #334155;
+        color: #F8FAFC;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     }
 
     .input-text:focus,
@@ -257,12 +290,25 @@
         border-color: #CBD5E1;
         box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
     }
+    html.dark .btn-secondary,
+    html.dark .app-btn-secondary {
+        background-color: #1E293B;
+        color: #CBD5E1;
+        border-color: #334155;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    }
     .btn-secondary:hover,
     .app-btn-secondary:hover {
         background-color: #F8FAFC;
         color: #0F172A;
         border-color: #94A3B8;
         transform: translateY(-0.5px);
+    }
+    html.dark .btn-secondary:hover,
+    html.dark .app-btn-secondary:hover {
+        background-color: #334155;
+        color: #F8FAFC;
+        border-color: #475569;
     }
 
     .btn-link {
