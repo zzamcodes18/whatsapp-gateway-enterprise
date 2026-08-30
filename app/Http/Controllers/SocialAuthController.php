@@ -276,6 +276,9 @@ class SocialAuthController extends Controller
         $deviceLimit = (int) SystemSetting::get('default_device_limit', 1);
         $dailyMessageLimit = (int) SystemSetting::get('default_daily_message_limit', 100);
 
+        // Assign plan default (Free) jika tersedia — limit akan otomatis mengikuti plan
+        $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
+
         $newUser = User::create([
             'name' => $name,
             'email' => $email,
@@ -283,10 +286,24 @@ class SocialAuthController extends Controller
             'role' => 'user',
             'is_active' => true,
             'avatar' => $picture,
+            'plan_id' => $defaultPlan?->id,
+            'plan_expires_at' => $defaultPlan ? now()->addDays($defaultPlan->duration_days) : null,
             'device_limit' => $deviceLimit,
             'daily_message_limit' => $dailyMessageLimit,
             $column => $providerId,
         ]);
+
+        // Catat riwayat subscription plan default
+        if ($defaultPlan) {
+            $newUser->subscriptions()->create([
+                'plan_id' => $defaultPlan->id,
+                'status' => 'active',
+                'starts_at' => now(),
+                'ends_at' => now()->addDays($defaultPlan->duration_days),
+                'assigned_by' => 'system:auto-register',
+                'note' => 'Auto-assign plan default saat registrasi via ' . ucfirst($provider),
+            ]);
+        }
 
         $newUser->last_login_at = now();
         $newUser->last_login_ip = $request->ip();

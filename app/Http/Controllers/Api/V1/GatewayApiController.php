@@ -35,9 +35,10 @@ class GatewayApiController extends Controller
         $user = $request->user();
 
         if (! $user->canSendMessage()) {
+            $reason = $user->sendMessageBlockReason() ?? 'Message quota reached.';
             return response()->json([
                 'success' => false,
-                'message' => "Daily message quota reached ({$user->daily_message_limit} msg/day). Resets at 00:05 WIB.",
+                'message' => $reason,
             ], 429);
         }
 
@@ -151,9 +152,10 @@ class GatewayApiController extends Controller
         $user = $request->user();
 
         if (! $user->canSendMessage()) {
+            $reason = $user->sendMessageBlockReason() ?? 'Message quota reached.';
             return response()->json([
                 'success' => false,
-                'message' => "Daily message quota reached ({$user->daily_message_limit} msg/day).",
+                'message' => $reason,
             ], 429);
         }
 
@@ -219,9 +221,10 @@ class GatewayApiController extends Controller
         $user = $request->user();
 
         if (! $user->canSendMessage()) {
+            $reason = $user->sendMessageBlockReason() ?? 'Message quota reached.';
             return response()->json([
                 'success' => false,
-                'message' => "Daily message quota reached ({$user->daily_message_limit} msg/day).",
+                'message' => $reason,
             ], 429);
         }
 

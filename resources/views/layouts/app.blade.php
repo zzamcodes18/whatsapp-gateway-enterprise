@@ -111,6 +111,11 @@
                             <span>Kelola Pengguna</span>
                         </a>
 
+                        <a href="{{ route('admin.plans.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.plans.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white' }}">
+                            <i data-lucide="package" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Kelola Paket (Plan)</span>
+                        </a>
+
                         <a href="{{ route('admin.devices.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.devices.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white' }}">
                             <i data-lucide="server" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Semua Device Sistem</span>
@@ -171,6 +176,43 @@
             <!-- Bottom: Quota Widget -->
             <div class="p-4 border-t border-slate-200/80 dark:border-slate-800 space-y-3 bg-slate-50/50 dark:bg-transparent transition-colors">
                 
+                <!-- Current Plan Widget -->
+                @if(!auth()->user()->isAdmin() && auth()->user()->plan)
+                    <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">
+                        <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
+                            <span>Paket Aktif</span>
+                            <i data-lucide="package" class="w-3.5 h-3.5 text-amber-500"></i>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 dark:text-white">{{ auth()->user()->plan->name }}</span>
+                            @if(auth()->user()->hasActivePlan())
+                                <span class="app-tag app-tag-emerald text-[9px]">AKTIF</span>
+                            @else
+                                <span class="app-tag app-tag-rose text-[9px]">EXPIRED</span>
+                            @endif
+                        </div>
+                        @if(auth()->user()->plan_expires_at)
+                            <div class="text-[10px] font-mono {{ auth()->user()->hasActivePlan() ? 'text-slate-400 dark:text-slate-500' : 'text-rose-500 font-bold' }}">
+                                {{ auth()->user()->hasActivePlan() ? 'Berakhir: ' . auth()->user()->plan_expires_at->format('d M Y') : 'Paket telah kedaluwarsa' }}
+                            </div>
+                        @endif
+                    </div>
+                @elseif(auth()->user()->isAdmin())
+                    <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">
+                        <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
+                            <span>Paket Aktif</span>
+                            <i data-lucide="package" class="w-3.5 h-3.5 text-amber-500"></i>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 dark:text-white">Admin</span>
+                            <span class="app-tag app-tag-indigo text-[9px]">PERMANENT</span>
+                        </div>
+                        <div class="text-[10px] font-mono text-slate-400 dark:text-slate-500">
+                            Unlimited Device &bull; Unlimited Pesan
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Quota Widget -->
                 <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">
                     <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
@@ -178,14 +220,34 @@
                         <i data-lucide="activity" class="w-3.5 h-3.5 text-blue-600"></i>
                     </div>
                     <div class="font-mono text-xs font-bold text-slate-900 dark:text-white">
-                        {{ auth()->user()->messages_sent_today }} / {{ auth()->user()->daily_message_limit ? auth()->user()->daily_message_limit . ' msg' : 'Unlimited' }}
+                        {{ auth()->user()->messages_sent_today }} / {{ auth()->user()->effectiveDailyMessageLimit() ? auth()->user()->effectiveDailyMessageLimit() . ' msg' : 'Unlimited' }}
                     </div>
                     @php
-                        $pct = auth()->user()->daily_message_limit ? min(100, round((auth()->user()->messages_sent_today / auth()->user()->daily_message_limit) * 100)) : 0;
+                        $effLimit = auth()->user()->effectiveDailyMessageLimit();
+                        $pct = $effLimit ? min(100, round((auth()->user()->messages_sent_today / $effLimit) * 100)) : 0;
                     @endphp
                     <div class="w-full bg-slate-200/80 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                         <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-300" style="width: {{ $pct }}%"></div>
                     </div>
+
+                    @php $effMonthlyLimit = auth()->user()->effectiveMonthlyMessageLimit(); @endphp
+                    @if($effMonthlyLimit > 0)
+                        <div class="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                            <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
+                                <span>Kuota Bulanan</span>
+                                <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-violet-600"></i>
+                            </div>
+                            <div class="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                                {{ number_format(auth()->user()->messages_sent_this_month, 0, ',', '.') }} / {{ number_format($effMonthlyLimit, 0, ',', '.') }} msg
+                            </div>
+                            @php
+                                $monthlyPct = min(100, round((auth()->user()->messages_sent_this_month / $effMonthlyLimit) * 100));
+                            @endphp
+                            <div class="w-full bg-slate-200/80 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                                <div class="{{ $monthlyPct >= 90 ? 'bg-rose-500' : ($monthlyPct >= 70 ? 'bg-amber-500' : 'bg-violet-600') }} h-1.5 rounded-full transition-all duration-300" style="width: {{ $monthlyPct }}%"></div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -35,6 +36,7 @@ class AdminUserController extends Controller
 
         return view('admin.users.index', [
             'users' => $users,
+            'plans' => Plan::active()->orderBy('sort_order')->orderBy('price')->get(),
         ]);
     }
 
@@ -60,6 +62,14 @@ class AdminUserController extends Controller
             'daily_message_limit' => $validated['daily_message_limit'],
             'is_active' => true,
         ]);
+
+        // Admin otomatis dapat plan Admin permanen (unlimited)
+        if ($user->isAdmin()) {
+            $adminPlan = \App\Models\Plan::where('slug', 'admin')->where('is_active', true)->first();
+            if ($adminPlan) {
+                $user->assignPlan($adminPlan, auth()->user()->email, 'Auto-assign plan Admin saat pembuatan akun admin');
+            }
+        }
 
         auth()->user()->logActivity('admin.user_create', "Admin membuat pengguna baru: {$user->email}");
 
@@ -93,7 +103,32 @@ class AdminUserController extends Controller
             $updateData['password'] = Hash::make($validated['password']);
         }
 
+        $wasAdmin = $user->isAdmin();
+
         $user->update($updateData);
+
+        // Promosi ke admin: otomatis dapat plan Admin permanen (unlimited)
+        if (! $wasAdmin && $user->isAdmin()) {
+            $adminPlan = \App\Models\Plan::where('slug', 'admin')->where('is_active', true)->first();
+            if ($adminPlan) {
+                $user->assignPlan($adminPlan, auth()->user()->email, 'Auto-assign plan Admin saat promosi role ke admin');
+            }
+        }
+
+        // Demosi dari admin ke user: plan kembali ke plan default (Free)
+        if ($wasAdmin && ! $user->isAdmin()) {
+            $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
+            if ($defaultPlan) {
+                $user->assignPlan($defaultPlan, auth()->user()->email, 'Auto-assign plan default saat demosi role admin ke user');
+            } else {
+                // Tidak ada plan default: lepas plan sepenuhnya (kembali ke limit manual)
+                $user->subscriptions()->where('status', 'active')->update(['status' => 'cancelled']);
+                $user->update([
+                    'plan_id' => null,
+                    'plan_expires_at' => null,
+                ]);
+            }
+        }
 
         auth()->user()->logActivity('admin.user_update', "Admin memperbarui data pengguna: {$user->email}");
 

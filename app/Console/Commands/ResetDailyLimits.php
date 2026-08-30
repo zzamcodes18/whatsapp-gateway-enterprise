@@ -28,14 +28,33 @@ class ResetDailyLimits extends Command
     public function handle(): int
     {
         $today = now()->toDateString();
+        $startOfMonth = now()->startOfMonth()->toDateString();
 
         $affected = User::query()->update([
             'messages_sent_today' => 0,
             'last_limit_reset_at' => $today,
         ]);
 
+        // Reset counter bulanan hanya saat pergantian bulan (hari pertama bulan)
+        $monthlyAffected = 0;
+        if (now()->day === 1) {
+            $monthlyAffected = User::query()
+                ->where(function ($q) use ($startOfMonth) {
+                    $q->whereNull('last_monthly_reset_at')
+                        ->orWhere('last_monthly_reset_at', '!=', $startOfMonth);
+                })
+                ->update([
+                    'messages_sent_this_month' => 0,
+                    'last_monthly_reset_at' => $startOfMonth,
+                ]);
+        }
+
         $this->info("Successfully reset daily message limits for {$affected} users at {$today} 00:05.");
-        Log::info("gateway:reset-daily-limits executed. Reset {$affected} users.");
+        if ($monthlyAffected > 0) {
+            $this->info("Successfully reset monthly message limits for {$monthlyAffected} users (new month: {$startOfMonth}).");
+        }
+
+        Log::info("gateway:reset-daily-limits executed. Reset daily: {$affected} users, monthly: {$monthlyAffected} users.");
 
         return Command::SUCCESS;
     }

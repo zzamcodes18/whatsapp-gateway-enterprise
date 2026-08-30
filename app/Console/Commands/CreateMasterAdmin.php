@@ -59,11 +59,18 @@ class CreateMasterAdmin extends Command
             ]
         );
 
+        // Admin otomatis dapat plan Admin permanen (unlimited)
+        $adminPlan = \App\Models\Plan::where('slug', 'admin')->where('is_active', true)->first();
+        if ($adminPlan && $user->plan_id !== $adminPlan->id) {
+            $user->assignPlan($adminPlan, 'system:make-admin', 'Auto-assign plan Admin permanen (unlimited)');
+        }
+
         $this->info("=================================================");
         $this->info(" 🎉 Master Admin Berhasil Dibuat / Diperbarui!");
         $this->info("=================================================");
         $this->info(" Email    : {$email}");
         $this->info(" Role     : Admin (Unlimited Limits)");
+        $this->info(" Plan     : Admin (Permanent, Unlimited)");
         $this->info("=================================================");
         return 0;
     }

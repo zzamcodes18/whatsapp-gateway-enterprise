@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminBotServerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminDeviceController;
+use App\Http\Controllers\Admin\AdminPlanController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\ApiKeyController;
@@ -163,6 +164,14 @@ Route::prefix('anjayadminwkwk')->middleware(['auth', AdminMiddleware::class])->n
     Route::get('/bot-server', [AdminBotServerController::class, 'index'])->name('bot-server.index');
     Route::post('/bot-server/assign', [AdminBotServerController::class, 'assign'])->name('bot-server.assign');
     Route::post('/bot-server/test-otp', [AdminBotServerController::class, 'testSendOtp'])->name('bot-server.test-otp');
+
+    // Plans & Subscriptions Management
+    Route::get('/plans', [AdminPlanController::class, 'index'])->name('plans.index');
+    Route::post('/plans', [AdminPlanController::class, 'store'])->name('plans.store');
+    Route::put('/plans/{plan}', [AdminPlanController::class, 'update'])->name('plans.update');
+    Route::delete('/plans/{plan}', [AdminPlanController::class, 'destroy'])->name('plans.destroy');
+    Route::post('/users/{user}/assign-plan', [AdminPlanController::class, 'assign'])->name('plans.assign');
+    Route::post('/users/{user}/revoke-plan', [AdminPlanController::class, 'revoke'])->name('plans.revoke');
 
     // Website & System Settings
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');

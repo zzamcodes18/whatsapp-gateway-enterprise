@@ -11,7 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeder kosong - Akun Master Admin dibuat secara eksplisit saat instalasi CLI via Artisan Command
+        // Seed paket default (Free Plan permanen untuk user baru)
+        $this->call([
+            PlanSeeder::class,
+        ]);
+
+        // Akun Master Admin dibuat secara eksplisit saat instalasi CLI via Artisan Command
     }
-}
 }

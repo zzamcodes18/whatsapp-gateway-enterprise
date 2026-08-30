@@ -56,6 +56,7 @@
                 <tr>
                     <th class="p-3.5">Pengguna</th>
                     <th class="p-3.5">Role</th>
+                    <th class="p-3.5">Paket (Plan)</th>
                     <th class="p-3.5">Device (Aktif/Limit)</th>
                     <th class="p-3.5">Pesan Hari Ini (Terkirim/Limit)</th>
                     <th class="p-3.5">Status</th>
@@ -77,11 +78,29 @@
                                 {{ strtoupper($user->role) }}
                             </span>
                         </td>
-                        <td class="p-3.5 font-mono">
-                            <strong class="text-slate-900 dark:text-white">{{ $user->devices_count }}</strong> / {{ $user->device_limit > 0 ? $user->device_limit . ' Unit' : 'Unlimited' }}
+                        <td class="p-3.5">
+                            @if($user->plan)
+                                <div class="flex flex-col gap-0.5">
+                                    <span class="app-tag text-[9px] {{ $user->hasActivePlan() ? 'app-tag-blue' : 'app-tag-rose' }}">
+                                        {{ strtoupper($user->plan->name) }}
+                                    </span>
+                                    @if($user->plan_expires_at)
+                                        <span class="text-[10px] font-mono {{ $user->hasActivePlan() ? 'text-slate-400 dark:text-slate-500' : 'text-rose-500 font-bold' }}">
+                                            {{ $user->hasActivePlan() ? 's/d ' . $user->plan_expires_at->format('d M Y') : 'EXPIRED' }}
+                                        </span>
+                                    @else
+                                        <span class="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Lifetime</span>
+                                    @endif
+                                </div>
+                            @else
+                                <span class="app-tag text-[9px] app-tag-slate">MANUAL</span>
+                            @endif
                         </td>
                         <td class="p-3.5 font-mono">
-                            <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $user->messages_sent_today }}</span> / {{ $user->daily_message_limit ? $user->daily_message_limit . ' msg/hari' : 'Unlimited' }}
+                            <strong class="text-slate-900 dark:text-white">{{ $user->devices_count }}</strong> / {{ $user->effectiveDeviceLimit() > 0 ? $user->effectiveDeviceLimit() . ' Unit' : 'Unlimited' }}
+                        </td>
+                        <td class="p-3.5 font-mono">
+                            <span class="text-blue-600 dark:text-blue-400 font-bold">{{ $user->messages_sent_today }}</span> / {{ $user->effectiveDailyMessageLimit() ? $user->effectiveDailyMessageLimit() . ' msg/hari' : 'Unlimited' }}
                             <div class="text-[10px] text-slate-400 dark:text-slate-500">Total: {{ $user->messages_count }}</div>
                         </td>
                         <td class="p-3.5">
@@ -94,6 +113,13 @@
                                 <i data-lucide="edit-3" class="w-3 h-3 text-blue-600"></i>
                                 <span>Edit</span>
                             </button>
+
+                            @if(!$user->isAdmin())
+                                <button type="button" @click="openPlanModal(@js($user))" class="app-btn app-btn-soft-blue text-[11px] py-1 px-2.5 cursor-pointer">
+                                    <i data-lucide="package" class="w-3 h-3"></i>
+                                    <span>Plan</span>
+                                </button>
+                            @endif
 
                             @if($user->id !== auth()->id())
                                 <form method="POST" action="{{ route('admin.users.toggle-status', $user) }}" class="inline">
@@ -121,7 +147,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-medium">
+                        <td colspan="7" class="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-medium">
                             Tidak ada data pengguna yang cocok dengan kriteria pencarian.
                         </td>
                     </tr>
@@ -280,6 +306,69 @@
         </div>
     </div>
 
+    <!-- ================= ASSIGN PLAN MODAL ================= -->
+    <div x-show="showPlanModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs" style="display: none;" x-cloak>
+        <div class="app-card bg-white dark:bg-[#111A2E] max-w-md w-full p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 dark:border-slate-800 custom-scrollbar" @click.away="showPlanModal = false">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div>
+                    <h3 class="font-bold text-base text-navy">Tetapkan Paket (Plan)</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono" x-text="planForm.email"></p>
+                </div>
+                <button @click="showPlanModal = false" class="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl p-3 text-[11px] text-blue-700 dark:text-blue-400 font-medium space-y-1">
+                <p><strong>Catatan:</strong> Saat paket ditetapkan, limit device &amp; pesan harian user akan otomatis mengikuti limit paket (meng-override limit manual).</p>
+                <p x-show="planForm.current_plan_name" class="font-semibold">Paket saat ini: <span x-text="planForm.current_plan_name"></span></p>
+            </div>
+
+            @if($plans->isEmpty())
+                <div class="p-4 text-center text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    Belum ada paket aktif yang tersedia.
+                    <a href="{{ route('admin.plans.index') }}" class="text-blue-600 dark:text-blue-400 font-bold hover:underline">Buat paket terlebih dahulu &rarr;</a>
+                </div>
+            @else
+                <form :action="'/anjayadminwkwk/users/' + planForm.id + '/assign-plan'" method="POST" class="space-y-3.5">
+                    @csrf
+                    <div class="space-y-1.5">
+                        <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Pilih Paket</label>
+                        <select name="plan_id" class="input-text text-xs font-semibold cursor-pointer" required>
+                            @foreach($plans as $plan)
+                                <option value="{{ $plan->id }}">{{ $plan->name }} — {{ $plan->formatPrice() }} / {{ $plan->duration_days }} hari ({{ $plan->formatDeviceLimit() }}, {{ $plan->formatMessageLimit() }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                        @if($user->plan_id ?? false)
+                        @endif
+                        <div class="flex items-center gap-2">
+                            <button type="button" @click="showPlanModal = false" class="app-btn app-btn-secondary text-xs py-2 px-3.5">
+                                Batal
+                            </button>
+                            <button type="submit" class="app-btn app-btn-primary py-2 px-4 text-xs flex items-center gap-1.5 cursor-pointer">
+                                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                                <span>Tetapkan Paket</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <template x-if="planForm.current_plan_id">
+                    <form :action="'/anjayadminwkwk/users/' + planForm.id + '/revoke-plan'" method="POST" class="pt-3 border-t border-slate-100 dark:border-slate-800">
+                        @csrf
+                        <button type="submit" class="app-btn app-btn-soft-danger text-xs py-2 px-3.5 w-full flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="x-circle" class="w-3.5 h-3.5"></i>
+                            <span>Cabut Paket Saat Ini</span>
+                        </button>
+                    </form>
+                </template>
+            @endif
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -287,6 +376,13 @@ function adminUsersManager() {
     return {
         showCreateModal: false,
         showEditModal: false,
+        showPlanModal: false,
+        planForm: {
+            id: null,
+            email: '',
+            current_plan_id: null,
+            current_plan_name: ''
+        },
         editForm: {
             id: null,
             name: '',
@@ -317,6 +413,19 @@ function adminUsersManager() {
                 is_active: user.is_active ? '1' : '0'
             };
             this.showEditModal = true;
+            setTimeout(() => {
+                if (window.renderLucide) window.renderLucide();
+            }, 50);
+        },
+
+        openPlanModal(user) {
+            this.planForm = {
+                id: user.id,
+                email: user.email,
+                current_plan_id: user.plan_id || null,
+                current_plan_name: user.plan ? user.plan.name : ''
+            };
+            this.showPlanModal = true;
             setTimeout(() => {
                 if (window.renderLucide) window.renderLucide();
             }, 50);

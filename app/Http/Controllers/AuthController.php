@@ -194,6 +194,9 @@ class AuthController extends Controller
         $defaultDeviceLimit = (int) SystemSetting::get('default_device_limit', 3);
         $defaultDailyLimit = (int) SystemSetting::get('default_daily_message_limit', 500);
 
+        // Assign plan default (Free) jika tersedia — limit akan otomatis mengikuti plan
+        $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
+
         $user = User::create([
             'name' => $pending['name'],
             'email' => $pending['email'],
@@ -201,11 +204,25 @@ class AuthController extends Controller
             'password' => $pending['password'],
             'role' => 'user',
             'is_active' => true,
+            'plan_id' => $defaultPlan?->id,
+            'plan_expires_at' => $defaultPlan ? now()->addDays($defaultPlan->duration_days) : null,
             'device_limit' => $defaultDeviceLimit,
             'daily_message_limit' => $defaultDailyLimit,
             'last_login_at' => now(),
             'last_login_ip' => $request->ip(),
         ]);
+
+        // Catat riwayat subscription plan default
+        if ($defaultPlan) {
+            $user->subscriptions()->create([
+                'plan_id' => $defaultPlan->id,
+                'status' => 'active',
+                'starts_at' => now(),
+                'ends_at' => now()->addDays($defaultPlan->duration_days),
+                'assigned_by' => 'system:auto-register',
+                'note' => 'Auto-assign plan default saat registrasi',
+            ]);
+        }
 
         session()->forget('pending_registration');
 

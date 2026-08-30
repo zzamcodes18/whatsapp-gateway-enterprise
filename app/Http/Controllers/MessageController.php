@@ -53,8 +53,9 @@ class MessageController extends Controller
         $user = Auth::user();
 
         if (! $user->canSendMessage()) {
+            $reason = $user->sendMessageBlockReason() ?? 'Batas pengiriman pesan Anda telah tercapai.';
             return back()->withInput()->withErrors([
-                'phone' => "Batas pengiriman pesan harian Anda ({$user->daily_message_limit} pesan/hari) telah tercapai. Kuota akan direset otomatis pada pukul 00:05 WIB.",
+                'phone' => $reason . ' Kuota harian direset pukul 00:05 WIB, kuota bulanan direset awal bulan.',
             ]);
         }
 
