@@ -438,7 +438,7 @@
         </form>
 
         <!-- Hidden Form for SMTP Test Connection -->
-        <form id="form-test-smtp" action="{{ route('settings.test-smtp') }}" method="POST" class="hidden">
+        <form id="form-test-smtp" action="{{ route('admin.settings.test-smtp') }}" method="POST" class="hidden">
             @csrf
         </form>
 

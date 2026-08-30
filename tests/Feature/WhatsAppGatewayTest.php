@@ -50,10 +50,10 @@ class WhatsAppGatewayTest extends TestCase
             'password' => 'password123',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/users/dashboard');
         $this->assertAuthenticatedAs($user);
 
-        $dashRes = $this->actingAs($user)->get('/dashboard');
+        $dashRes = $this->actingAs($user)->get('/users/dashboard');
         $dashRes->assertStatus(200);
         $dashRes->assertSee('Dashboard Overview');
     }

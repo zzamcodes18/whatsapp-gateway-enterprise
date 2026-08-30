@@ -112,7 +112,7 @@
 
                         <!-- Card Actions -->
                         <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
-                            <a :href="'/devices/' + device.id" class="flex-1 app-btn app-btn-secondary text-[11px] py-1.5 text-center">
+                            <a :href="'/users/devices/' + device.id" class="flex-1 app-btn app-btn-secondary text-[11px] py-1.5 text-center">
                                 Detail
                             </a>
 
@@ -391,7 +391,7 @@ function deviceManager(initialDevices = []) {
 
             this.isUpdating = true;
             try {
-                const res = await axios.put(`/devices/${this.editForm.id}`, {
+                const res = await axios.put(`/users/devices/${this.editForm.id}`, {
                     name: this.editForm.name,
                     phone_number: this.editForm.phone_number
                 });
@@ -483,7 +483,7 @@ function deviceManager(initialDevices = []) {
 
             this.pollInterval = setInterval(async () => {
                 try {
-                    const res = await axios.get(`/devices/${deviceId}/status`);
+                    const res = await axios.get(`/users/devices/${deviceId}/status`);
                     if (res.data && res.data.success) {
                         const dev = res.data.device;
                         this.currentStatus = dev.status;
@@ -530,7 +530,7 @@ function deviceManager(initialDevices = []) {
                 type: 'danger',
                 onConfirm: async () => {
                     try {
-                        const res = await axios.post(`/devices/${device.id}/disconnect`);
+                        const res = await axios.post(`/users/devices/${device.id}/disconnect`);
                         if (res.data && res.data.success) {
                             window.$toast.success(res.data.message);
                             const idx = this.devicesList.findIndex(d => d.id === device.id);
@@ -551,7 +551,7 @@ function deviceManager(initialDevices = []) {
                 type: 'danger',
                 onConfirm: async () => {
                     try {
-                        const res = await axios.delete(`/devices/${device.id}`);
+                        const res = await axios.delete(`/users/devices/${device.id}`);
                         if (res.data && res.data.success) {
                             window.$toast.success(res.data.message);
                             this.devicesList = this.devicesList.filter(d => d.id !== device.id);

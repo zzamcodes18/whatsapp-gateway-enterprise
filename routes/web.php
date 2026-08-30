@@ -88,7 +88,7 @@ Route::post('/api/internal/wa-event', [InternalEngineController::class, 'handleE
 | Protected User Dashboard Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->group(function () {
+Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Devices Management
