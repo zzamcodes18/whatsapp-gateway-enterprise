@@ -35,8 +35,8 @@ return new class extends Migration
                 $table->foreignId('user_id')->constrained()->cascadeOnDelete();
                 $table->foreignId('plan_id')->constrained()->cascadeOnDelete();
                 $table->string('status', 20)->default('active'); // active | expired | cancelled
-                $table->timestamp('starts_at')->nullable();
-                $table->timestamp('ends_at')->nullable();
+                $table->dateTime('starts_at')->nullable();
+                $table->dateTime('ends_at')->nullable();
                 $table->string('assigned_by')->nullable(); // email admin yang assign
                 $table->text('note')->nullable();
                 $table->timestamps();
@@ -49,7 +49,7 @@ return new class extends Migration
         if (!Schema::hasColumn('users', 'plan_id')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->foreignId('plan_id')->nullable()->after('is_active')->constrained('plans')->nullOnDelete();
-                $table->timestamp('plan_expires_at')->nullable()->after('plan_id');
+                $table->dateTime('plan_expires_at')->nullable()->after('plan_id'); // dateTime: support tanggal permanen > 2038
             });
         }
 
