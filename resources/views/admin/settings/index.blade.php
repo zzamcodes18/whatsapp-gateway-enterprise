@@ -399,6 +399,54 @@
                         <li>Salin <strong>Site Key</strong> & <strong>Secret Key</strong> ke kolom di samping</li>
                     </ol>
                 </div>
+
+                <!-- hCaptcha (Pop-up Challenge) -->
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-5">
+                    <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <h3 class="font-bold text-sm text-slate-900 dark:text-white">hCaptcha (Pop-up Captcha Developer Actions)</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Proteksi pop-up captcha interaktif saat pengguna melakukan aksi sensitif seperti membuat (generate) atau menghentikan (revoke) API Key.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div x-data="{ enableHc: {{ old('enable_hcaptcha', $settings['enable_hcaptcha'] ?? 'false') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                            <label class="app-label">Status hCaptcha</label>
+                            <input type="hidden" name="enable_hcaptcha" :value="enableHc ? 'true' : 'false'">
+                            
+                            <div class="flex items-center gap-3 pt-1">
+                                <button type="button" 
+                                        @click="enableHc = !enableHc" 
+                                        :class="enableHc ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'"
+                                        class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                    <span :class="enableHc ? 'translate-x-5' : 'translate-x-0'"
+                                          class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                                </button>
+                                <span class="text-xs font-bold transition-colors" :class="enableHc ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'" x-text="enableHc ? '✓ Aktif' : '✕ Nonaktif'"></span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Menampilkan pop-up captcha pada modal Generate & Revoke API Key.</p>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="hcaptcha_site_key" class="app-label">Site Key</label>
+                            <input type="text" id="hcaptcha_site_key" name="hcaptcha_site_key" value="{{ old('hcaptcha_site_key', $settings['hcaptcha_site_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="10000000-ffff-ffff-ffff-111111111111">
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Public Site Key dari Dashboard hCaptcha.</p>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="hcaptcha_secret_key" class="app-label">Secret Key</label>
+                            <input type="password" id="hcaptcha_secret_key" name="hcaptcha_secret_key" value="{{ old('hcaptcha_secret_key', $settings['hcaptcha_secret_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="0x00000000000000...">
+                            <p class="text-[11px] text-slate-400 dark:text-slate-500">Secret Key untuk verifikasi server-side.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white dark:bg-[#0D1526] rounded-lg border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                        <p class="font-semibold text-slate-800 dark:text-slate-200">Cara mendapatkan key:</p>
+                        <ol class="list-decimal ml-4 space-y-0.5 text-[11px]">
+                            <li>Buka <a href="https://dashboard.hcaptcha.com/" target="_blank" class="text-blue-600 dark:text-blue-400 underline">Dashboard hCaptcha</a></li>
+                            <li>Tambahkan New Site & masukkan domain aplikasi Anda</li>
+                            <li>Salin <strong>Site Key</strong> & <strong>Secret Key</strong> ke kolom di atas</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
 
             <!-- SECTION 6: OAUTH & SINGLE SIGN-ON (Tab: Pengguna & SSO) -->

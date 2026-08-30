@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApiKey;
+use App\Services\HcaptchaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,13 @@ class ApiKeyController extends Controller
 
     public function store(Request $request)
     {
+        if (HcaptchaService::isEnabled()) {
+            $hcaptchaToken = $request->input('h-captcha-response') ?? $request->input('g-recaptcha-response');
+            if (! HcaptchaService::verify($hcaptchaToken)) {
+                return back()->withErrors(['captcha' => 'Verifikasi hCaptcha gagal atau belum diselesaikan. Silakan coba lagi.'])->withInput();
+            }
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100'],
             'rate_limit' => ['nullable', 'integer', 'min:10', 'max:1000'],
@@ -45,10 +53,17 @@ class ApiKeyController extends Controller
         ]);
     }
 
-    public function destroy(ApiKey $apiKey)
+    public function destroy(Request $request, ApiKey $apiKey)
     {
         if ($apiKey->user_id !== Auth::id()) {
             abort(403);
+        }
+
+        if (HcaptchaService::isEnabled()) {
+            $hcaptchaToken = $request->input('h-captcha-response') ?? $request->input('g-recaptcha-response');
+            if (! HcaptchaService::verify($hcaptchaToken)) {
+                return back()->withErrors(['captcha' => 'Verifikasi hCaptcha gagal atau belum diselesaikan. Silakan coba lagi.']);
+            }
         }
 
         $name = $apiKey->name;

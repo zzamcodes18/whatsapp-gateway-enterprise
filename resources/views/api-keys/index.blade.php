@@ -5,7 +5,10 @@
 @section('content')
 <div class="space-y-6" x-data="{ 
     activeTab: (new URLSearchParams(window.location.search)).get('tab') === 'webhooks' ? 'webhooks' : 'api-keys',
-    showNewModal: false 
+    showNewModal: false,
+    showRevokeModal: false,
+    revokeKeyName: '',
+    revokeActionUrl: ''
 }">
 
     <!-- Header & Action Bar -->
@@ -59,6 +62,13 @@
 
     <!-- ================= TAB 1: API KEYS MANAGEMENT ================= -->
     <div x-show="activeTab === 'api-keys'" class="space-y-5">
+
+        @if($errors->has('captcha'))
+            <div class="p-4 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 text-rose-700 dark:text-rose-400 rounded-xl text-xs flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-4 h-4 shrink-0"></i>
+                <span>{{ $errors->first('captcha') }}</span>
+            </div>
+        @endif
 
         <!-- Plain Text Token Reveal Banner -->
         @if(session('plain_text_token'))
@@ -119,19 +129,13 @@
                                     <td class="p-3.5 font-mono text-slate-400 dark:text-slate-500 whitespace-nowrap">{{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}</td>
                                     <td class="p-3.5 font-mono text-slate-400 dark:text-slate-500 whitespace-nowrap">{{ $key->created_at->format('d M Y') }}</td>
                                     <td class="p-3.5 text-right whitespace-nowrap">
-                                        <button type="button" @click="$confirm({
-                                            title: 'Revoke API Key',
-                                            message: 'Apakah Anda yakin ingin menghapus API Key \'{{ $key->name }}\'? Aplikasi yang menggunakan kunci ini akan kehilangan akses.',
-                                            confirmText: 'Hapus Key',
-                                            type: 'danger',
-                                            onConfirm: () => document.getElementById('delete-key-{{ $key->id }}').submit()
-                                        })" class="app-btn app-btn-secondary text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 border-rose-200 dark:border-rose-500/20 text-[11px] py-1 px-2.5 cursor-pointer">
+                                        <button type="button" @click="
+                                            revokeKeyName = '{{ e($key->name) }}';
+                                            revokeActionUrl = '{{ route('api-keys.destroy', $key) }}';
+                                            showRevokeModal = true;
+                                        " class="app-btn app-btn-secondary text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 border-rose-200 dark:border-rose-500/20 text-[11px] py-1 px-2.5 cursor-pointer">
                                             Revoke Key
                                         </button>
-                                        <form id="delete-key-{{ $key->id }}" method="POST" action="{{ route('api-keys.destroy', $key) }}" class="hidden">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -293,6 +297,13 @@
                     <p class="text-[10px] text-slate-400 dark:text-slate-500">Default: 60 request per menit per API key.</p>
                 </div>
 
+                @if(\App\Services\HcaptchaService::isEnabled())
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-center">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300">Verifikasi Keamanan Captcha</label>
+                        {!! \App\Services\HcaptchaService::renderWidget() !!}
+                    </div>
+                @endif
+
                 <div class="pt-2 flex items-center justify-end gap-2">
                     <button type="button" @click="showNewModal = false" class="app-btn app-btn-secondary py-2 px-3 text-xs cursor-pointer">Batal</button>
                     <button type="submit" class="app-btn app-btn-primary py-2 px-4 text-xs cursor-pointer flex items-center gap-1.5">
@@ -304,5 +315,53 @@
         </div>
     </div>
 
+    <!-- ================= REVOKE API KEY MODAL ================= -->
+    <div x-show="showRevokeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
+        <div class="fixed inset-0 bg-slate-900/60 transition-opacity" @click="showRevokeModal = false"></div>
+
+        <div class="relative bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full p-6 space-y-4 z-10">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg flex items-center justify-center font-bold">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Revoke API Key</h3>
+                </div>
+                <button @click="showRevokeModal = false" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-white p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <form method="POST" :action="revokeActionUrl" class="space-y-4 text-xs">
+                @csrf
+                @method('DELETE')
+
+                <div class="p-3.5 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-xl space-y-1">
+                    <p class="font-bold text-rose-800 dark:text-rose-300">Konfirmasi Hapus Key</p>
+                    <p class="text-slate-600 dark:text-slate-400 text-[11px]">
+                        Apakah Anda yakin ingin menghapus API Key <strong class="text-slate-900 dark:text-white" x-text="revokeKeyName"></strong>? Aplikasi yang menggunakan kunci ini akan langsung kehilangan akses.
+                    </p>
+                </div>
+
+                @if(\App\Services\HcaptchaService::isEnabled())
+                    <div class="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-center">
+                        <label class="block font-bold text-slate-700 dark:text-slate-300">Verifikasi Keamanan Captcha</label>
+                        {!! \App\Services\HcaptchaService::renderWidget() !!}
+                    </div>
+                @endif
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" @click="showRevokeModal = false" class="app-btn app-btn-secondary py-2 px-3 text-xs cursor-pointer">Batal</button>
+                    <button type="submit" class="app-btn app-btn-primary bg-rose-600 hover:bg-rose-700 border-rose-600 text-white py-2 px-4 text-xs cursor-pointer flex items-center gap-1.5">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>Hapus Key</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
+
+{!! \App\Services\HcaptchaService::renderScript() !!}
 @endsection

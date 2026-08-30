@@ -51,6 +51,9 @@ class AdminSettingController extends Controller
             'recaptcha_site_key' => ['nullable', 'string', 'max:255'],
             'recaptcha_secret_key' => ['nullable', 'string', 'max:255'],
             'recaptcha_min_score' => ['nullable', 'numeric', 'between:0,1'],
+            'enable_hcaptcha' => ['nullable', 'in:true,false'],
+            'hcaptcha_site_key' => ['nullable', 'string', 'max:255'],
+            'hcaptcha_secret_key' => ['nullable', 'string', 'max:255'],
             'site_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:2048'],
             'site_favicon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,ico,webp', 'max:1024'],
         ]);
@@ -61,7 +64,6 @@ class AdminSettingController extends Controller
             'site_keywords',
             'support_email',
             'support_whatsapp',
-            'allow_registration',
             'allow_registration',
             'smtp_host',
             'smtp_port',
@@ -85,6 +87,9 @@ class AdminSettingController extends Controller
             'recaptcha_site_key',
             'recaptcha_secret_key',
             'recaptcha_min_score',
+            'enable_hcaptcha',
+            'hcaptcha_site_key',
+            'hcaptcha_secret_key',
         ];
 
         foreach ($keysToUpdate as $key) {
