@@ -3,6 +3,7 @@
 @section('title', 'Reset Password')
 
 @section('content')
+@include('auth.partials.recaptcha', ['action' => 'forgot_password'])
 <div class="space-y-6">
     
     <!-- Title -->
@@ -18,6 +19,7 @@
     <!-- Form -->
     <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
+        <input type="hidden" name="recaptcha_token" class="recaptcha-token">
 
         <!-- Email -->
         <div class="space-y-1.5">

@@ -345,6 +345,62 @@
                 </div>
             </div>
 
+            <!-- SECTION 8: RECAPTCHA V3 (Tab: Server & Integrasi) -->
+            <div x-show="tab === 'server'" class="space-y-5" style="display: none;">
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Google reCAPTCHA v3 (Invisible)</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Proteksi anti-bot invisible di semua halaman auth (login, register, lupa password, verifikasi OTP). User tidak melihat apa pun.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div x-data="{ enableRc: {{ old('enable_recaptcha', $settings['enable_recaptcha'] ?? 'false') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                        <label class="app-label">Status reCAPTCHA v3</label>
+                        <input type="hidden" name="enable_recaptcha" :value="enableRc ? 'true' : 'false'">
+                        
+                        <div class="flex items-center gap-3 pt-1">
+                            <button type="button" 
+                                    @click="enableRc = !enableRc" 
+                                    :class="enableRc ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                <span :class="enableRc ? 'translate-x-5' : 'translate-x-0'"
+                                      class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                            </button>
+                            <span class="text-xs font-bold transition-colors" :class="enableRc ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'" x-text="enableRc ? '✓ Aktif' : '✕ Nonaktif'"></span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Berjalan invisible di background semua form auth.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="recaptcha_site_key" class="app-label">Site Key (v3)</label>
+                        <input type="text" id="recaptcha_site_key" name="recaptcha_site_key" value="{{ old('recaptcha_site_key', $settings['recaptcha_site_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="6Lc...">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Public key dari Google reCAPTCHA Admin.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="recaptcha_secret_key" class="app-label">Secret Key (v3)</label>
+                        <input type="password" id="recaptcha_secret_key" name="recaptcha_secret_key" value="{{ old('recaptcha_secret_key', $settings['recaptcha_secret_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="6Lc...">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Private key untuk verifikasi server-side.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="space-y-1.5">
+                        <label for="recaptcha_min_score" class="app-label">Minimum Score (0.0 – 1.0)</label>
+                        <input type="number" step="0.1" min="0" max="1" id="recaptcha_min_score" name="recaptcha_min_score" value="{{ old('recaptcha_min_score', $settings['recaptcha_min_score'] ?? '0.5') }}" class="app-input font-mono text-xs" placeholder="0.5">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Ambang skor risiko. Rekomendasi: <strong>0.5</strong> (seimbang). Naikkan ke 0.7 untuk keamanan ketat, turunkan ke 0.3 jika banyak false positive.</p>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-white dark:bg-[#0D1526] rounded-lg border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                    <p class="font-semibold text-slate-800 dark:text-slate-200">Cara mendapatkan key:</p>
+                    <ol class="list-decimal ml-4 space-y-0.5 text-[11px]">
+                        <li>Buka <a href="https://www.google.com/recaptcha/admin/create" target="_blank" class="text-blue-600 dark:text-blue-400 underline">Google reCAPTCHA Admin</a></li>
+                        <li>Pilih tipe <strong>reCAPTCHA v3</strong> & masukkan domain aplikasi Anda</li>
+                        <li>Salin <strong>Site Key</strong> & <strong>Secret Key</strong> ke kolom di samping</li>
+                    </ol>
+                </div>
+            </div>
+
             <!-- SECTION 6: OAUTH & SINGLE SIGN-ON (Tab: Pengguna & SSO) -->
             <div x-show="tab === 'users'" class="space-y-6" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">

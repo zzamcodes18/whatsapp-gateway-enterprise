@@ -47,6 +47,10 @@ class AdminSettingController extends Controller
             'enable_turnstile' => ['nullable', 'in:true,false'],
             'turnstile_site_key' => ['nullable', 'string', 'max:255'],
             'turnstile_secret_key' => ['nullable', 'string', 'max:255'],
+            'enable_recaptcha' => ['nullable', 'in:true,false'],
+            'recaptcha_site_key' => ['nullable', 'string', 'max:255'],
+            'recaptcha_secret_key' => ['nullable', 'string', 'max:255'],
+            'recaptcha_min_score' => ['nullable', 'numeric', 'between:0,1'],
             'site_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:2048'],
             'site_favicon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,ico,webp', 'max:1024'],
         ]);
@@ -77,6 +81,10 @@ class AdminSettingController extends Controller
             'enable_turnstile',
             'turnstile_site_key',
             'turnstile_secret_key',
+            'enable_recaptcha',
+            'recaptcha_site_key',
+            'recaptcha_secret_key',
+            'recaptcha_min_score',
         ];
 
         foreach ($keysToUpdate as $key) {

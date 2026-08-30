@@ -3,6 +3,7 @@
 @section('title', 'Sign In')
 
 @section('content')
+@include('auth.partials.recaptcha', ['action' => 'login'])
 @php
     $enableGoogle = \App\Models\SystemSetting::get('enable_google_login', 'false') === 'true';
     $enableGithub = \App\Models\SystemSetting::get('enable_github_login', 'false') === 'true';
@@ -22,6 +23,7 @@
     <!-- Form -->
     <form method="POST" action="{{ route('login.submit') }}" class="space-y-4">
         @csrf
+        <input type="hidden" name="recaptcha_token" class="recaptcha-token">
 
         <!-- Email Address -->
         <div class="space-y-1.5">

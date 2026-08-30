@@ -3,6 +3,7 @@
 @section('title', 'Verifikasi Kode OTP')
 
 @section('content')
+@include('auth.partials.recaptcha', ['action' => 'verify_otp'])
 <div class="space-y-6" x-data="otpForm({{ $expiresAt }})">
     
     <!-- Title & Info -->
@@ -48,6 +49,7 @@
     <!-- OTP Verification Form -->
     <form method="POST" action="{{ route('register.verify-otp') }}" class="space-y-5">
         @csrf
+        <input type="hidden" name="recaptcha_token" class="recaptcha-token">
 
         <!-- Hidden full OTP field -->
         <input type="hidden" name="otp" :value="otpCode">

@@ -46,10 +46,6 @@
             <p class="text-xs font-semibold text-rose-600 dark:text-rose-400 text-center">{{ $message }}</p>
         @enderror
     </div>
-
-    <a href="{{ route('home') }}" class="mt-5 text-[11px] font-semibold text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-        &larr; Kembali ke Beranda
-    </a>
 </div>
 
 <script>

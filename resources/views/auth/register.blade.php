@@ -3,6 +3,7 @@
 @section('title', 'Sign Up')
 
 @section('content')
+@include('auth.partials.recaptcha', ['action' => 'register'])
 @php
     $enableRegisterOtp = \App\Models\SystemSetting::get('enable_register_otp', 'true') === 'true';
     $botDeviceId = \App\Models\SystemSetting::get('otp_server_device_id');
@@ -26,6 +27,7 @@
     <!-- Form -->
     <form method="POST" action="{{ route('register.submit') }}" class="space-y-4">
         @csrf
+        <input type="hidden" name="recaptcha_token" class="recaptcha-token">
 
         <!-- Name -->
         <div class="space-y-1.5">

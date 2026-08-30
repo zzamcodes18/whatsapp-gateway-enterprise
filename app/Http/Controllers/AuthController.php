@@ -8,6 +8,7 @@ use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\WaEngineService;
 use App\Services\TurnstileService;
+use App\Services\RecaptchaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -90,6 +91,13 @@ class AuthController extends Controller
             return redirect()->route('auth.verify', ['redirect' => 'login']);
         }
 
+        // Verifikasi reCAPTCHA v3 (jika aktif)
+        if (RecaptchaService::isEnabled() && ! RecaptchaService::verify($request->input('recaptcha_token'))) {
+            return back()
+                ->withInput($request->only('email', 'remember'))
+                ->withErrors(['email' => 'Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.']);
+        }
+
         $throttleKey = 'login_attempt:'.sha1(Str::lower($credentials['email']).'|'.$request->ip());
 
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
@@ -157,6 +165,13 @@ class AuthController extends Controller
         $botDeviceId = SystemSetting::get('otp_server_device_id');
         $botDevice = $botDeviceId ? Device::find($botDeviceId) : null;
         $isBotActive = $enableRegisterOtp && $botDevice && $botDevice->isConnected();
+
+        // Verifikasi reCAPTCHA v3 (jika aktif)
+        if (RecaptchaService::isEnabled() && ! RecaptchaService::verify($request->input('recaptcha_token'))) {
+            return back()
+                ->withInput($request->only('name', 'email', 'phone_number'))
+                ->withErrors(['recaptcha_token' => 'Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.']);
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -239,6 +254,11 @@ class AuthController extends Controller
             return redirect()->route('register')->with('error', 'Sesi pendaftaran telah berakhir. Silakan daftar kembali.');
         }
 
+        // Verifikasi reCAPTCHA v3 (jika aktif)
+        if (RecaptchaService::isEnabled() && ! RecaptchaService::verify($request->input('recaptcha_token'))) {
+            return back()->withErrors(['otp' => 'Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.']);
+        }
+
         $validated = $request->validate([
             'otp' => ['required', 'string', 'size:6'],
         ]);
@@ -297,6 +317,11 @@ class AuthController extends Controller
         $pending = session('pending_registration');
         if (! $pending) {
             return redirect()->route('register')->with('error', 'Sesi pendaftaran telah berakhir. Silakan daftar kembali.');
+        }
+
+        // Verifikasi reCAPTCHA v3 (jika aktif)
+        if (RecaptchaService::isEnabled() && ! RecaptchaService::verify($request->input('recaptcha_token'))) {
+            return back()->withErrors(['otp' => 'Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.']);
         }
 
         $targetChannel = $request->input('channel', $pending['otp_method'] ?? 'whatsapp');
@@ -398,6 +423,11 @@ class AuthController extends Controller
 
     public function sendResetLink(Request $request)
     {
+        // Verifikasi reCAPTCHA v3 (jika aktif)
+        if (RecaptchaService::isEnabled() && ! RecaptchaService::verify($request->input('recaptcha_token'))) {
+            return back()->withErrors(['email' => 'Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.']);
+        }
+
         $request->validate(['email' => ['required', 'email']]);
 
         // Simulating reset instructions safely without revealing user presence
