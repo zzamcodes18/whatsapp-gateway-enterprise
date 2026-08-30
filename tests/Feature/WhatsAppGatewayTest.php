@@ -28,11 +28,11 @@ class WhatsAppGatewayTest extends TestCase
 
     public function test_login_and_register_pages_render(): void
     {
-        $loginRes = $this->get('/login');
+        $loginRes = $this->get('/auth/login');
         $loginRes->assertStatus(200);
         $loginRes->assertSee('Sign in');
 
-        $regRes = $this->get('/register');
+        $regRes = $this->get('/auth/register');
         $regRes->assertStatus(200);
         $regRes->assertSee('Create Your Account');
     }
@@ -45,7 +45,7 @@ class WhatsAppGatewayTest extends TestCase
             'role' => 'user',
         ]);
 
-        $response = $this->post('/login', [
+        $response = $this->post('/auth/login', [
             'email' => $user->email,
             'password' => 'password123',
         ]);

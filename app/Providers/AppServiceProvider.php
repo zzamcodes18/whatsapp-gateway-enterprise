@@ -25,6 +25,24 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Jakarta');
         \Carbon\Carbon::setLocale('id');
 
+        try {
+            $smtpHost = SystemSetting::get('smtp_host');
+            if ($smtpHost) {
+                config([
+                    'mail.default' => 'smtp',
+                    'mail.mailers.smtp.host' => $smtpHost,
+                    'mail.mailers.smtp.port' => (int) SystemSetting::get('smtp_port', 587),
+                    'mail.mailers.smtp.encryption' => SystemSetting::get('smtp_encryption') === 'null' ? null : SystemSetting::get('smtp_encryption', 'tls'),
+                    'mail.mailers.smtp.username' => SystemSetting::get('smtp_username'),
+                    'mail.mailers.smtp.password' => SystemSetting::get('smtp_password'),
+                    'mail.from.address' => SystemSetting::get('smtp_from_address', env('MAIL_FROM_ADDRESS', 'noreply@example.com')),
+                    'mail.from.name' => SystemSetting::get('smtp_from_name', SystemSetting::get('site_name', 'WhatsApp Gateway')),
+                ]);
+            }
+        } catch (\Throwable $e) {
+            // Abaikan jika DB belum siap
+        }
+
         View::composer('*', function ($view) {
             try {
                 $settings = SystemSetting::all()->pluck('value', 'key')->toArray();

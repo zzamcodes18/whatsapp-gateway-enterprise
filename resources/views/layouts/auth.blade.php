@@ -69,11 +69,6 @@
                         @endif
                         <span class="font-extrabold text-base tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{{ $siteName }}</span>
                     </a>
-
-                    <a href="{{ route('home') }}" class="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-blue-600 flex items-center gap-1 transition-colors">
-                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-                        <span>Beranda</span>
-                    </a>
                 </div>
 
                 <!-- Center Main Form Container -->

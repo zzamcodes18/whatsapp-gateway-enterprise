@@ -101,7 +101,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone_number' => [$isBotActive ? 'required' : 'nullable', 'string', 'max:20'],
+            'phone_number' => ['required', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
 
@@ -113,55 +113,41 @@ class AuthController extends Controller
             }
         }
 
-        // Jika Bot Server OTP Aktif & Terhubung, kirimkan Kode OTP via WhatsApp
+        // Generasi Kode OTP
+        $otp = (string) rand(100000, 999999);
+        $method = 'whatsapp'; // Default pengiriman via WhatsApp
+
+        // Jika bot WA aktif, kirim via WA terlebih dahulu
         if ($isBotActive && $cleanPhone) {
-            $otp = (string) rand(100000, 999999);
-
-            session([
-                'pending_registration' => [
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'phone_number' => $cleanPhone,
-                    'password' => Hash::make($validated['password']),
-                    'otp' => $otp,
-                    'expires_at' => now()->addMinutes(5)->timestamp,
-                ],
-            ]);
-
             $sent = $this->sendWhatsAppOtp($botDevice, $cleanPhone, $otp);
-
-            if ($sent) {
-                return redirect()->route('register.otp')
-                    ->with('success', "Kode verifikasi OTP telah dikirimkan ke WhatsApp (+{$cleanPhone}). Silakan masukkan 6 digit kode OTP Anda.");
-            } else {
-                return back()->withInput()->withErrors(['phone_number' => 'Gagal mengirim kode OTP ke nomor WhatsApp Anda. Pastikan nomor terhubung dengan WhatsApp.']);
+            if (! $sent && ! empty(SystemSetting::get('smtp_host'))) {
+                // Fallback kirim via Email jika WA gagal tapi SMTP ada
+                $this->sendEmailOtp($validated['email'], $otp);
+                $method = 'email';
             }
+        } elseif (! empty(SystemSetting::get('smtp_host'))) {
+            // Jika Bot WA tidak aktif tapi SMTP dikonfigurasi, kirim via Email
+            $this->sendEmailOtp($validated['email'], $otp);
+            $method = 'email';
         }
 
-        // Fallback pendaftaran langsung jika Bot Server tidak aktif / offline
-        $defaultDeviceLimit = (int) SystemSetting::get('default_device_limit', 3);
-        $defaultDailyLimit = (int) SystemSetting::get('default_daily_message_limit', 500);
-
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'phone_number' => $cleanPhone,
-            'password' => Hash::make($validated['password']),
-            'role' => 'user',
-            'is_active' => true,
-            'device_limit' => $defaultDeviceLimit,
-            'daily_message_limit' => $defaultDailyLimit,
-            'last_login_at' => now(),
-            'last_login_ip' => $request->ip(),
+        session([
+            'pending_registration' => [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone_number' => $cleanPhone,
+                'password' => Hash::make($validated['password']),
+                'otp' => $otp,
+                'otp_method' => $method,
+                'expires_at' => now()->addMinutes(5)->timestamp,
+            ],
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+        $msg = $method === 'whatsapp' 
+            ? "Kode verifikasi OTP telah dikirimkan ke WhatsApp (+{$cleanPhone})."
+            : "Kode verifikasi OTP telah dikirimkan ke Email ({$validated['email']}).";
 
-        $user->logActivity('auth.register', 'Pendaftaran akun baru');
-
-        return redirect()->route('dashboard')
-            ->with('success', 'Akun berhasil dibuat! Selamat datang di WhatsApp Gateway Enterprise.');
+        return redirect()->route('register.otp')->with('success', $msg);
     }
 
     public function showVerifyOtp()
@@ -171,10 +157,18 @@ class AuthController extends Controller
             return redirect()->route('register');
         }
 
+        $hasSmtp = ! empty(SystemSetting::get('smtp_host'));
+        $botDeviceId = SystemSetting::get('otp_server_device_id');
+        $botDevice = $botDeviceId ? Device::find($botDeviceId) : null;
+        $hasWa = $botDevice && $botDevice->isConnected();
+
         return view('auth.verify-otp', [
             'phone' => $pending['phone_number'],
             'email' => $pending['email'],
             'expiresAt' => $pending['expires_at'],
+            'currentMethod' => $pending['otp_method'] ?? 'whatsapp',
+            'hasSmtp' => $hasSmtp,
+            'hasWa' => $hasWa,
         ]);
     }
 
@@ -231,25 +225,51 @@ class AuthController extends Controller
             return redirect()->route('register')->with('error', 'Sesi pendaftaran telah berakhir. Silakan daftar kembali.');
         }
 
-        $botDeviceId = SystemSetting::get('otp_server_device_id');
-        $botDevice = $botDeviceId ? Device::find($botDeviceId) : null;
-
-        if (! $botDevice || ! $botDevice->isConnected()) {
-            return back()->withErrors(['otp' => 'Perangkat Bot Server OTP saat ini sedang offline.']);
-        }
+        $targetChannel = $request->input('channel', $pending['otp_method'] ?? 'whatsapp');
 
         $otp = (string) rand(100000, 999999);
         $pending['otp'] = $otp;
+        $pending['otp_method'] = $targetChannel;
         $pending['expires_at'] = now()->addMinutes(5)->timestamp;
         session(['pending_registration' => $pending]);
 
-        $sent = $this->sendWhatsAppOtp($botDevice, $pending['phone_number'], $otp);
+        if ($targetChannel === 'email') {
+            $hasSmtp = ! empty(SystemSetting::get('smtp_host'));
+            if (! $hasSmtp) {
+                return back()->withErrors(['otp' => 'SMTP Mail Server belum dikonfigurasi oleh administrator.']);
+            }
+            $this->sendEmailOtp($pending['email'], $otp);
+            return back()->with('success', "Kode OTP baru berhasil dikirimkan ke Email ({$pending['email']})!");
+        } else {
+            $botDeviceId = SystemSetting::get('otp_server_device_id');
+            $botDevice = $botDeviceId ? Device::find($botDeviceId) : null;
 
-        if ($sent) {
-            return back()->with('success', "Kode OTP WhatsApp baru berhasil dikirimkan ke +{$pending['phone_number']}!");
+            if (! $botDevice || ! $botDevice->isConnected()) {
+                return back()->withErrors(['otp' => 'Perangkat Bot Server WhatsApp OTP saat ini sedang offline.']);
+            }
+
+            $sent = $this->sendWhatsAppOtp($botDevice, $pending['phone_number'], $otp);
+            if ($sent) {
+                return back()->with('success', "Kode OTP WhatsApp baru berhasil dikirimkan ke +{$pending['phone_number']}!");
+            }
+            return back()->withErrors(['otp' => 'Gagal mengirimkan ulang OTP via WhatsApp. Silakan coba beberapa saat lagi.']);
         }
+    }
 
-        return back()->withErrors(['otp' => 'Gagal mengirimkan ulang OTP via WhatsApp. Silakan coba beberapa saat lagi.']);
+    protected function sendEmailOtp(string $email, string $otp): void
+    {
+        try {
+            $siteName = SystemSetting::get('site_name', 'WhatsApp Gateway');
+            \Illuminate\Support\Facades\Mail::raw(
+                "Kode verifikasi OTP {$siteName} Anda adalah: {$otp}\n\nKode ini berlaku selama 5 menit. Jangan berikan kode ini kepada siapapun.",
+                function ($message) use ($email, $siteName, $otp) {
+                    $message->to($email)
+                        ->subject("[{$siteName}] Kode Verifikasi OTP: {$otp}");
+                }
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim Email OTP: ' . $e->getMessage());
+        }
     }
 
     protected function sendWhatsAppOtp(Device $botDevice, string $phone, string $otp): bool

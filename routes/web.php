@@ -50,26 +50,26 @@ Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubC
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])
+    Route::get('/auth/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/auth/login', [AuthController::class, 'login'])
         ->middleware(AntiBruteForce::class.':5,1')
         ->name('login.submit');
 
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])
+    Route::get('/auth/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/auth/register', [AuthController::class, 'register'])
         ->middleware(AntiBruteForce::class.':5,1')
         ->name('register.submit');
 
-    Route::get('/register/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('register.otp');
-    Route::post('/register/verify-otp', [AuthController::class, 'verifyOtp'])
+    Route::get('/auth/register/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('register.otp');
+    Route::post('/auth/register/verify-otp', [AuthController::class, 'verifyOtp'])
         ->middleware(AntiBruteForce::class.':10,1')
         ->name('register.verify-otp');
-    Route::post('/register/resend-otp', [AuthController::class, 'resendOtp'])
+    Route::post('/auth/register/resend-otp', [AuthController::class, 'resendOtp'])
         ->middleware(AntiBruteForce::class.':3,1')
         ->name('register.resend-otp');
 
-    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])
+    Route::get('/auth/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/auth/forgot-password', [AuthController::class, 'sendResetLink'])
         ->middleware(AntiBruteForce::class.':3,1')
         ->name('password.email');
 });
@@ -167,4 +167,5 @@ Route::prefix('anjayadminwkwk')->middleware(['auth', AdminMiddleware::class])->n
     // Website & System Settings
     Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
     Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
+    Route::post('/settings/test-smtp', [AdminSettingController::class, 'testSmtp'])->name('settings.test-smtp');
 });

@@ -51,6 +51,13 @@
                 <span>Limit & Pendaftaran</span>
             </button>
 
+            <button @click="tab = 'smtp'" type="button" 
+                :class="tab === 'smtp' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
+                class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <span>SMTP Mail Server</span>
+            </button>
+
             <button @click="tab = 'engine'" type="button" 
                 :class="tab === 'engine' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
                 class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
@@ -215,7 +222,86 @@
                 </div>
             </div>
 
-            <!-- TAB 4: ENGINE & MICROSERVICE -->
+            <!-- TAB 4: SMTP MAIL SERVER -->
+            <div x-show="tab === 'smtp'" class="space-y-5" style="display: none;">
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Konfigurasi SMTP Mail Server</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Pengaturan server email SMTP untuk pengiriman kode OTP, notifikasi, dan reset password via email.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div class="space-y-1.5">
+                        <label for="smtp_host" class="app-label">SMTP Host Server</label>
+                        <input type="text" id="smtp_host" name="smtp_host" value="{{ old('smtp_host', $settings['smtp_host'] ?? '') }}" class="app-input font-mono text-xs" placeholder="smtp.gmail.com atau smtp.mailtrap.io">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="smtp_port" class="app-label">SMTP Port</label>
+                        <input type="number" id="smtp_port" name="smtp_port" value="{{ old('smtp_port', $settings['smtp_port'] ?? '587') }}" class="app-input font-mono text-xs" placeholder="587 / 465 / 2525">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="smtp_encryption" class="app-label">Enkripsi (Encryption)</label>
+                        <select id="smtp_encryption" name="smtp_encryption" class="app-input text-xs cursor-pointer">
+                            <option value="tls" {{ ($settings['smtp_encryption'] ?? 'tls') === 'tls' ? 'selected' : '' }}>TLS (Port 587)</option>
+                            <option value="ssl" {{ ($settings['smtp_encryption'] ?? '') === 'ssl' ? 'selected' : '' }}>SSL (Port 465)</option>
+                            <option value="null" {{ ($settings['smtp_encryption'] ?? '') === 'null' ? 'selected' : '' }}>Tanpa Enkripsi (None)</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="smtp_username" class="app-label">SMTP Username / Email</label>
+                        <input type="text" id="smtp_username" name="smtp_username" value="{{ old('smtp_username', $settings['smtp_username'] ?? '') }}" class="app-input font-mono text-xs" placeholder="user@domain.com">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="smtp_password" class="app-label">SMTP Password / App Password</label>
+                        <input type="password" id="smtp_password" name="smtp_password" value="{{ old('smtp_password', $settings['smtp_password'] ?? '') }}" class="app-input font-mono text-xs" placeholder="••••••••••••">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="smtp_from_address" class="app-label">Pengirim (From Email)</label>
+                        <input type="email" id="smtp_from_address" name="smtp_from_address" value="{{ old('smtp_from_address', $settings['smtp_from_address'] ?? '') }}" class="app-input text-xs" placeholder="noreply@domain.com">
+                    </div>
+
+                    <div class="space-y-1.5 md:col-span-3">
+                        <label for="smtp_from_name" class="app-label">Nama Pengirim (From Name)</label>
+                        <input type="text" id="smtp_from_name" name="smtp_from_name" value="{{ old('smtp_from_name', $settings['smtp_from_name'] ?? '') }}" class="app-input text-xs" placeholder="WhatsApp Gateway Enterprise">
+                    </div>
+                </div>
+
+                <!-- TEST KONEKSI SMTP -->
+                <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800">
+                    <div class="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-xl p-4">
+                        <h4 class="font-semibold text-xs text-blue-900 dark:text-blue-300 mb-1 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            Uji Koneksi (Test Email SMTP)
+                        </h4>
+                        <p class="text-[11px] text-blue-700 dark:text-blue-400 mb-3">Simpan konfigurasi terlebih dahulu jika Anda baru saja mengubah data SMTP, lalu kirim email uji coba ke alamat email Anda.</p>
+                        
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                            <input type="email" 
+                                   form="form-test-smtp" 
+                                   name="test_email" 
+                                   value="{{ old('test_email', auth()->user()->email) }}" 
+                                   class="app-input text-xs flex-1 bg-white dark:bg-slate-900" 
+                                   placeholder="email-anda@gmail.com" 
+                                   required>
+                            <button type="submit" 
+                                    form="form-test-smtp" 
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg font-medium text-xs transition-colors flex items-center justify-center gap-1.5 shadow-xs shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                Kirim Email Uji Coba
+                            </button>
+                        </div>
+                        @error('test_email')
+                            <p class="mt-2 text-xs font-semibold text-rose-600 dark:text-rose-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: ENGINE & MICROSERVICE -->
             <div x-show="tab === 'engine'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Integrasi Microservice Engine Node.js</h3>
@@ -349,6 +435,11 @@
                 </button>
             </div>
 
+        </form>
+
+        <!-- Hidden Form for SMTP Test Connection -->
+        <form id="form-test-smtp" action="{{ route('settings.test-smtp') }}" method="POST" class="hidden">
+            @csrf
         </form>
 
     </div>
