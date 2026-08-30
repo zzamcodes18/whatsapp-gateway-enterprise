@@ -36,13 +36,13 @@
     </div>
 
     <!-- Payment Notice -->
-    <div class="rounded-xl border border-amber-200/80 dark:border-amber-500/20 bg-amber-50 dark:bg-amber-500/10 p-4 flex items-start gap-3">
-        <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+    <div class="rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-gradient-to-r from-slate-50 to-white dark:from-slate-800/60 dark:to-[#111A2E] p-4 flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm shadow-blue-500/25">
             <i data-lucide="credit-card" class="w-4.5 h-4.5"></i>
         </div>
         <div class="space-y-1">
-            <div class="text-sm font-bold text-amber-800 dark:text-amber-300">Sistem Pembayaran Belum Tersedia</div>
-            <p class="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">
+            <div class="text-sm font-bold text-slate-800 dark:text-slate-200">Sistem Pembayaran Belum Tersedia</div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                 Upgrade mandiri melalui halaman ini akan segera hadir setelah metode pembayaran online diintegrasikan.
                 Untuk saat ini, silakan hubungi admin untuk upgrade paket secara manual — prosesnya cepat dan gratis biaya admin.
             </p>
@@ -62,20 +62,20 @@
                 @php
                     $isCurrent = $currentPlan && $currentPlan->id === $plan->id;
                 @endphp
-                <div class="app-card p-5 space-y-4 bg-white dark:bg-[#111A2E] relative overflow-hidden {{ $isCurrent ? 'ring-2 ring-blue-500/50' : '' }}">
+                <div class="app-card p-5 space-y-4 bg-white dark:bg-[#111A2E] relative overflow-hidden {{ $isCurrent ? 'ring-2 ring-blue-500/60 shadow-lg shadow-blue-500/10' : 'hover:shadow-md hover:border-slate-200 dark:hover:border-slate-700 transition-all' }}">
                     @if($isCurrent)
-                        <div class="absolute top-0 right-0 bg-blue-600 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-bl-lg tracking-wide uppercase">
+                        <div class="absolute top-0 right-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-bl-lg tracking-wide uppercase shadow-sm">
                             PAKET ANDA
                         </div>
                     @elseif($plan->is_default)
-                        <div class="absolute top-0 right-0 bg-slate-600 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-bl-lg tracking-wide uppercase">
+                        <div class="absolute top-0 right-0 bg-slate-500/90 text-white text-[9px] font-extrabold px-2.5 py-1 rounded-bl-lg tracking-wide uppercase">
                             STARTER
                         </div>
                     @endif
 
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-2">
-                            <div class="w-9 h-9 rounded-xl {{ $plan->price > 0 ? 'bg-gradient-to-tr from-amber-400 to-orange-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300' }} flex items-center justify-center flex-shrink-0">
+                            <div class="w-9 h-9 rounded-xl {{ $plan->price > 0 ? 'bg-gradient-to-tr from-blue-500 to-indigo-600 text-white shadow-sm shadow-indigo-500/25' : 'bg-gradient-to-tr from-emerald-400 to-teal-500 text-white shadow-sm shadow-emerald-500/25' }} flex items-center justify-center flex-shrink-0">
                                 <i data-lucide="{{ $plan->price > 0 ? 'crown' : 'gift' }}" class="w-4.5 h-4.5"></i>
                             </div>
                             <div>
@@ -88,8 +88,8 @@
                         @endif
                     </div>
 
-                    <div class="text-center py-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
-                        <span class="font-extrabold text-xl {{ $plan->price > 0 ? 'text-slate-900 dark:text-white' : 'text-emerald-600 dark:text-emerald-400' }}">{{ $plan->formatPrice() }}</span>
+                    <div class="text-center py-3.5 bg-gradient-to-b from-slate-50 to-slate-100/50 dark:from-slate-800/60 dark:to-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                        <span class="font-extrabold text-2xl {{ $plan->price > 0 ? 'bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent' : 'text-emerald-600 dark:text-emerald-400' }}">{{ $plan->formatPrice() }}</span>
                         <span class="text-[10px] font-semibold text-slate-400 dark:text-slate-500 block mt-0.5">per {{ $plan->duration_days >= 36500 ? 'permanen' : $plan->duration_days . ' hari' }}</span>
                     </div>
 
@@ -136,19 +136,19 @@
     @endif
 
     <!-- Contact Admin CTA -->
-    <div class="app-card p-5 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-600/90 dark:to-indigo-600/90 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="app-card p-5 bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg shadow-blue-500/15">
         <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
                 <i data-lucide="headset" class="w-5 h-5"></i>
             </div>
             <div>
                 <h3 class="font-extrabold text-sm">Butuh Upgrade Sekarang?</h3>
-                <p class="text-xs text-blue-100 mt-0.5 leading-relaxed">
+                <p class="text-xs text-blue-50/90 mt-0.5 leading-relaxed">
                     Hubungi admin untuk aktivasi paket premium secara manual. Sertakan email akun Anda dan pilihan paket.
                 </p>
             </div>
         </div>
-        <a href="{{ route('pages.support') }}" class="app-btn bg-white text-blue-700 hover:bg-blue-50 text-xs font-bold py-2.5 px-4 flex-shrink-0">
+        <a href="{{ route('pages.support') }}" class="app-btn bg-white text-blue-700 hover:bg-blue-50 text-xs font-bold py-2.5 px-4 flex-shrink-0 shadow-sm">
             <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
             <span>Hubungi Support</span>
         </a>
