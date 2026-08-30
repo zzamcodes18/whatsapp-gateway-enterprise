@@ -80,58 +80,63 @@
                 </div>
 
                 <nav class="space-y-1">
-                    <a href="#section-auth" @click="activeSection = 'auth'" :class="activeSection === 'auth' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'all'" :class="activeSection === 'all' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        <span>Semua Dokumentasi</span>
+                    </button>
+
+                    <button @click="activeSection = 'auth'" :class="activeSection === 'auth' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>
                         <span>Autentikasi & Header</span>
-                    </a>
+                    </button>
 
-                    <a href="#section-ratelimit" @click="activeSection = 'ratelimit'" :class="activeSection === 'ratelimit' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'ratelimit'" :class="activeSection === 'ratelimit' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="gauge" class="w-4 h-4"></i>
                         <span>Batas Limit (Rate Limit)</span>
-                    </a>
+                    </button>
 
                     <div class="pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3">
                         REST Endpoints
                     </div>
 
-                    <a href="#endpoint-send-text" @click="activeSection = 'send-text'" :class="activeSection === 'send-text' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'send-text'" :class="activeSection === 'send-text' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">POST</span>
                         <span class="truncate">Kirim Pesan Teks</span>
-                    </a>
+                    </button>
 
-                    <a href="#endpoint-send-template" @click="activeSection = 'send-template'" :class="activeSection === 'send-template' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'send-template'" :class="activeSection === 'send-template' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700">POST</span>
                         <span class="truncate">Kirim Template Pesan</span>
-                    </a>
+                    </button>
 
-                    <a href="#endpoint-send-button" @click="activeSection = 'send-button'" :class="activeSection === 'send-button' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'send-button'" :class="activeSection === 'send-button' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-purple-100 text-purple-700">POST</span>
                         <span class="truncate">Kirim Button Message</span>
-                    </a>
+                    </button>
 
-                    <a href="#endpoint-send-media" @click="activeSection = 'send-media'" :class="activeSection === 'send-media' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'send-media'" :class="activeSection === 'send-media' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">POST</span>
                         <span class="truncate">Kirim Gambar / File</span>
-                    </a>
+                    </button>
 
-                    <a href="#endpoint-device-status" @click="activeSection = 'device-status'" :class="activeSection === 'device-status' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'device-status'" :class="activeSection === 'device-status' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700">GET</span>
                         <span class="truncate">Status Device WA</span>
-                    </a>
+                    </button>
 
                     <div class="pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3">
                         Callbacks & Errors
                     </div>
 
-                    <a href="#section-webhooks" @click="activeSection = 'webhooks'" :class="activeSection === 'webhooks' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'webhooks'" :class="activeSection === 'webhooks' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="webhook" class="w-4 h-4"></i>
                         <span>Webhook Signature</span>
-                    </a>
+                    </button>
 
-                    <a href="#section-status-codes" @click="activeSection = 'status-codes'" :class="activeSection === 'status-codes' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                    <button @click="activeSection = 'status-codes'" :class="activeSection === 'status-codes' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>
                         <span>Status Kode & Errors</span>
-                    </a>
+                    </button>
                 </nav>
             </div>
         </aside>
@@ -140,7 +145,7 @@
         <main class="lg:col-span-9 space-y-8">
 
             <!-- 1. AUTENTIKASI & HEADER -->
-            <section id="section-auth" class="app-card p-6 bg-white space-y-4">
+            <section id="section-auth" x-show="activeSection === 'all' || activeSection === 'auth'" class="app-card p-6 bg-white space-y-4">
                 <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                     <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>
@@ -170,7 +175,7 @@
             </section>
 
             <!-- 2. RATE LIMITING -->
-            <section id="section-ratelimit" class="app-card p-6 bg-white space-y-4">
+            <section id="section-ratelimit" x-show="activeSection === 'all' || activeSection === 'ratelimit'" class="app-card p-6 bg-white space-y-4">
                 <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                     <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="gauge" class="w-4 h-4"></i>
@@ -193,7 +198,7 @@
             </section>
 
             <!-- 3. ENDPOINT: KIRIM PESAN TEKS / OTP -->
-            <section id="endpoint-send-text" class="app-card p-6 bg-white space-y-5">
+            <section id="endpoint-send-text" x-show="activeSection === 'all' || activeSection === 'send-text'" class="app-card p-6 bg-white space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-emerald-500 text-slate-950 font-extrabold rounded-lg font-mono text-xs">POST</span>
@@ -328,7 +333,7 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 4. ENDPOINT: KIRIM TEMPLATE PESAN (DYNAMIC PARAMETERS) -->
-            <section id="endpoint-send-template" class="app-card p-6 bg-white space-y-5">
+            <section id="endpoint-send-template" x-show="activeSection === 'all' || activeSection === 'send-template'" class="app-card p-6 bg-white space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-blue-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
@@ -401,7 +406,7 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 5. ENDPOINT: KIRIM BUTTON & INTERACTIVE MESSAGE -->
-            <section id="endpoint-send-button" class="app-card p-6 bg-white space-y-5">
+            <section id="endpoint-send-button" x-show="activeSection === 'all' || activeSection === 'send-button'" class="app-card p-6 bg-white space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-purple-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
@@ -430,7 +435,7 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 4. ENDPOINT: KIRIM MEDIA / GAMBAR / PDF -->
-            <section id="endpoint-send-media" class="app-card p-6 bg-white space-y-5">
+            <section id="endpoint-send-media" x-show="activeSection === 'all' || activeSection === 'send-media'" class="app-card p-6 bg-white space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-emerald-500 text-slate-950 font-extrabold rounded-lg font-mono text-xs">POST</span>
@@ -496,7 +501,7 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 5. ENDPOINT: STATUS DEVICE -->
-            <section id="endpoint-device-status" class="app-card p-6 bg-white space-y-5">
+            <section id="endpoint-device-status" x-show="activeSection === 'all' || activeSection === 'device-status'" class="app-card p-6 bg-white space-y-5">
                 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-blue-600 text-white font-extrabold rounded-lg font-mono text-xs">GET</span>
@@ -529,7 +534,7 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 6. WEBHOOK HMAC SIGNATURE VERIFICATION -->
-            <section id="section-webhooks" class="app-card p-6 bg-white space-y-4">
+            <section id="section-webhooks" x-show="activeSection === 'all' || activeSection === 'webhooks'" class="app-card p-6 bg-white space-y-4">
                 <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                     <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="webhook" class="w-4 h-4"></i>
@@ -560,7 +565,7 @@ $payload = json_decode(file_get_contents('php://input'), true);
             </section>
 
             <!-- 7. KODE STATUS & ERROR HANDLING -->
-            <section id="section-status-codes" class="app-card p-6 bg-white space-y-4">
+            <section id="section-status-codes" x-show="activeSection === 'all' || activeSection === 'status-codes'" class="app-card p-6 bg-white space-y-4">
                 <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                     <div class="w-8 h-8 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>

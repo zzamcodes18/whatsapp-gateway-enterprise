@@ -40,7 +40,7 @@
                 <span class="font-mono text-[11px] font-semibold text-slate-500">MESSAGE TEMPLATES</span>
             </div>
             <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900">Template Pesan WhatsApp</h1>
-            <p class="text-xs text-slate-500 font-medium">Buat template fleksibel dengan parameter otomatis <code>{otp}</code>, <code>{name}</code>, <code>{code}</code>, dan Tombol Interaktif.</p>
+            <p class="text-xs text-slate-500 font-medium">Kelola template pesan dinamis dengan parameter <code>{otp}</code>, <code>{name}</code>, dan Tombol Interaktif.</p>
         </div>
 
         <div class="flex items-center gap-2">
@@ -49,23 +49,6 @@
                 <span>Buat Template Baru</span>
             </button>
         </div>
-    </div>
-
-    <!-- Info Box Placeholders -->
-    <div class="bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-slate-50 border border-blue-100 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div class="space-y-1 max-w-2xl">
-            <h3 class="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                <i data-lucide="sparkles" class="w-4 h-4 text-blue-600"></i>
-                <span>Format Variabel & Parameter Dinamis</span>
-            </h3>
-            <p class="text-[11px] text-slate-600 leading-relaxed">
-                Gunakan tag seperti <code class="bg-white px-1.5 py-0.5 rounded border border-blue-200 font-mono text-blue-700 font-bold">{otp}</code>, <code class="bg-white px-1.5 py-0.5 rounded border border-blue-200 font-mono text-blue-700 font-bold">{name}</code>, <code class="bg-white px-1.5 py-0.5 rounded border border-blue-200 font-mono text-blue-700 font-bold">{code}</code>, atau variabel kustom lain di dalam teks atau URL tombol. Sistem akan menggantinya secara otomatis saat API dipanggil.
-            </p>
-        </div>
-        <a href="{{ route('docs.index') }}" class="text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 shrink-0 bg-white border border-blue-200/80 px-3 py-1.5 rounded-xl shadow-2xs">
-            <span>Lihat API Docs Template</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-        </a>
     </div>
 
     <!-- Search & Filter Bar -->
@@ -163,16 +146,10 @@
 
                     <!-- Card Actions Footer -->
                     <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-1.5">
-                            <button @click="openTestModal({{ json_encode($tpl) }})" class="px-2.5 py-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
-                                <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                                <span>Test Kirim</span>
-                            </button>
-                            <button @click="openApiModal({{ json_encode($tpl) }})" class="px-2.5 py-1.5 text-[11px] font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
-                                <i data-lucide="code-2" class="w-3.5 h-3.5"></i>
-                                <span>API Payload</span>
-                            </button>
-                        </div>
+                        <button @click="openTestModal({{ json_encode($tpl) }})" class="px-3 py-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                            <span>Test Kirim</span>
+                        </button>
 
                         <div class="flex items-center gap-1">
                             <button @click="openEditModal({{ json_encode($tpl) }})" class="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer" title="Edit Template">
@@ -200,10 +177,10 @@
 
     <!-- ========================= CREATE / EDIT MODAL ========================= -->
     <div x-show="showFormModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showFormModal = false"></div>
 
-            <div class="inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+            <div class="inline-block w-full max-w-4xl my-auto overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl relative z-10">
                 
                 <!-- Modal Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
@@ -213,13 +190,13 @@
                         </div>
                         <h3 class="font-extrabold text-slate-900 text-base" x-text="isEditMode ? 'Edit Template Pesan #' + formData.id : 'Buat Template Pesan Baru'"></h3>
                     </div>
-                    <button @click="showFormModal = false" class="text-slate-400 hover:text-slate-600">
+                    <button @click="showFormModal = false" class="text-slate-400 hover:text-slate-600 cursor-pointer">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
 
                 <!-- Modal Body: Split Form & WhatsApp Live Preview -->
-                <form :action="isEditMode ? '{{ url('/templates') }}/' + formData.id : '{{ route('templates.store') }}'" method="POST" class="p-6">
+                <form :action="isEditMode ? '{{ url('/templates') }}/' + formData.id : '{{ route('templates.store') }}'" method="POST" class="p-6 max-h-[80vh] overflow-y-auto">
                     @csrf
                     <template x-if="isEditMode">
                         <input type="hidden" name="_method" value="PUT">
@@ -262,12 +239,12 @@
                                     <!-- Quick Insert Tags -->
                                     <div class="flex items-center gap-1">
                                         <span class="text-[10px] text-slate-400 font-semibold">Sisipkan:</span>
-                                        <button type="button" @click="insertTag('{otp}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100">+ {otp}</button>
-                                        <button type="button" @click="insertTag('{name}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100">+ {name}</button>
-                                        <button type="button" @click="insertTag('{code}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100">+ {code}</button>
+                                        <button type="button" @click="insertTag('{otp}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {otp}</button>
+                                        <button type="button" @click="insertTag('{name}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {name}</button>
+                                        <button type="button" @click="insertTag('{code}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {code}</button>
                                     </div>
                                 </div>
-                                <textarea name="content" x-model="formData.content" rows="5" required placeholder="Halo {name}, kode OTP rahasia Anda adalah *{otp}*. Berlaku selama 5 menit. Jangan bagikan kepada siapa pun." class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-sans leading-relaxed"></textarea>
+                                <textarea name="content" x-model="formData.content" rows="4" required placeholder="Halo {name}, kode OTP rahasia Anda adalah *{otp}*. Berlaku selama 5 menit. Jangan bagikan kepada siapa pun." class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-sans leading-relaxed"></textarea>
                             </div>
 
                             <!-- Footer Text -->
@@ -281,7 +258,7 @@
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <h4 class="text-xs font-bold text-slate-800">Tombol Interaktif (Interactive Buttons)</h4>
-                                        <p class="text-[10px] text-slate-400">Maksimal 3 tombol interaktif (Quick Reply, Copy Code, Link URL, Call)</p>
+                                        <p class="text-[10px] text-slate-400">Maksimal 3 tombol interaktif</p>
                                     </div>
                                     <button type="button" @click="addButton()" x-show="formData.buttons.length < 3" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 cursor-pointer">
                                         <i data-lucide="plus" class="w-3.5 h-3.5"></i>
@@ -291,40 +268,47 @@
 
                                 <div class="space-y-2">
                                     <template x-for="(btn, index) in formData.buttons" :key="index">
-                                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 relative group">
-                                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                                <div>
-                                                    <select :name="'buttons[' + index + '][type]'" x-model="btn.type" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-semibold">
-                                                        <option value="copy">📋 Copy Code (Salin)</option>
-                                                        <option value="reply">💬 Quick Reply</option>
-                                                        <option value="url">🔗 Link Web (URL)</option>
-                                                        <option value="call">📞 Telepon (Call)</option>
+                                        <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                                            <div class="grid grid-cols-12 gap-2 items-center">
+                                                
+                                                <!-- Button Type Select -->
+                                                <div class="col-span-12 sm:col-span-4">
+                                                    <select :name="'buttons[' + index + '][type]'" x-model="btn.type" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none font-medium">
+                                                        <option value="copy">Copy Code (Salin)</option>
+                                                        <option value="reply">Quick Reply</option>
+                                                        <option value="url">Link Web (URL)</option>
+                                                        <option value="call">Telepon (Call)</option>
                                                     </select>
                                                 </div>
 
-                                                <div>
-                                                    <input type="text" :name="'buttons[' + index + '][text]'" x-model="btn.text" placeholder="Teks Tombol" required class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none">
+                                                <!-- Button Text Input -->
+                                                <div class="col-span-12 sm:col-span-4">
+                                                    <input type="text" :name="'buttons[' + index + '][text]'" x-model="btn.text" placeholder="Teks Tombol" required class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 outline-none">
                                                 </div>
 
-                                                <div class="flex items-center gap-1">
-                                                    <!-- Dynamic value input based on button type -->
+                                                <!-- Dynamic Value Input -->
+                                                <div class="col-span-10 sm:col-span-3">
                                                     <template x-if="btn.type === 'copy'">
-                                                        <input type="text" :name="'buttons[' + index + '][code]'" x-model="btn.code" placeholder="Kode yang disalin / {otp}" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
+                                                        <input type="text" :name="'buttons[' + index + '][code]'" x-model="btn.code" placeholder="Kode / {otp}" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
                                                     </template>
                                                     <template x-if="btn.type === 'url'">
-                                                        <input type="text" :name="'buttons[' + index + '][url]'" x-model="btn.url" placeholder="https://domain.com/auth?code={otp}" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
+                                                        <input type="text" :name="'buttons[' + index + '][url]'" x-model="btn.url" placeholder="https://..." class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
                                                     </template>
                                                     <template x-if="btn.type === 'call'">
-                                                        <input type="text" :name="'buttons[' + index + '][phone]'" x-model="btn.phone" placeholder="+628123456789" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
+                                                        <input type="text" :name="'buttons[' + index + '][phone]'" x-model="btn.phone" placeholder="+628123..." class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
                                                     </template>
                                                     <template x-if="btn.type === 'reply'">
-                                                        <input type="text" :name="'buttons[' + index + '][id]'" x-model="btn.id" placeholder="ID Balasan (Opsional)" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
+                                                        <input type="text" :name="'buttons[' + index + '][id]'" x-model="btn.id" placeholder="ID (Opsional)" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
                                                     </template>
+                                                </div>
 
-                                                    <button type="button" @click="removeButton(index)" class="p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer shrink-0">
-                                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                                <!-- Remove Button -->
+                                                <div class="col-span-2 sm:col-span-1 flex justify-center">
+                                                    <button type="button" @click="removeButton(index)" class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer" title="Hapus Tombol">
+                                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
                                                     </button>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </template>
@@ -334,7 +318,7 @@
                         </div>
 
                         <!-- Right Column: WhatsApp Live Preview Simulator (5 cols) -->
-                        <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-4 text-white space-y-3 flex flex-col justify-between shadow-inner">
+                        <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-4 text-white space-y-3 flex flex-col justify-between shadow-inner min-h-[320px]">
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                                     <div class="flex items-center gap-2">
@@ -364,7 +348,7 @@
                                     <!-- Rendered Buttons Preview -->
                                     <div class="space-y-1 pt-1">
                                         <template x-for="btn in formData.buttons" :key="btn.text">
-                                            <div class="bg-[#202c33] hover:bg-[#2a3942] text-emerald-400 text-center py-2 px-3 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs border border-slate-700/40">
+                                            <div class="bg-[#202c33] text-emerald-400 text-center py-2 px-3 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-slate-700/40">
                                                 <template x-if="btn.type === 'copy'"><span>📋 Salin Kode: <span class="font-mono text-white" x-text="btn.code || btn.text"></span></span></template>
                                                 <template x-if="btn.type === 'url'"><span>🔗 <span x-text="btn.text"></span></span></template>
                                                 <template x-if="btn.type === 'call'"><span>📞 <span x-text="btn.text"></span></span></template>
@@ -376,7 +360,7 @@
                             </div>
 
                             <div class="text-[10px] text-slate-400 text-center font-mono">
-                                Tampilan simulasi balasan WhatsApp Baileys Engine
+                                Tampilan simulasi pesan WhatsApp
                             </div>
                         </div>
 
@@ -401,10 +385,10 @@
 
     <!-- ========================= TEST SEND MODAL ========================= -->
     <div x-show="showTestModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showTestModal = false"></div>
 
-            <div class="inline-block w-full max-w-lg my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+            <div class="inline-block w-full max-w-lg my-auto overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl relative z-10">
                 
                 <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
                     <div class="flex items-center gap-2">
@@ -413,7 +397,7 @@
                         </div>
                         <h3 class="font-extrabold text-slate-900 text-base">Uji Kirim Template Pesan</h3>
                     </div>
-                    <button @click="showTestModal = false" class="text-slate-400 hover:text-slate-600">
+                    <button @click="showTestModal = false" class="text-slate-400 hover:text-slate-600 cursor-pointer">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -447,77 +431,16 @@
                     </div>
 
                     <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button type="button" @click="showTestModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl">
+                        <button type="button" @click="showTestModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl cursor-pointer">
                             Batal
                         </button>
-                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-5 font-bold flex items-center gap-2">
+                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-5 font-bold flex items-center gap-2 cursor-pointer">
                             <i data-lucide="send" class="w-4 h-4"></i>
                             <span>Kirim Test Pesan Sekarang</span>
                         </button>
                     </div>
 
                 </form>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================= API PAYLOAD CODE MODAL ========================= -->
-    <div x-show="showApiModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showApiModal = false"></div>
-
-            <div class="inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
-                
-                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
-                            <i data-lucide="code-2" class="w-4 h-4"></i>
-                        </div>
-                        <h3 class="font-extrabold text-slate-900 text-base">API Request Payload & Snippet</h3>
-                    </div>
-                    <button @click="showApiModal = false" class="text-slate-400 hover:text-slate-600">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
-
-                <div class="p-6 space-y-4">
-                    <div class="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between gap-2">
-                        <div class="font-mono text-xs text-slate-800">
-                            <span class="font-bold text-emerald-600">POST</span> /api/v1/messages/send-template
-                        </div>
-                        <span class="font-mono text-[11px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">Template ID: #<span x-text="activeTemplate.id"></span></span>
-                    </div>
-
-                    <!-- Tabs Snippet -->
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="text-xs font-bold text-slate-700">JSON Request Body</label>
-                            <button @click="copyText(getJsonPayload())" class="text-xs text-blue-600 font-bold hover:text-blue-800 flex items-center gap-1">
-                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                                <span>Salin JSON Payload</span>
-                            </button>
-                        </div>
-                        <pre class="p-4 bg-slate-900 text-slate-100 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed" x-text="getJsonPayload()"></pre>
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="text-xs font-bold text-slate-700">cURL Example Command</label>
-                            <button @click="copyText(getCurlSnippet())" class="text-xs text-blue-600 font-bold hover:text-blue-800 flex items-center gap-1">
-                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                                <span>Salin cURL Command</span>
-                            </button>
-                        </div>
-                        <pre class="p-4 bg-slate-900 text-emerald-400 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed" x-text="getCurlSnippet()"></pre>
-                    </div>
-                </div>
-
-                <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end">
-                    <button @click="showApiModal = false" class="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-200 hover:bg-slate-300 rounded-xl">
-                        Tutup
-                    </button>
-                </div>
 
             </div>
         </div>
@@ -530,7 +453,6 @@ function templateManager() {
     return {
         showFormModal: false,
         showTestModal: false,
-        showApiModal: false,
         isEditMode: false,
         activeTemplate: {},
         formData: {
@@ -578,11 +500,6 @@ function templateManager() {
             this.showTestModal = true;
         },
 
-        openApiModal(template) {
-            this.activeTemplate = template;
-            this.showApiModal = true;
-        },
-
         addButton() {
             if (this.formData.buttons.length < 3) {
                 this.formData.buttons.push({
@@ -606,26 +523,7 @@ function templateManager() {
 
         copyText(text) {
             navigator.clipboard.writeText(text);
-            alert('Teks berhasil disalin ke clipboard!');
-        },
-
-        getJsonPayload() {
-            return JSON.stringify({
-                device_id: 1,
-                phone: "081234567890",
-                template_id: this.activeTemplate.id || 1,
-                variables: {
-                    otp: "884920",
-                    name: "Budi Santoso"
-                }
-            }, null, 2);
-        },
-
-        getCurlSnippet() {
-            return `curl -X POST "{{ url('/api/v1/messages/send-template') }}" \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '${this.getJsonPayload()}'`;
+            alert('Template ID disalin: #' + text);
         }
     }
 }
