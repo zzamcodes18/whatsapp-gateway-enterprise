@@ -24,7 +24,7 @@ return new class extends Migration
                 $table->unsignedInteger('monthly_message_limit')->default(0); // 0 = unlimited
                 $table->boolean('is_active')->default(true);
                 $table->boolean('is_default')->default(false); // plan default untuk user baru
-                $table->unsignedInteger('sort_order')->default(0);
+                $table->integer('sort_order')->default(0); // signed: nilai negatif untuk plan sistem (admin)
                 $table->timestamps();
             });
         }
