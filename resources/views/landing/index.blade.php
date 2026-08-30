@@ -42,9 +42,9 @@
                     <span>Mulai Integrasi Gratis</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </a>
-                <a href="#simulator" class="app-btn app-btn-secondary text-xs sm:text-sm py-3 px-5 flex items-center gap-2">
-                    <i data-lucide="play-circle" class="w-4 h-4 text-blue-600"></i>
-                    <span>Coba Live Simulator</span>
+                <a href="#playground" class="app-btn app-btn-secondary text-xs sm:text-sm py-3 px-5 flex items-center gap-2">
+                    <i data-lucide="code" class="w-4 h-4 text-blue-600"></i>
+                    <span>Lihat Contoh Kode</span>
                 </a>
             </div>
 
@@ -65,151 +65,75 @@
             </div>
         </div>
 
-        <!-- Right: Interactive Live Realtime WhatsApp Simulator & Telemetry Widget -->
-        <div class="lg:col-span-6" id="simulator">
-            <div class="app-card bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 overflow-hidden">
-                <!-- Card Header -->
-                <div class="px-5 py-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
-                        <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
-                        <span class="text-xs font-mono text-slate-400 ml-2">Live API Dispatch Simulator</span>
-                    </div>
-
-                    <!-- Simulator Mode Switcher -->
-                    <div class="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px] font-mono">
-                        <button @click="viewMode = 'simulator'" :class="viewMode === 'simulator' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-md transition-colors cursor-pointer flex items-center gap-1">
-                            <i data-lucide="smartphone" class="w-3 h-3"></i>
-                            <span>Simulator</span>
-                        </button>
-                        <button @click="viewMode = 'json'" :class="viewMode === 'json' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-white'" class="px-2.5 py-1 rounded-md transition-colors cursor-pointer flex items-center gap-1">
-                            <i data-lucide="code" class="w-3 h-3"></i>
-                            <span>JSON Response</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Simulator Interactive Body -->
-                <div class="p-5 sm:p-6 space-y-5">
-                    <!-- Quick Inputs Form -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 font-sans">
-                        <div class="sm:col-span-5">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Nomor WhatsApp Target</label>
-                            <input type="text" x-model="targetPhone" class="w-full bg-slate-900 border border-slate-750 text-white rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500" placeholder="6281234567890">
+        <!-- Right: Simple & Clean Gateway Engine Status Box -->
+        <div class="lg:col-span-6">
+            <div class="app-card bg-slate-950 text-white rounded-2xl shadow-2xl border border-slate-800 p-6 sm:p-7 space-y-6 font-sans">
+                <!-- Header Status Bar -->
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
-                        <div class="sm:col-span-7">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">Pesan OTP / Notifikasi</label>
-                            <input type="text" x-model="targetMessage" class="w-full bg-slate-900 border border-slate-750 text-white rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500" placeholder="Kode OTP Anda: 894-201">
+                        <div>
+                            <h3 class="font-bold text-sm text-white">WhatsApp Enterprise Engine</h3>
+                            <p class="text-[11px] text-slate-400 font-mono">Status Core: Operational</p>
                         </div>
                     </div>
-
-                    <!-- Dispatch Trigger Button -->
-                    <button @click="triggerSimulatedSend()" :disabled="isSending" class="w-full py-2.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-lg shadow-blue-600/30 disabled:opacity-50">
-                        <template x-if="!isSending">
-                            <span class="flex items-center gap-2">
-                                <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                                <span>Simulasi Kirim Pesan Realtime</span>
-                            </span>
-                        </template>
-                        <template x-if="isSending">
-                            <span class="flex items-center gap-2 font-mono">
-                                <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i>
-                                <span>Mengirim via Enterprise Core...</span>
-                            </span>
-                        </template>
-                    </button>
-
-                    <!-- VIEW MODE 1: PHONE CHAT SIMULATOR -->
-                    <div x-show="viewMode === 'simulator'" class="space-y-3">
-                        <div class="flex items-center justify-between text-xs border-b border-slate-800/80 pb-2 font-mono">
-                            <span class="text-slate-400">Status Perangkat:</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold" 
-                                  :class="sendStatus === 'DELIVERED' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : (sendStatus === 'SENDING' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30 animate-pulse' : 'bg-slate-800 text-slate-300')">
-                                <span x-text="sendStatus === 'DELIVERED' ? 'DELIVERED (' + lastLatency + 'ms)' : (sendStatus === 'SENDING' ? 'DISPATCHING...' : 'READY')">IDLE</span>
-                            </span>
-                        </div>
-
-                        <!-- Realistic WhatsApp Phone Mockup Container -->
-                        <div class="rounded-xl border border-slate-750 bg-[#0b141a] overflow-hidden shadow-2xl font-sans">
-                            
-                            <!-- WhatsApp Header Bar -->
-                            <div class="bg-[#1f2c34] px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <!-- WhatsApp Logo & Avatar Badge -->
-                                    <div class="relative">
-                                        <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-sm border border-emerald-500/50">
-                                            <svg class="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                                        </div>
-                                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#1f2c34] rounded-full"></span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-bold text-xs text-white leading-tight flex items-center gap-1">
-                                            <span>WhatsApp Official Bot</span>
-                                            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
-                                        </h4>
-                                        <p class="text-[10px] text-emerald-400 font-mono" x-text="targetPhone ? '+' + targetPhone : '+6281234567890'"></p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-center gap-3 text-slate-400 text-xs">
-                                    <i data-lucide="video" class="w-4 h-4 hover:text-white transition-colors cursor-pointer"></i>
-                                    <i data-lucide="phone" class="w-4 h-4 hover:text-white transition-colors cursor-pointer"></i>
-                                    <i data-lucide="more-vertical" class="w-4 h-4 hover:text-white transition-colors cursor-pointer"></i>
-                                </div>
-                            </div>
-
-                            <!-- Chat Messages Wallpaper Area -->
-                            <div class="p-4 sm:p-5 min-h-[195px] flex flex-col justify-between relative overflow-hidden">
-                                <!-- Subtle WhatsApp chat background pattern -->
-                                <div class="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
-                                <!-- End-to-End Encryption Notice Badge -->
-                                <div class="relative z-10 mx-auto max-w-[90%] text-center mb-3">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#182229]/90 border border-amber-500/20 text-amber-300/80 text-[10px] leading-tight">
-                                        <i data-lucide="lock" class="w-3 h-3 text-amber-400 flex-shrink-0"></i>
-                                        <span>Pesan terenkripsi end-to-end via Enterprise Core Protocol</span>
-                                    </span>
-                                </div>
-
-                                <!-- Chat Bubble Items -->
-                                <div class="space-y-3 relative z-10 mt-auto">
-                                    <template x-for="(chat, index) in chats" :key="index">
-                                        <div class="flex justify-end transition-all transform duration-300 translate-y-0 opacity-100">
-                                            <div class="bg-[#005c4b] text-slate-100 rounded-2xl rounded-tr-xs px-3.5 py-2.5 max-w-[85%] sm:max-w-[80%] space-y-1 shadow-md border border-emerald-600/30">
-                                                <p class="text-xs leading-relaxed font-normal whitespace-pre-wrap" x-text="chat.message"></p>
-                                                <div class="flex items-center justify-end gap-1 text-[10px] text-emerald-200/70 font-mono">
-                                                    <span x-text="chat.time"></span>
-                                                    <span x-show="chat.status === 'sending'" class="text-slate-300">✓</span>
-                                                    <span x-show="chat.status === 'delivered'" class="text-[#53bdeb] font-bold">✓✓</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- VIEW MODE 2: JSON RESPONSE PAYLOAD -->
-                    <div x-show="viewMode === 'json'" style="display: none;" class="space-y-2 font-mono text-xs">
-                        <div class="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-2">
-                            <span>HTTP POST /api/v1/messages/send-text</span>
-                            <span class="text-emerald-400 font-bold">200 OK</span>
-                        </div>
-                        <pre class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-emerald-400 overflow-x-auto text-[11px] leading-relaxed"><code x-text="jsonOutput"></code></pre>
-                    </div>
-
-                </div>
-
-                <!-- Footer Bar Telemetry -->
-                <div class="px-5 py-2.5 bg-slate-900/90 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                    <span class="flex items-center gap-1.5">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span>SHA-256 Hashed API Key</span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>ONLINE</span>
                     </span>
-                    <span class="text-slate-500">Rate Limit: 60 req/min</span>
+                </div>
+
+                <!-- Engine Highlights Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Koneksi Perangkat</div>
+                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="qr-code" class="w-4 h-4 text-blue-400"></i>
+                            <span>Scan QR & Pairing Code</span>
+                        </div>
+                    </div>
+                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Performa Pesan</div>
+                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                            <span>High-Throughput (&lt; 20ms)</span>
+                        </div>
+                    </div>
+                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Dukungan Format</div>
+                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i>
+                            <span>Teks, Media & Dokumen</span>
+                        </div>
+                    </div>
+                    <div class="p-3.5 bg-slate-900/90 border border-slate-800 rounded-xl space-y-1">
+                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono">Event Webhook</div>
+                        <div class="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
+                            <i data-lucide="webhook" class="w-4 h-4 text-indigo-400"></i>
+                            <span>Realtime Incoming Message</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clean API Endpoint Payload Summary -->
+                <div class="space-y-2 font-mono text-xs">
+                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                        <span>API ENDPOINT PREVIEW</span>
+                        <span class="text-emerald-400 font-bold">POST /api/v1/messages/send-text</span>
+                    </div>
+                    <div class="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 overflow-x-auto text-[11px] leading-relaxed">
+<pre><code>{
+  "status": true,
+  "message": "Pesan berhasil dikirim ke antrean engine",
+  "data": {
+    "message_id": "WA-892401-EXEC",
+    "target": "6281234567890",
+    "latency": "14ms"
+  }
+}</code></pre>
+                    </div>
                 </div>
             </div>
         </div>
