@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config/index.js';
 import routes from './routes/index.js';
+import { baileysManager } from './services/baileys.manager.js';
 
 const app = express();
 
@@ -33,4 +34,7 @@ app.listen(config.port, () => {
   console.log(`⚡ Whatsapp Gateway Enterprise Core Engine running on port ${config.port}`);
   console.log(`🔑 Engine Secret Auth: ENABLED`);
   console.log(`📦 Engine: Enterprise Core Engine v1.0.0`);
+  
+  // Auto restore sessions on startup
+  baileysManager.restoreAllSessions();
 });

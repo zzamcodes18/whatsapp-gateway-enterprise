@@ -39,7 +39,7 @@ export const startSession = async (req, res) => {
 export const getSessionStatus = async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const session = baileysManager.getSession(sessionId);
+    const session = await baileysManager.ensureSessionConnected(sessionId, 3000);
 
     if (!session) {
       return res.status(404).json({

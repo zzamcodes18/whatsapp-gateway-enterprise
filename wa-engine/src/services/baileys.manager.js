@@ -254,6 +254,59 @@ class BaileysManager {
     };
   }
 
+  async restoreAllSessions() {
+    try {
+      if (!fs.existsSync(config.sessionsDir)) {
+        fs.mkdirSync(config.sessionsDir, { recursive: true });
+        return;
+      }
+      const entries = fs.readdirSync(config.sessionsDir, { withFileTypes: true });
+      for (const entry of entries) {
+        if (entry.isDirectory()) {
+          const sessionId = entry.name;
+          const credsFile = path.join(config.sessionsDir, sessionId, 'creds.json');
+          if (fs.existsSync(credsFile)) {
+            this.logger.info(`[Auto-Restore] Restoring Baileys session '${sessionId}' from disk...`);
+            this.initSession(sessionId, { forceRestart: false }).catch((err) => {
+              this.logger.error(`[Auto-Restore Error] Failed for '${sessionId}': ${err.message}`);
+            });
+          }
+        }
+      }
+    } catch (err) {
+      this.logger.error(`Error reading sessions dir for auto-restore: ${err.message}`);
+    }
+  }
+
+  async ensureSessionConnected(sessionId, timeoutMs = 8000) {
+    let session = this.sessions.get(sessionId);
+    const sessionDir = this.getSessionPath(sessionId);
+    const credsFile = path.join(sessionDir, 'creds.json');
+
+    if (!session && fs.existsSync(credsFile)) {
+      this.logger.info(`Session '${sessionId}' not active in memory, restoring from disk...`);
+      await this.initSession(sessionId);
+      session = this.sessions.get(sessionId);
+    }
+
+    if (session && session.status !== 'connected' && fs.existsSync(credsFile)) {
+      this.logger.info(`Session '${sessionId}' status is '${session.status}', waiting up to ${timeoutMs}ms for connection...`);
+      const start = Date.now();
+      while (Date.now() - start < timeoutMs) {
+        session = this.sessions.get(sessionId);
+        if (session && session.status === 'connected' && session.sock) {
+          return session;
+        }
+        if (session && session.status === 'disconnected') {
+          break;
+        }
+        await delay(500);
+      }
+    }
+
+    return this.sessions.get(sessionId);
+  }
+
   getSession(sessionId) {
     if (!this.sessions.has(sessionId)) return null;
     const session = this.sessions.get(sessionId);
@@ -268,7 +321,7 @@ class BaileysManager {
   }
 
   async sendTextMessage(sessionId, targetPhone, text) {
-    const session = this.sessions.get(sessionId);
+    const session = await this.ensureSessionConnected(sessionId);
     if (!session || session.status !== 'connected' || !session.sock) {
       throw new Error(`Device session '${sessionId}' is not connected`);
     }
@@ -288,7 +341,7 @@ class BaileysManager {
   }
 
   async sendMediaMessage(sessionId, targetPhone, mediaUrl, mediaType = 'image', caption = '', fileName = 'document.pdf') {
-    const session = this.sessions.get(sessionId);
+    const session = await this.ensureSessionConnected(sessionId);
     if (!session || session.status !== 'connected' || !session.sock) {
       throw new Error(`Device session '${sessionId}' is not connected`);
     }
@@ -321,7 +374,7 @@ class BaileysManager {
   }
 
   async sendInteractiveMessage(sessionId, targetPhone, options) {
-    const session = this.sessions.get(sessionId);
+    const session = await this.ensureSessionConnected(sessionId);
     if (!session || session.status !== 'connected' || !session.sock) {
       throw new Error(`Device session '${sessionId}' is not connected`);
     }

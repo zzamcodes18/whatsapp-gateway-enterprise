@@ -176,7 +176,7 @@
     @endif
 
     <!-- ========================= CREATE / EDIT MODAL ========================= -->
-    <div x-show="showFormModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+    <div x-show="showFormModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" x-cloak>
         <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showFormModal = false"></div>
 
@@ -220,7 +220,7 @@
                                         <option value="other">Lainnya (Input Manual)</option>
                                     </select>
                                     
-                                    <div x-show="formData.category === 'other'" class="mt-2" x-cloak>
+                                    <div x-show="formData.category === 'other'" class="mt-2" style="display: none;" x-cloak>
                                         <input type="text" name="custom_category" x-model="formData.custom_category" placeholder="Kategori Kustom (misal: tagihan)" class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-semibold text-blue-700">
                                     </div>
                                 </div>
@@ -396,7 +396,7 @@
     </div>
 
     <!-- ========================= TEST SEND MODAL ========================= -->
-    <div x-show="showTestModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+    <div x-show="showTestModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" x-cloak>
         <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showTestModal = false"></div>
 
@@ -459,7 +459,7 @@
     </div>
 
     <!-- ========================= TEST DRAFT SEND MODAL (BEFORE SAVE) ========================= -->
-    <div x-show="showTestDraftModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+    <div x-show="showTestDraftModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;" x-cloak>
         <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
             <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showTestDraftModal = false"></div>
 
