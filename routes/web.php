@@ -52,6 +52,12 @@ Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubC
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
+    // Gerbang verifikasi Turnstile sebelum akses halaman auth
+    Route::get('/auth/verify', [AuthController::class, 'showVerify'])->name('auth.verify');
+    Route::post('/auth/verify', [AuthController::class, 'verifyGate'])
+        ->middleware(AntiBruteForce::class.':10,1')
+        ->name('auth.verify.submit');
+
     Route::get('/auth/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/auth/login', [AuthController::class, 'login'])
         ->middleware(AntiBruteForce::class.':5,1')

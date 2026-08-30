@@ -6,12 +6,7 @@
 @php
     $enableGoogle = \App\Models\SystemSetting::get('enable_google_login', 'false') === 'true';
     $enableGithub = \App\Models\SystemSetting::get('enable_github_login', 'false') === 'true';
-    $turnstileEnabled = \App\Services\TurnstileService::isEnabled();
-    $turnstileSiteKey = \App\Models\SystemSetting::get('turnstile_site_key');
 @endphp
-@if($turnstileEnabled)
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-@endif
 <div class="space-y-6">
     
     <!-- Title -->
@@ -79,14 +74,6 @@
                 Ingat sesi login saya
             </label>
         </div>
-
-        <!-- Cloudflare Turnstile -->
-        @if($turnstileEnabled)
-            <div class="cf-turnstile" data-sitekey="{{ $turnstileSiteKey }}" data-theme="auto" data-language="id"></div>
-            @error('cf-turnstile-response')
-                <p class="text-xs font-semibold text-rose-600 dark:text-rose-400 mt-1.5">{{ $message }}</p>
-            @enderror
-        @endif
 
         <!-- Submit Button -->
         <div class="pt-2">

@@ -19,13 +19,63 @@ class AuthController extends Controller
 {
     public function __construct(protected WaEngineService $engineService) {}
 
-    public function showLogin()
+    public function showLogin(Request $request)
     {
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
 
+        if (TurnstileService::isEnabled() && ! $this->turnstilePassed($request)) {
+            return redirect()->route('auth.verify', ['redirect' => 'login']);
+        }
+
         return view('auth.login');
+    }
+
+    /**
+     * Halaman gerbang verifikasi Turnstile (ala Duitku) sebelum akses login/register.
+     */
+    public function showVerify(Request $request)
+    {
+        $target = $request->query('redirect') === 'register' ? 'register' : 'login';
+
+        if (! TurnstileService::isEnabled() || $this->turnstilePassed($request)) {
+            return redirect()->route($target);
+        }
+
+        return view('auth.verify', [
+            'siteKey' => SystemSetting::get('turnstile_site_key'),
+            'target' => $target,
+        ]);
+    }
+
+    /**
+     * Verifikasi token Turnstile dari halaman gerbang, lalu arahkan ke tujuan.
+     */
+    public function verifyGate(Request $request)
+    {
+        $target = in_array($request->input('redirect'), ['login', 'register']) ? $request->input('redirect') : 'login';
+
+        if (! TurnstileService::isEnabled()) {
+            return redirect()->route($target);
+        }
+
+        if (! TurnstileService::verify($request->input('cf-turnstile-response'))) {
+            return redirect()
+                ->route('auth.verify', ['redirect' => $target])
+                ->withErrors(['cf-turnstile-response' => 'Verifikasi keamanan gagal. Silakan selesaikan tantangan dan coba lagi.']);
+        }
+
+        $request->session()->put('turnstile_passed_at', now()->timestamp);
+
+        return redirect()->route($target);
+    }
+
+    private function turnstilePassed(Request $request): bool
+    {
+        $passedAt = $request->session()->get('turnstile_passed_at');
+
+        return $passedAt !== null && (now()->timestamp - $passedAt) < 1800; // lolos 30 menit
     }
 
     public function login(Request $request)
@@ -35,11 +85,9 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Verifikasi Cloudflare Turnstile (jika aktif)
-        if (TurnstileService::isEnabled() && ! TurnstileService::verify($request->input('cf-turnstile-response'))) {
-            return back()
-                ->withInput($request->only('email', 'remember'))
-                ->withErrors(['cf-turnstile-response' => 'Verifikasi keamanan Cloudflare gagal. Silakan selesaikan tantangan dan coba lagi.']);
+        // Wajib lolos gerbang Turnstile (jika aktif)
+        if (TurnstileService::isEnabled() && ! $this->turnstilePassed($request)) {
+            return redirect()->route('auth.verify', ['redirect' => 'login']);
         }
 
         $throttleKey = 'login_attempt:'.sha1(Str::lower($credentials['email']).'|'.$request->ip());
@@ -90,6 +138,10 @@ class AuthController extends Controller
 
         if (SystemSetting::get('allow_registration', 'true') === 'false') {
             return redirect()->route('login')->with('error', 'Pendaftaran pengguna baru saat ini sedang ditutup oleh administrator.');
+        }
+
+        if (TurnstileService::isEnabled() && ! $this->turnstilePassed(request())) {
+            return redirect()->route('auth.verify', ['redirect' => 'register']);
         }
 
         return view('auth.register');
