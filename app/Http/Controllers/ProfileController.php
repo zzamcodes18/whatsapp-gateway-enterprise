@@ -117,4 +117,27 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Password kata sandi akun Anda berhasil diperbarui!');
     }
+
+    /**
+     * Lepaskan tautan akun sosial (Google / GitHub).
+     */
+    public function unlinkSocial(Request $request, string $provider): RedirectResponse
+    {
+        if (! in_array($provider, ['google', 'github'])) {
+            return redirect()->back()->with('error', 'Provider sosial tidak valid.');
+        }
+
+        /** @var User $user */
+        $user = $request->user();
+        $column = $provider . '_id';
+
+        if (empty($user->{$column})) {
+            return redirect()->back()->with('error', 'Akun ' . ucfirst($provider) . ' belum terhubung.');
+        }
+
+        $user->update([$column => null]);
+        $user->logActivity('user.social_unlink', 'Melepas tautan akun ' . ucfirst($provider));
+
+        return redirect()->back()->with('success', 'Tautan akun ' . ucfirst($provider) . ' berhasil dilepas!');
+    }
 }

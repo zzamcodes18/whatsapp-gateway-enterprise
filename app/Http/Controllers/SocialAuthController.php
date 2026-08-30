@@ -194,6 +194,29 @@ class SocialAuthController extends Controller
     {
         $column = $provider . '_id';
 
+        // A. JIKA PENGGUNA SEDANG LOGIN (Menghubungkan akun sosial dari Profil)
+        if (Auth::check()) {
+            /** @var User $currentUser */
+            $currentUser = Auth::user();
+
+            // Pastikan providerId belum dipakai akun lain
+            $existingUser = User::where($column, $providerId)->where('id', '!=', $currentUser->id)->first();
+            if ($existingUser) {
+                return redirect()->route('profile.edit')->with('error', 'Akun ' . ucfirst($provider) . ' ini sudah terhubung dengan pengguna lain.');
+            }
+
+            $currentUser->{$column} = $providerId;
+            if (empty($currentUser->avatar) && $picture) {
+                $currentUser->avatar = $picture;
+            }
+            $currentUser->save();
+
+            $currentUser->logActivity('user.social_link', 'Menghubungkan akun ' . ucfirst($provider));
+
+            return redirect()->route('profile.edit')->with('success', 'Akun ' . ucfirst($provider) . ' berhasil dihubungkan ke profil Anda!');
+        }
+
+        // B. JIKA PENGGUNA BELUM LOGIN (Login / Register via OAuth)
         // 1. Cari user berdasarkan provider_id
         $user = User::where($column, $providerId)->first();
 

@@ -36,16 +36,20 @@ Route::post('/support', [PublicPageController::class, 'submitSupport'])->name('p
 
 /*
 |--------------------------------------------------------------------------
+| OAuth Social Login Routes (Public & User Accessible)
+|--------------------------------------------------------------------------
+*/
+Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+Route::get('/auth/github', [SocialAuthController::class, 'redirectToGithub'])->name('auth.github');
+Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubCallback'])->name('auth.github.callback');
+
+/*
+|--------------------------------------------------------------------------
 | Guest Authentication Routes
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-    // OAuth Social Login Routes
-    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
-    Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
-    Route::get('/auth/github', [SocialAuthController::class, 'redirectToGithub'])->name('auth.github');
-    Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubCallback'])->name('auth.github.callback');
-
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware(AntiBruteForce::class.':5,1')
@@ -122,6 +126,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/information', [ProfileController::class, 'updateInformation'])->name('profile.update-information');
     Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    Route::post('/profile/social/unlink/{provider}', [ProfileController::class, 'unlinkSocial'])->name('profile.unlink-social');
 
     // Webhook Settings
     Route::get('/webhooks', function () {
