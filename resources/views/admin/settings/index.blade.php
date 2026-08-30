@@ -3,7 +3,7 @@
 @section('title', 'Pengaturan System & Website')
 
 @section('content')
-<div class="space-y-6" x-data="{ tab: 'general' }">
+<div class="space-y-6" x-data="{ tab: 'website' }">
 
     <!-- Top Header Title & Actions -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -30,46 +30,25 @@
         
         <!-- Tab Navigation Buttons Header -->
         <div class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/40 px-4 sm:px-6 pt-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
-            <button @click="tab = 'general'" type="button" 
-                :class="tab === 'general' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
+            <button @click="tab = 'website'" type="button" 
+                :class="tab === 'website' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
                 class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
                 <i data-lucide="globe" class="w-4 h-4"></i>
-                <span>Identitas & SEO</span>
+                <span>Website & Branding</span>
             </button>
 
-            <button @click="tab = 'branding'" type="button" 
-                :class="tab === 'branding' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
+            <button @click="tab = 'users'" type="button" 
+                :class="tab === 'users' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
                 class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
-                <i data-lucide="image" class="w-4 h-4"></i>
-                <span>Logo & Branding</span>
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span>Pengguna & SSO</span>
             </button>
 
-            <button @click="tab = 'registration'" type="button" 
-                :class="tab === 'registration' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
+            <button @click="tab = 'server'" type="button" 
+                :class="tab === 'server' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
                 class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
-                <i data-lucide="user-plus" class="w-4 h-4"></i>
-                <span>Limit & Pendaftaran</span>
-            </button>
-
-            <button @click="tab = 'smtp'" type="button" 
-                :class="tab === 'smtp' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
-                class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
-                <i data-lucide="mail" class="w-4 h-4"></i>
-                <span>SMTP Mail Server</span>
-            </button>
-
-            <button @click="tab = 'engine'" type="button" 
-                :class="tab === 'engine' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
-                class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
-                <i data-lucide="cpu" class="w-4 h-4"></i>
-                <span>Engine & Microservice</span>
-            </button>
-
-            <button @click="tab = 'oauth'" type="button" 
-                :class="tab === 'oauth' ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-bold bg-white dark:bg-[#111A2E] shadow-2xs' : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/70 font-semibold'"
-                class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
-                <i data-lucide="share-2" class="w-4 h-4"></i>
-                <span>OAuth & SSO Login</span>
+                <i data-lucide="server" class="w-4 h-4"></i>
+                <span>Server & Integrasi</span>
             </button>
         </div>
 
@@ -77,8 +56,8 @@
         <form id="settings-form" action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-6 space-y-6">
             @csrf
 
-            <!-- TAB 1: IDENTITAS & SEO WEBSITE -->
-            <div x-show="tab === 'general'" class="space-y-5">
+            <!-- SECTION 1: IDENTITAS & SEO WEBSITE (Tab: Website & Branding) -->
+            <div x-show="tab === 'website'" class="space-y-5">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Informasi & Meta Data Website</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Sesuaikan nama aplikasi, deskripsi SEO, dan kontak bantuan pengguna.</p>
@@ -115,8 +94,8 @@
                 </div>
             </div>
 
-            <!-- TAB 2: BRANDING & MEDIA (LOGO & FAVICON) -->
-            <div x-show="tab === 'branding'" class="space-y-5" style="display: none;">
+            <!-- SECTION 2: BRANDING & MEDIA (Tab: Website & Branding) -->
+            <div x-show="tab === 'website'" class="space-y-5 pt-2">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Logo & Favicon Website</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Unggah logo dan favicon khusus atau masukkan URL gambar untuk mengubah tampilan branding aplikasi.</p>
@@ -181,8 +160,8 @@
                 </div>
             </div>
 
-            <!-- TAB 3: LIMIT & PENDAFTARAN USER BARU -->
-            <div x-show="tab === 'registration'" class="space-y-5" style="display: none;">
+            <!-- SECTION 3: LIMIT & PENDAFTARAN (Tab: Pengguna & SSO) -->
+            <div x-show="tab === 'users'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Kebijakan Registrasi & Limit Default</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Atur status pendaftaran akun publik dan jatah limit awal bagi pengguna baru.</p>
@@ -222,8 +201,8 @@
                 </div>
             </div>
 
-            <!-- TAB 4: SMTP MAIL SERVER -->
-            <div x-show="tab === 'smtp'" class="space-y-5" style="display: none;">
+            <!-- SECTION 4: SMTP MAIL SERVER (Tab: Server & Integrasi) -->
+            <div x-show="tab === 'server'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Konfigurasi SMTP Mail Server</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Pengaturan server email SMTP untuk pengiriman kode OTP, notifikasi, dan reset password via email.</p>
@@ -301,8 +280,8 @@
                 </div>
             </div>
 
-            <!-- TAB 5: ENGINE & MICROSERVICE -->
-            <div x-show="tab === 'engine'" class="space-y-5" style="display: none;">
+            <!-- SECTION 5: ENGINE & MICROSERVICE (Tab: Server & Integrasi) -->
+            <div x-show="tab === 'server'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Integrasi Microservice Engine Node.js</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Pengaturan alamat internal microservice WhatsApp engine (port 3000).</p>
@@ -323,8 +302,8 @@
                 </div>
             </div>
 
-            <!-- TAB 5: OAUTH & SINGLE SIGN-ON (GOOGLE & GITHUB) -->
-            <div x-show="tab === 'oauth'" class="space-y-6" style="display: none;">
+            <!-- SECTION 6: OAUTH & SINGLE SIGN-ON (Tab: Pengguna & SSO) -->
+            <div x-show="tab === 'users'" class="space-y-6" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
                     <h3 class="font-bold text-sm text-slate-900 dark:text-white">Pengaturan Single Sign-On (SSO)</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Aktifkan atau nonaktifkan fitur SSO Google dan GitHub untuk pengguna.</p>
