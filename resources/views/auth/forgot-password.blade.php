@@ -7,10 +7,10 @@
     
     <!-- Title -->
     <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy">
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy dark:text-white">
             Reset Your Password
         </h1>
-        <p class="text-xs text-slate-500 font-medium mt-1.5">
+        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1.5">
             Masukkan email terdaftar untuk menerima tautan pemulihan kata sandi.
         </p>
     </div>
@@ -21,7 +21,7 @@
 
         <!-- Email -->
         <div class="space-y-1.5">
-            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Email Address</label>
+            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Email Address</label>
             <div class="relative flex items-center">
                 <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
@@ -47,7 +47,7 @@
 
         <!-- Back to Login -->
         <div class="pt-2 text-center">
-            <a href="{{ route('login') }}" class="btn btn-link w-full text-xs font-semibold text-slate-600 hover:text-blue-600">
+            <a href="{{ route('login') }}" class="btn btn-link w-full text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600">
                 &larr; Back to sign in
             </a>
         </div>

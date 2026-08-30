@@ -11,10 +11,10 @@
     
     <!-- Title -->
     <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy">
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-navy dark:text-white">
             Sign in to Your Account
         </h1>
-        <p class="text-xs text-slate-500 font-medium mt-1.5">
+        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1.5">
             Kelola sesi perangkat dan integrasi REST API WhatsApp Anda.
         </p>
     </div>
@@ -25,7 +25,7 @@
 
         <!-- Email Address -->
         <div class="space-y-1.5">
-            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Email Address</label>
+            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Email Address</label>
             <div class="relative flex items-center">
                 <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none z-10"></i>
                 <input 
@@ -44,7 +44,7 @@
         <!-- Password -->
         <div class="space-y-1.5">
             <div class="flex items-center justify-between">
-                <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Password</label>
+                <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Password</label>
                 <a href="{{ route('password.request') }}" class="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">
                     Forgotten password?
                 </a>
@@ -70,7 +70,7 @@
                 id="remember" 
                 class="w-4 h-4 border-slate-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
             >
-            <label for="remember" class="text-xs font-medium text-slate-600 cursor-pointer select-none">
+            <label for="remember" class="text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer select-none">
                 Ingat sesi login saya
             </label>
         </div>
@@ -86,16 +86,16 @@
         @if($enableGoogle || $enableGithub)
             <div class="relative my-4">
                 <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-slate-200"></div>
+                    <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
                 </div>
                 <div class="relative flex justify-center text-xs uppercase">
-                    <span class="bg-white px-2 text-slate-500 font-medium">atau masuk dengan</span>
+                    <span class="bg-white dark:bg-[#0B1120] px-2 text-slate-500 dark:text-slate-400 font-medium transition-colors">atau masuk dengan</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-{{ ($enableGoogle && $enableGithub) ? '2' : '1' }} gap-3">
                 @if($enableGoogle)
-                    <a href="{{ route('auth.google', ['action' => 'login']) }}" class="flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-300 rounded-xl text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-colors shadow-2xs">
+                    <a href="{{ route('auth.google', ['action' => 'login']) }}" class="flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-2xs">
                         <svg class="w-4 h-4" viewBox="0 0 24 24">
                             <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
                             <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
@@ -119,8 +119,8 @@
 
         <!-- Register Link -->
         <div class="pt-2 text-center">
-            <a href="{{ route('register') }}" class="btn btn-link w-full text-xs font-semibold text-slate-600 hover:text-blue-600">
-                Need an Account? <span class="text-blue-600 font-bold ml-1">Sign up for free &rarr;</span>
+            <a href="{{ route('register') }}" class="btn btn-link w-full text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600">
+                Need an Account? <span class="text-blue-600 dark:text-blue-400 font-bold ml-1">Sign up for free &rarr;</span>
             </a>
         </div>
     </form>

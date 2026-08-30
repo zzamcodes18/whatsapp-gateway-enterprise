@@ -12,15 +12,15 @@
             
             <!-- Live Status Telemetry Pill -->
             <div class="inline-flex flex-wrap items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20 shadow-2xs">
                     <span class="relative flex h-2 w-2">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
                     <span>GATEWAY ENGINE: ONLINE</span>
                 </span>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                    <i data-lucide="zap" class="w-3 h-3 text-blue-600"></i>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/20">
+                    <i data-lucide="zap" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
                     <span x-text="'Ping: ' + ping + ' ms'">Ping: 18 ms</span>
                 </span>
             </div>
@@ -79,7 +79,7 @@
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono">Status Core: Operational</p>
                         </div>
                     </div>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold font-mono bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>ONLINE</span>
                     </span>
@@ -154,10 +154,10 @@
             <!-- Pairing Code Card -->
             <div class="app-card app-card-hover p-6 sm:p-8 bg-white dark:bg-[#111A2E] space-y-5 border-blue-100 dark:border-slate-800 shadow-sm relative overflow-hidden">
                 <div class="flex items-center justify-between">
-                    <div class="w-12 h-12 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-center font-bold text-blue-600 shadow-2xs">
+                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 rounded-2xl flex items-center justify-center font-bold text-blue-600 dark:text-blue-400 shadow-2xs">
                         <i data-lucide="key-round" class="w-6 h-6"></i>
                     </div>
-                    <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-mono text-[11px] font-bold border border-blue-200">REKOMENDASI VPS</span>
+                    <span class="px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 font-mono text-[11px] font-bold border border-blue-200 dark:border-blue-500/20">REKOMENDASI VPS</span>
                 </div>
 
                 <div class="space-y-2">
@@ -192,10 +192,10 @@
             <!-- QR Code Card -->
             <div class="app-card app-card-hover p-6 sm:p-8 bg-white dark:bg-[#111A2E] space-y-5 border-emerald-100 dark:border-slate-800 shadow-sm">
                 <div class="flex items-center justify-between">
-                    <div class="w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center justify-center font-bold text-emerald-600 shadow-2xs">
+                    <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-2xl flex items-center justify-center font-bold text-emerald-600 dark:text-emerald-400 shadow-2xs">
                         <i data-lucide="qr-code" class="w-6 h-6"></i>
                     </div>
-                    <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-mono text-[11px] font-bold border border-emerald-200">1-STEP SCAN</span>
+                    <span class="px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-mono text-[11px] font-bold border border-emerald-200 dark:border-emerald-500/20">1-STEP SCAN</span>
                 </div>
 
                 <div class="space-y-2">
@@ -206,13 +206,13 @@
                 </div>
 
                 <!-- Live QR Visual Mockup -->
-                <div class="p-3 bg-emerald-50/60 border border-emerald-100 rounded-xl flex items-center gap-3">
-                    <div class="w-12 h-12 bg-white rounded-lg border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-2xs flex-shrink-0">
+                <div class="p-3 bg-emerald-50/60 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-xl flex items-center gap-3">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-lg border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-2xs flex-shrink-0">
                         <i data-lucide="scan" class="w-6 h-6"></i>
                     </div>
                     <div class="text-xs space-y-0.5">
-                        <strong class="text-slate-800 font-bold block">Auto Refresh Realtime</strong>
-                        <p class="text-slate-500 text-[11px]">QR Code otomatis diperbarui sebelum masa berlaku habis.</p>
+                        <strong class="text-slate-800 dark:text-slate-200 font-bold block">Auto Refresh Realtime</strong>
+                        <p class="text-slate-500 dark:text-slate-400 text-[11px]">QR Code otomatis diperbarui sebelum masa berlaku habis.</p>
                     </div>
                 </div>
 
@@ -237,8 +237,8 @@
     <!-- FITUR INFRASTRUKTUR ENTERPRISE -->
     <section id="fitur" class="space-y-8">
         <div class="text-center max-w-xl mx-auto space-y-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
                 <span>ENTERPRISE FEATURES</span>
             </span>
             <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">Performa Tinggi & Keamanan Produk</h2>
@@ -317,8 +317,8 @@
     <!-- CODE PLAYGROUND & INTEGRATION SNIPPETS -->
     <section id="playground" class="space-y-6" x-data="codePlayground()">
         <div class="text-center max-w-xl mx-auto space-y-2">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                <i data-lucide="code" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/20">
+                <i data-lucide="code" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
                 <span>DEVELOPER PLAYGROUND</span>
             </span>
             <h2 class="font-extrabold text-2xl sm:text-4xl text-slate-900 dark:text-white">Integrasi API Dalam 3 Menit</h2>
