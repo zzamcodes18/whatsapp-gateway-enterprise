@@ -20,6 +20,16 @@
         --color-rose: #EF4444;
     }
 
+    html.dark {
+        --color-bg: #0F172A;
+        --color-surface: #1E293B;
+        --color-surface-subtle: #334155;
+        --color-border: #334155;
+        --color-border-subtle: #1E293B;
+        --color-text-main: #F8FAFC;
+        --color-text-muted: #94A3B8;
+    }
+
     * {
         border-color: #E2E8F0;
         box-sizing: border-box;
