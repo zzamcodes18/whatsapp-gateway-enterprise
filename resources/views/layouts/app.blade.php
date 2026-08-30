@@ -127,6 +127,11 @@
                             <span>Kirim & Log Pesan</span>
                         </a>
 
+                        <a href="{{ route('templates.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('templates.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
+                            <i data-lucide="file-code-2" class="w-4 h-4 flex-shrink-0"></i>
+                            <span>Template Pesan</span>
+                        </a>
+
                         <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900' }}">
                             <i data-lucide="key-round" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Integrasi & Callback</span>
@@ -410,6 +415,11 @@
                         <a href="{{ route('messages.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('messages.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
                             <i data-lucide="send" class="w-4 h-4"></i>
                             <span>Kirim Pesan & Log</span>
+                        </a>
+
+                        <a href="{{ route('templates.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('templates.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">
+                            <i data-lucide="file-code-2" class="w-4 h-4"></i>
+                            <span>Template Pesan</span>
                         </a>
 
                         <a href="{{ route('api-keys.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('api-keys.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold' : 'text-slate-700 hover:bg-slate-100' }}">

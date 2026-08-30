@@ -15,4 +15,5 @@ Route::prefix('v1')->middleware(VerifyApiKey::class)->group(function () {
     Route::post('/messages/send-media', [GatewayApiController::class, 'sendMediaMessage']);
     Route::post('/messages/send-button', [GatewayApiController::class, 'sendButtonMessage']);
     Route::post('/messages/send-interactive', [GatewayApiController::class, 'sendButtonMessage']);
+    Route::post('/messages/send-template', [GatewayApiController::class, 'sendTemplateMessage']);
 });

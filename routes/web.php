@@ -13,6 +13,7 @@ use App\Http\Controllers\DocsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InternalEngineController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MessageTemplateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\WebhookController;
@@ -92,6 +93,13 @@ Route::middleware('auth')->group(function () {
     // Messages & Logs
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::post('/messages/send', [MessageController::class, 'send'])->name('messages.send');
+
+    // Message Templates Management
+    Route::get('/templates', [MessageTemplateController::class, 'index'])->name('templates.index');
+    Route::post('/templates', [MessageTemplateController::class, 'store'])->name('templates.store');
+    Route::put('/templates/{template}', [MessageTemplateController::class, 'update'])->name('templates.update');
+    Route::delete('/templates/{template}', [MessageTemplateController::class, 'destroy'])->name('templates.destroy');
+    Route::post('/templates/{template}/test', [MessageTemplateController::class, 'testSend'])->name('templates.test');
 
     // API Keys & Integrasi
     Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('api-keys.index');

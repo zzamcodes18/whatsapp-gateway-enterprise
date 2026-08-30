@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Message;
+use App\Models\MessageTemplate;
 use App\Services\WaEngineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -200,6 +201,111 @@ class GatewayApiController extends Controller
 
         return response()->json([
             'success' => $result['success'] ?? false,
+            'message_id' => $messageRecord->id,
+            'wa_id' => $result['messageId'] ?? null,
+            'status' => $messageRecord->status,
+        ], ($result['success'] ?? false) ? 200 : 500);
+    }
+
+    public function sendTemplateMessage(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'device_id' => ['required', 'integer'],
+            'phone' => ['required', 'string', 'min:8'],
+            'template_id' => ['required', 'integer'],
+            'variables' => ['nullable', 'array'],
+        ]);
+
+        $user = $request->user();
+
+        if (! $user->canSendMessage()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Daily message quota reached ({$user->daily_message_limit} msg/day).",
+            ], 429);
+        }
+
+        $template = $user->messageTemplates()->where('id', $validated['template_id'])->where('is_active', true)->first();
+
+        if (! $template) {
+            return response()->json(['success' => false, 'message' => 'Template message not found or inactive'], 404);
+        }
+
+        $device = $user->devices()->where('id', $validated['device_id'])->first();
+
+        if (! $device || ! $device->isConnected()) {
+            return response()->json(['success' => false, 'message' => 'Device not found or not connected to WhatsApp'], 400);
+        }
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $validated['phone']);
+        if (str_starts_with($cleanPhone, '08')) {
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        }
+
+        $vars = $validated['variables'] ?? [];
+
+        // Render template variables
+        $body = MessageTemplate::renderPlaceholders($template->content, $vars);
+        $title = MessageTemplate::renderPlaceholders($template->title, $vars);
+        $footer = MessageTemplate::renderPlaceholders($template->footer, $vars);
+
+        $buttons = [];
+        if (! empty($template->buttons)) {
+            foreach ($template->buttons as $btn) {
+                $item = $btn;
+                $item['text'] = MessageTemplate::renderPlaceholders($btn['text'] ?? '', $vars);
+                if (! empty($btn['url'])) {
+                    $item['url'] = MessageTemplate::renderPlaceholders($btn['url'], $vars);
+                }
+                if (! empty($btn['code'])) {
+                    $item['code'] = MessageTemplate::renderPlaceholders($btn['code'], $vars);
+                }
+                $buttons[] = $item;
+            }
+        }
+
+        if (! empty($buttons)) {
+            $result = $this->engineService->sendInteractiveMessage(
+                $device->session_id,
+                $cleanPhone,
+                [
+                    'title' => $title ?? '',
+                    'body' => $body,
+                    'footer' => $footer ?? '',
+                    'buttons' => $buttons,
+                ]
+            );
+        } else {
+            $result = $this->engineService->sendTextMessage(
+                $device->session_id,
+                $cleanPhone,
+                $body
+            );
+        }
+
+        if (! empty($result['success']) && $result['success'] === true) {
+            $user->incrementMessageCount();
+        }
+
+        $messageRecord = Message::create([
+            'user_id' => $user->id,
+            'device_id' => $device->id,
+            'remote_jid' => $cleanPhone.'@s.whatsapp.net',
+            'message_type' => ! empty($buttons) ? 'interactive' : 'text',
+            'message_content' => $body,
+            'direction' => 'outbound',
+            'status' => ($result['success'] ?? false) ? 'sent' : 'failed',
+            'wa_message_id' => $result['messageId'] ?? null,
+            'error_message' => $result['message'] ?? null,
+        ]);
+
+        return response()->json([
+            'success' => $result['success'] ?? false,
+            'template' => [
+                'id' => $template->id,
+                'name' => $template->name,
+            ],
+            'rendered_message' => $body,
             'message_id' => $messageRecord->id,
             'wa_id' => $result['messageId'] ?? null,
             'status' => $messageRecord->status,

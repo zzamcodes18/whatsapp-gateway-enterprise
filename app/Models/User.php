@@ -118,6 +118,11 @@ class User extends Authenticatable
         return $this->hasMany(Device::class);
     }
 
+    public function messageTemplates(): HasMany
+    {
+        return $this->hasMany(MessageTemplate::class);
+    }
+
     public function apiKeys(): HasMany
     {
         return $this->hasMany(ApiKey::class);

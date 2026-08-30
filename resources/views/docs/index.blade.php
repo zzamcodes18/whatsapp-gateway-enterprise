@@ -99,6 +99,16 @@
                         <span class="truncate">Kirim Pesan Teks</span>
                     </a>
 
+                    <a href="#endpoint-send-template" @click="activeSection = 'send-template'" :class="activeSection === 'send-template' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700">POST</span>
+                        <span class="truncate">Kirim Template Pesan</span>
+                    </a>
+
+                    <a href="#endpoint-send-button" @click="activeSection = 'send-button'" :class="activeSection === 'send-button' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-purple-100 text-purple-700">POST</span>
+                        <span class="truncate">Kirim Button Message</span>
+                    </a>
+
                     <a href="#endpoint-send-media" @click="activeSection = 'send-media'" :class="activeSection === 'send-media' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-all">
                         <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">POST</span>
                         <span class="truncate">Kirim Gambar / File</span>
@@ -314,6 +324,108 @@ print(res.json())</code></pre>
     <span class="text-blue-400">"created_at"</span>: <span class="text-emerald-300">"{{ now()->toIso8601String() }}"</span>
   }
 }</pre>
+                </div>
+            </section>
+
+            <!-- 4. ENDPOINT: KIRIM TEMPLATE PESAN (DYNAMIC PARAMETERS) -->
+            <section id="endpoint-send-template" class="app-card p-6 bg-white space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2.5 py-1 bg-blue-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
+                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-template</h2>
+                    </div>
+                    <span class="app-tag app-tag-blue text-[10px]">TEMPLATE SYSTEM</span>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Kirim pesan berdasarkan <strong>Template ID</strong> yang telah Anda buat di menu <em>Template Pesan</em>. Variabel seperti <code>{otp}</code>, <code>{name}</code>, <code>{code}</code> akan diisi secara otomatis dari object <code>variables</code>.
+                </p>
+
+                <div class="space-y-2">
+                    <h3 class="font-bold text-xs text-slate-700">Request JSON Parameters:</h3>
+                    <div class="app-table-wrapper">
+                        <table class="w-full text-left text-xs app-table">
+                            <thead>
+                                <tr>
+                                    <th class="p-2.5">Parameter</th>
+                                    <th class="p-2.5">Tipe</th>
+                                    <th class="p-2.5">Wajib</th>
+                                    <th class="p-2.5">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-mono text-[11px]">
+                                <tr>
+                                    <td class="p-2.5 font-bold text-blue-600">device_id</td>
+                                    <td class="p-2.5">integer</td>
+                                    <td class="p-2.5 text-emerald-600 font-bold">Ya</td>
+                                    <td class="p-2.5 font-sans">ID perangkat WhatsApp terhubung.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-blue-600">phone</td>
+                                    <td class="p-2.5">string</td>
+                                    <td class="p-2.5 text-emerald-600 font-bold">Ya</td>
+                                    <td class="p-2.5 font-sans">Nomor WhatsApp penerima (misal: <code>081234567890</code>).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-blue-600">template_id</td>
+                                    <td class="p-2.5">integer</td>
+                                    <td class="p-2.5 text-emerald-600 font-bold">Ya</td>
+                                    <td class="p-2.5 font-sans">ID unik template pesan milik akun Anda (Lihat badge <code>ID: #...</code> di menu Template).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold text-blue-600">variables</td>
+                                    <td class="p-2.5">object / array</td>
+                                    <td class="p-2.5 text-slate-400">Opsional</td>
+                                    <td class="p-2.5 font-sans">Pasangan Key-Value untuk menggantikan placeholder <code>{key}</code> pada template (contoh: <code>{"otp": "884920", "name": "Budi"}</code>).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-slate-700">Contoh Request cURL Template Message:</span>
+                    <pre class="bg-slate-950 text-emerald-400 p-4 rounded-xl font-mono text-xs overflow-x-auto border border-slate-800"><code>curl -X POST "{{ $baseUrl }}/api/v1/messages/send-template" \
+  -H "Authorization: Bearer {{ $userApiKey }}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "device_id": 1,
+    "phone": "6281234567890",
+    "template_id": 1,
+    "variables": {
+      "otp": "992014",
+      "name": "Budi Santoso"
+    }
+  }'</code></pre>
+                </div>
+            </section>
+
+            <!-- 5. ENDPOINT: KIRIM BUTTON & INTERACTIVE MESSAGE -->
+            <section id="endpoint-send-button" class="app-card p-6 bg-white space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2.5 py-1 bg-purple-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
+                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-button</h2>
+                    </div>
+                    <span class="app-tag app-tag-blue text-[10px]">INTERACTIVE BUTTONS</span>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-slate-700">Contoh Request cURL Button Message:</span>
+                    <pre class="bg-slate-950 text-emerald-400 p-4 rounded-xl font-mono text-xs overflow-x-auto border border-slate-800"><code>curl -X POST "{{ $baseUrl }}/api/v1/messages/send-button" \
+  -H "Authorization: Bearer {{ $userApiKey }}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "device_id": 1,
+    "phone": "6281234567890",
+    "title": "KONFIRMASI PESANAN",
+    "body": "Halo Kak, mohon konfirmasi pesanan #INV-9901 Anda.",
+    "footer": "LapakOTP Gateway System",
+    "buttons": [
+      { "type": "copy", "text": "Salin Kode Inv", "code": "INV-9901" },
+      { "type": "url", "text": "Bayar Sekarang", "url": "https://lapakotp.com/pay/INV-9901" }
+    ]
+  }'</code></pre>
                 </div>
             </section>
 
