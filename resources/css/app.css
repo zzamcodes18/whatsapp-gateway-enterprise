@@ -112,6 +112,12 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #94A3B8;
 }
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
 
 /* ==========================================================================
    MODERN FLY.IO & LIGHT LUXURY DESIGN SYSTEM
@@ -120,6 +126,10 @@
 @layer components {
     .text-navy {
         color: #0F172A;
+    }
+
+    html.dark .text-navy {
+        color: #F8FAFC;
     }
 
     /* Ambient soft background optimized for mobile performance */
@@ -378,10 +388,22 @@
         border: 1px solid #DBEAFE;
     }
 
+    html.dark .app-tag-blue {
+        background-color: rgba(59, 130, 246, 0.12);
+        color: #93C5FD;
+        border-color: rgba(59, 130, 246, 0.25);
+    }
+
     .app-tag-emerald {
         background-color: #ECFDF5;
         color: #047857;
         border: 1px solid #D1FAE5;
+    }
+
+    html.dark .app-tag-emerald {
+        background-color: rgba(16, 185, 129, 0.12);
+        color: #6EE7B7;
+        border-color: rgba(16, 185, 129, 0.25);
     }
 
     .app-tag-amber {
@@ -390,16 +412,34 @@
         border: 1px solid #FDE68A;
     }
 
+    html.dark .app-tag-amber {
+        background-color: rgba(245, 158, 11, 0.12);
+        color: #FCD34D;
+        border-color: rgba(245, 158, 11, 0.25);
+    }
+
     .app-tag-rose {
         background-color: #FEF2F2;
         color: #B91C1C;
         border: 1px solid #FECACA;
     }
 
+    html.dark .app-tag-rose {
+        background-color: rgba(239, 68, 68, 0.12);
+        color: #FCA5A5;
+        border-color: rgba(239, 68, 68, 0.25);
+    }
+
     .app-tag-slate {
         background-color: #F1F5F9;
         color: #475569;
         border: 1px solid #E2E8F0;
+    }
+
+    html.dark .app-tag-slate {
+        background-color: rgba(51, 65, 85, 0.5);
+        color: #94A3B8;
+        border-color: #334155;
     }
 
     /* ==========================================================================
@@ -418,6 +458,14 @@
         max-width: 100%;
     }
 
+    html.dark .app-table-wrapper {
+        background-color: #111A2E;
+        border-color: #1E293B;
+        box-shadow: 
+            0 1px 3px 0 rgba(0, 0, 0, 0.3),
+            0 4px 12px 0 rgba(0, 0, 0, 0.2);
+    }
+
     .app-table {
         width: 100%;
         min-width: 640px;
@@ -432,6 +480,12 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: #64748B;
+    }
+
+    html.dark .app-table thead {
+        background-color: #0D1526;
+        border-bottom-color: #1E293B;
+        color: #94A3B8;
     }
 
     .app-table thead th {
@@ -451,6 +505,14 @@
 
     .app-table tbody tr:hover {
         background-color: #F8FAFC;
+    }
+
+    html.dark .app-table tbody tr {
+        border-bottom-color: #1E293B;
+    }
+
+    html.dark .app-table tbody tr:hover {
+        background-color: rgba(30, 41, 59, 0.5);
     }
 
     .app-table tbody tr:last-child {

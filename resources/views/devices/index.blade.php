@@ -6,15 +6,15 @@
 <div class="space-y-6" x-data="deviceManager(@js($devices->items()))" x-init="init()">
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
                 <span class="app-tag app-tag-blue">MULTI-DEVICE ENGINE</span>
-                <span class="font-mono text-[11px] font-semibold text-slate-500">UUIDv4 SESSIONS</span>
+                <span class="font-mono text-[11px] font-semibold text-slate-500 dark:text-slate-400">UUIDv4 SESSIONS</span>
             </div>
-            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900">Perangkat WhatsApp</h1>
-            <p class="text-xs text-slate-500 font-medium">
-                Kelola sesi nomor WhatsApp Anda. Kuota: <strong class="text-slate-800" x-text="devicesList.length"></strong> / <strong class="text-slate-800">{{ auth()->user()->device_limit > 0 ? auth()->user()->device_limit . ' Unit' : 'Unlimited' }}</strong>.
+            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900 dark:text-white">Perangkat WhatsApp</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Kelola sesi nomor WhatsApp Anda. Kuota: <strong class="text-slate-800 dark:text-slate-200" x-text="devicesList.length"></strong> / <strong class="text-slate-800 dark:text-slate-200">{{ auth()->user()->device_limit > 0 ? auth()->user()->device_limit . ' Unit' : 'Unlimited' }}</strong>.
             </p>
         </div>
 
@@ -35,13 +35,13 @@
     <div class="space-y-4">
         <!-- Empty State -->
         <template x-if="devicesList.length === 0">
-            <div class="app-card p-12 text-center space-y-4 bg-white">
-                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-2xs">
+            <div class="app-card p-12 text-center space-y-4 bg-white dark:bg-[#111A2E]">
+                <div class="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl mx-auto flex items-center justify-center shadow-2xs">
                     <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                 </div>
                 <div class="space-y-1">
-                    <h3 class="font-bold text-base text-slate-900">Belum Ada Perangkat WhatsApp</h3>
-                    <p class="text-xs text-slate-500 font-medium max-w-sm mx-auto">
+                    <h3 class="font-bold text-base text-slate-900 dark:text-white">Belum Ada Perangkat WhatsApp</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium max-w-sm mx-auto">
                         Mulai dengan menambahkan perangkat baru. Pilih metode <strong>Scan QR Code</strong> atau <strong>Pairing Code 8-Digit</strong>.
                     </p>
                 </div>
@@ -56,16 +56,16 @@
         <template x-if="devicesList.length > 0">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <template x-for="device in devicesList" :key="device.id">
-                    <div class="app-card app-card-hover p-5 bg-white space-y-4 flex flex-col justify-between border-slate-200/80">
+                    <div class="app-card app-card-hover p-5 bg-white dark:bg-[#111A2E] space-y-4 flex flex-col justify-between border-slate-200/80 dark:border-slate-800">
                         
                         <!-- Top Header -->
                         <div class="space-y-3">
                             <div class="flex items-start justify-between gap-2">
                                 <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm"
                                      :class="{
-                                        'bg-emerald-50 text-emerald-600 border border-emerald-100': device.status === 'connected',
-                                        'bg-amber-50 text-amber-600 border border-amber-100': device.status === 'connecting' || device.status === 'qr_ready' || device.status === 'pairing_ready',
-                                        'bg-rose-50 text-rose-600 border border-rose-100': device.status === 'disconnected'
+                                        'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20': device.status === 'connected',
+                                        'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20': device.status === 'connecting' || device.status === 'qr_ready' || device.status === 'pairing_ready',
+                                        'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20': device.status === 'disconnected'
                                      }">
                                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                                 </div>
@@ -87,31 +87,31 @@
 
                             <div>
                                 <div class="flex items-center justify-between">
-                                    <h3 class="font-bold text-sm text-slate-900 truncate" x-text="device.name"></h3>
-                                    <button type="button" @click="openEditModal(device)" class="text-slate-400 hover:text-blue-600 p-1 rounded-lg transition-colors cursor-pointer" title="Edit Nama Device">
+                                    <h3 class="font-bold text-sm text-slate-900 dark:text-white truncate" x-text="device.name"></h3>
+                                    <button type="button" @click="openEditModal(device)" class="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 p-1 rounded-lg transition-colors cursor-pointer" title="Edit Nama Device">
                                         <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                                     </button>
                                 </div>
-                                <div class="font-mono text-xs text-slate-700 font-semibold mt-1 flex items-center gap-1.5">
-                                    <i data-lucide="phone" class="w-3 h-3 text-slate-400"></i>
+                                <div class="font-mono text-xs text-slate-700 dark:text-slate-300 font-semibold mt-1 flex items-center gap-1.5">
+                                    <i data-lucide="phone" class="w-3 h-3 text-slate-400 dark:text-slate-500"></i>
                                     <span x-text="device.phone_number ? '+' + device.phone_number : 'Nomor Belum Ditautkan'"></span>
                                 </div>
                             </div>
 
-                            <div class="p-2.5 bg-slate-50 border border-slate-100 rounded-xl space-y-1 font-mono text-[11px]">
-                                <div class="flex justify-between text-slate-500">
+                            <div class="p-2.5 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl space-y-1 font-mono text-[11px]">
+                                <div class="flex justify-between text-slate-500 dark:text-slate-400">
                                     <span>Metode:</span>
-                                    <strong class="text-slate-800 uppercase" x-text="device.connection_type"></strong>
+                                    <strong class="text-slate-800 dark:text-slate-200 uppercase" x-text="device.connection_type"></strong>
                                 </div>
-                                <div class="flex justify-between text-slate-500 items-center">
+                                <div class="flex justify-between text-slate-500 dark:text-slate-400 items-center">
                                     <span>UUID Session:</span>
-                                    <strong class="text-slate-800 truncate max-w-[130px]" x-text="device.session_id" :title="device.session_id"></strong>
+                                    <strong class="text-slate-800 dark:text-slate-200 truncate max-w-[130px]" x-text="device.session_id" :title="device.session_id"></strong>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card Actions -->
-                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
                             <a :href="'/devices/' + device.id" class="flex-1 app-btn app-btn-secondary text-[11px] py-1.5 text-center">
                                 Detail
                             </a>
@@ -131,7 +131,7 @@
                             </template>
 
                             <!-- Delete Button -->
-                            <button type="button" @click="confirmDelete(device)" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="Hapus Device">
+                            <button type="button" @click="confirmDelete(device)" class="p-1.5 text-slate-400 dark:text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer" title="Hapus Device">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -144,15 +144,15 @@
 
     <!-- ================= ADD DEVICE MODAL ================= -->
     <div x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" style="display: none;" x-cloak>
-        <div class="app-card bg-white max-w-md w-full p-6 space-y-5 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100" @click.away="closeModal()">
+        <div class="app-card bg-white dark:bg-[#111A2E] max-w-md w-full p-6 space-y-5 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 dark:border-slate-800" @click.away="closeModal()">
             
             <!-- Modal Header -->
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
                     <span class="app-tag app-tag-blue text-[9px]">CONNECT SESSION</span>
-                    <h3 class="font-bold text-lg mt-0.5 text-slate-900">Tambah Device WhatsApp</h3>
+                    <h3 class="font-bold text-lg mt-0.5 text-slate-900 dark:text-white">Tambah Device WhatsApp</h3>
                 </div>
-                <button @click="closeModal()" class="p-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100">
+                <button @click="closeModal()" class="p-1.5 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -160,12 +160,12 @@
             <!-- Step 1: Setup Form -->
             <div x-show="step === 'form'" class="space-y-4">
                 <!-- Method Selection Tabs -->
-                <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 rounded-xl">
-                    <button type="button" @click="connectionType = 'pairing_code'" :class="connectionType === 'pairing_code' ? 'bg-white text-blue-700 shadow-2xs font-bold' : 'bg-transparent text-slate-600 font-semibold'" class="py-2 text-xs rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                <div class="grid grid-cols-2 gap-2 p-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                    <button type="button" @click="connectionType = 'pairing_code'" :class="connectionType === 'pairing_code' ? 'bg-white dark:bg-[#0D1526] text-blue-700 dark:text-blue-400 shadow-2xs font-bold' : 'bg-transparent text-slate-600 dark:text-slate-400 font-semibold'" class="py-2 text-xs rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5">
                         <i data-lucide="key-round" class="w-3.5 h-3.5"></i>
                         <span>Pairing Code</span>
                     </button>
-                    <button type="button" @click="connectionType = 'qr'" :class="connectionType === 'qr' ? 'bg-white text-blue-700 shadow-2xs font-bold' : 'bg-transparent text-slate-600 font-semibold'" class="py-2 text-xs rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                    <button type="button" @click="connectionType = 'qr'" :class="connectionType === 'qr' ? 'bg-white dark:bg-[#0D1526] text-blue-700 dark:text-blue-400 shadow-2xs font-bold' : 'bg-transparent text-slate-600 dark:text-slate-400 font-semibold'" class="py-2 text-xs rounded-lg transition-all cursor-pointer flex items-center justify-center gap-1.5">
                         <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
                         <span>Scan QR Code</span>
                     </button>
@@ -173,20 +173,20 @@
 
                 <!-- Device Name -->
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nama Perangkat</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Nama Perangkat</label>
                     <input type="text" x-model="deviceName" placeholder="Contoh: CS Utama Jakarta" class="app-input text-xs">
                 </div>
 
                 <!-- Phone Number (Required for pairing_code) -->
                 <div x-show="connectionType === 'pairing_code'" class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nomor WhatsApp Ponsel Anda</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Nomor WhatsApp Ponsel Anda</label>
                     <input type="text" x-model="phoneNumber" placeholder="628123456789 atau 08123456789" class="app-input text-xs font-mono font-bold">
-                    <p class="text-[11px] text-slate-500 font-medium">Gunakan format internasional (contoh: 6281234567890).</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Gunakan format internasional (contoh: 6281234567890).</p>
                 </div>
 
-                <div class="p-3.5 bg-blue-50/70 border border-blue-100 rounded-xl text-xs space-y-1">
-                    <p class="font-bold text-blue-950" x-text="connectionType === 'pairing_code' ? 'Alur Pairing Code:' : 'Alur Scan QR:'"></p>
-                    <p class="text-slate-600 text-[11px] leading-relaxed" x-text="connectionType === 'pairing_code' ? 'Server akan meminta 8 digit kode dari WhatsApp untuk dimasukkan pada menu Tautkan Perangkat di aplikasi HP.' : 'Server akan merender QR Code live untuk dipindai melalui kamera WhatsApp ponsel Anda.'"></p>
+                <div class="p-3.5 bg-blue-50/70 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl text-xs space-y-1">
+                    <p class="font-bold text-blue-950 dark:text-blue-300" x-text="connectionType === 'pairing_code' ? 'Alur Pairing Code:' : 'Alur Scan QR:'"></p>
+                    <p class="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed" x-text="connectionType === 'pairing_code' ? 'Server akan meminta 8 digit kode dari WhatsApp untuk dimasukkan pada menu Tautkan Perangkat di aplikasi HP.' : 'Server akan merender QR Code live untuk dipindai melalui kamera WhatsApp ponsel Anda.'"></p>
                 </div>
 
                 <div class="pt-1">
@@ -207,18 +207,18 @@
                 <div x-show="connectionType === 'pairing_code'" class="text-center space-y-3">
                     <div class="inline-flex items-center gap-1.5">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
-                        <span class="font-mono text-xs font-bold text-slate-700">KODE PAIRING WHATSAPP</span>
+                        <span class="font-mono text-xs font-bold text-slate-700 dark:text-slate-300">KODE PAIRING WHATSAPP</span>
                     </div>
 
-                    <div class="p-5 bg-gradient-to-b from-blue-50/50 to-slate-50 border border-blue-100 rounded-2xl space-y-3">
+                    <div class="p-5 bg-gradient-to-b from-blue-50/50 to-slate-50 dark:from-blue-500/10 dark:to-slate-800/30 border border-blue-100 dark:border-blue-500/20 rounded-2xl space-y-3">
                         <template x-if="activePairingCode">
                             <div class="flex items-center justify-center">
-                                <div class="px-6 py-3 bg-white border border-blue-200 rounded-xl font-mono font-extrabold text-2xl sm:text-3xl tracking-widest text-blue-700 shadow-sm" x-text="activePairingCode">
+                                <div class="px-6 py-3 bg-white dark:bg-[#0D1526] border border-blue-200 dark:border-blue-500/30 rounded-xl font-mono font-extrabold text-2xl sm:text-3xl tracking-widest text-blue-700 dark:text-blue-400 shadow-sm" x-text="activePairingCode">
                                 </div>
                             </div>
                         </template>
                         <template x-if="!activePairingCode">
-                            <div class="w-52 h-14 app-shimmer rounded-xl mx-auto border border-slate-200 flex items-center justify-center text-xs font-mono font-semibold text-slate-400">
+                            <div class="w-52 h-14 app-shimmer rounded-xl mx-auto border border-slate-200 dark:border-slate-700 flex items-center justify-center text-xs font-mono font-semibold text-slate-400 dark:text-slate-500">
                                 Meminta kode 8-digit...
                             </div>
                         </template>
@@ -231,12 +231,12 @@
                         </div>
                     </div>
 
-                    <div class="text-left p-3.5 bg-slate-50 border border-slate-100 rounded-xl text-xs space-y-1.5">
-                        <div class="font-bold text-slate-900 flex items-center gap-1.5">
-                            <i data-lucide="info" class="w-3.5 h-3.5 text-blue-600"></i>
+                    <div class="text-left p-3.5 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl text-xs space-y-1.5">
+                        <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
                             <span>Langkah di Ponsel:</span>
                         </div>
-                        <ol class="list-decimal list-inside space-y-1 text-slate-600 font-medium text-[11px]">
+                        <ol class="list-decimal list-inside space-y-1 text-slate-600 dark:text-slate-400 font-medium text-[11px]">
                             <li>Buka WhatsApp di HP &rarr; Menu &rarr; <strong>Perangkat Tertaut</strong>.</li>
                             <li>Pilih <strong>Tautkan dengan nomor telepon</strong>.</li>
                             <li>Ketik 8-digit kode di atas.</li>
@@ -248,29 +248,29 @@
                 <div x-show="connectionType === 'qr'" class="text-center space-y-3">
                     <div class="inline-flex items-center gap-1.5">
                         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
-                        <span class="font-mono text-xs font-bold text-slate-700">SCAN QR CODE DENGAN WHATSAPP</span>
+                        <span class="font-mono text-xs font-bold text-slate-700 dark:text-slate-300">SCAN QR CODE DENGAN WHATSAPP</span>
                     </div>
 
-                    <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl flex flex-col items-center justify-center">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center">
                         <template x-if="activeQrCode">
-                            <div class="w-52 h-52 bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm flex items-center justify-center">
+                            <div class="w-52 h-52 bg-white border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 shadow-sm flex items-center justify-center">
                                 <img :src="activeQrCode" alt="WhatsApp QR Code" class="w-full h-full object-contain">
                             </div>
                         </template>
                         <template x-if="!activeQrCode">
-                            <div class="w-52 h-52 app-shimmer rounded-xl border border-slate-200 flex flex-col items-center justify-center p-3">
-                                <i data-lucide="loader" class="w-6 h-6 animate-spin text-slate-400"></i>
-                                <span class="text-[11px] font-mono font-bold mt-2 text-slate-500">Memuat QR Code...</span>
+                            <div class="w-52 h-52 app-shimmer rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center p-3">
+                                <i data-lucide="loader" class="w-6 h-6 animate-spin text-slate-400 dark:text-slate-500"></i>
+                                <span class="text-[11px] font-mono font-bold mt-2 text-slate-500 dark:text-slate-400">Memuat QR Code...</span>
                             </div>
                         </template>
                     </div>
                 </div>
 
                 <!-- Status Footer -->
-                <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between text-xs font-semibold">
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl flex items-center justify-between text-xs font-semibold">
                     <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full" :class="currentStatus === 'connected' ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'"></span>
-                        <span class="font-mono text-slate-600">Status: <strong x-text="currentStatus.toUpperCase()" :class="currentStatus === 'connected' ? 'text-emerald-700' : 'text-slate-900'"></strong></span>
+                        <span class="font-mono text-slate-600 dark:text-slate-400">Status: <strong x-text="currentStatus.toUpperCase()" :class="currentStatus === 'connected' ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-900 dark:text-white'"></strong></span>
                     </div>
                     <button type="button" @click="closeModal()" class="app-btn app-btn-secondary text-[11px] py-1 px-3">
                         Selesai
@@ -284,26 +284,26 @@
 
     <!-- ================= EDIT DEVICE MODAL ================= -->
     <div x-show="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs" style="display: none;" x-cloak>
-        <div class="app-card bg-white max-w-sm w-full p-6 space-y-4 shadow-2xl border-slate-100" @click.away="showEditModal = false">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <h3 class="font-bold text-base text-slate-900">Edit Informasi Device</h3>
-                <button @click="showEditModal = false" class="p-1 text-slate-400 hover:text-slate-800 rounded-lg">
+        <div class="app-card bg-white dark:bg-[#111A2E] max-w-sm w-full p-6 space-y-4 shadow-2xl border-slate-100 dark:border-slate-800" @click.away="showEditModal = false">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Edit Informasi Device</h3>
+                <button @click="showEditModal = false" class="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
 
             <form @submit.prevent="submitEditDevice()" class="space-y-3.5">
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nama Perangkat</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Nama Perangkat</label>
                     <input type="text" x-model="editForm.name" required class="app-input text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nomor Telepon</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Nomor Telepon</label>
                     <input type="text" x-model="editForm.phone_number" placeholder="628123456789" class="app-input text-xs font-mono">
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
                     <button type="button" @click="showEditModal = false" class="app-btn app-btn-secondary text-xs py-1.5 px-3">
                         Batal
                     </button>

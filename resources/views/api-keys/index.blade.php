@@ -9,14 +9,14 @@
 }">
 
     <!-- Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200/80 pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
                 <span class="app-tag app-tag-blue">DEVELOPER GATEWAY</span>
-                <span class="font-mono text-[11px] font-semibold text-slate-500">API KEYS & WEBHOOKS</span>
+                <span class="font-mono text-[11px] font-semibold text-slate-500 dark:text-slate-400">API KEYS & WEBHOOKS</span>
             </div>
-            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900">Integrasi & Callback</h1>
-            <p class="text-xs text-slate-500 font-medium">Kelola kunci akses REST API dan URL callback Webhook realtime dalam satu tempat.</p>
+            <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-slate-900 dark:text-white">Integrasi & Callback</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Kelola kunci akses REST API dan URL callback Webhook realtime dalam satu tempat.</p>
         </div>
 
         <!-- Action Buttons -->
@@ -39,17 +39,17 @@
     </div>
 
     <!-- Navigation Tabs Switcher -->
-    <div class="border-b border-slate-200/80">
+    <div class="border-b border-slate-200/80 dark:border-slate-800">
         <div class="flex gap-4 text-xs font-bold">
             <button @click="activeTab = 'api-keys'" 
-                    :class="activeTab === 'api-keys' ? 'border-blue-600 text-blue-600 border-b-2 pb-2.5' : 'text-slate-500 hover:text-slate-800 pb-2.5'"
+                    :class="activeTab === 'api-keys' ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 border-b-2 pb-2.5' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white pb-2.5'"
                     class="flex items-center gap-2 transition-colors cursor-pointer">
                 <i data-lucide="key" class="w-4 h-4"></i>
                 <span>API Keys ({{ $apiKeys->count() }})</span>
             </button>
 
             <button @click="activeTab = 'webhooks'" 
-                    :class="activeTab === 'webhooks' ? 'border-blue-600 text-blue-600 border-b-2 pb-2.5' : 'text-slate-500 hover:text-slate-800 pb-2.5'"
+                    :class="activeTab === 'webhooks' ? 'border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 border-b-2 pb-2.5' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white pb-2.5'"
                     class="flex items-center gap-2 transition-colors cursor-pointer">
                 <i data-lucide="webhook" class="w-4 h-4"></i>
                 <span>Webhook Callback {{ $webhook ? '(Aktif)' : '(Belum Diatur)' }}</span>
@@ -62,17 +62,17 @@
 
         <!-- Plain Text Token Reveal Banner -->
         @if(session('plain_text_token'))
-            <div class="app-card p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 border-blue-200 space-y-3 shadow-sm">
+            <div class="app-card p-5 bg-gradient-to-br from-blue-50 to-indigo-50/50 dark:from-blue-500/10 dark:to-indigo-500/5 border-blue-200 dark:border-blue-500/20 space-y-3 shadow-sm">
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <h3 class="font-bold text-sm text-slate-900">Kunci API Baru Dibuat: {{ session('key_name') }}</h3>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Kunci API Baru Dibuat: {{ session('key_name') }}</h3>
                 </div>
-                <p class="text-xs font-medium text-slate-600">
+                <p class="text-xs font-medium text-slate-600 dark:text-slate-400">
                     Salin token API di bawah ini sekarang. Demi alasan keamanan, token rahasia ini hanya ditampilkan **satu kali**.
                 </p>
                 
-                <div class="flex items-center gap-2 p-2 bg-white border border-blue-200 rounded-xl">
-                    <code class="font-mono font-bold text-xs text-blue-700 flex-1 select-all break-all px-2" id="plainToken">
+                <div class="flex items-center gap-2 p-2 bg-white dark:bg-[#0D1526] border border-blue-200 dark:border-blue-500/20 rounded-xl">
+                    <code class="font-mono font-bold text-xs text-blue-700 dark:text-blue-400 flex-1 select-all break-all px-2" id="plainToken">
                         {{ session('plain_text_token') }}
                     </code>
                     <button type="button" onclick="copyToClipboard(document.getElementById('plainToken').innerText.trim(), 'Token API berhasil disalin!')" class="app-btn app-btn-primary text-xs py-2 px-3 flex items-center gap-1 cursor-pointer">
@@ -84,17 +84,17 @@
         @endif
 
         <!-- Active API Keys Table -->
-        <div class="app-card p-6 bg-white space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
-                    <h2 class="font-bold text-base text-slate-900">Kunci API Aktif Anda</h2>
-                    <p class="text-xs text-slate-500">Kunci ini digunakan pada header HTTP Authorization (Bearer token) atau parameter X-API-KEY.</p>
+                    <h2 class="font-bold text-base text-slate-900 dark:text-white">Kunci API Aktif Anda</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Kunci ini digunakan pada header HTTP Authorization (Bearer token) atau parameter X-API-KEY.</p>
                 </div>
                 <span class="app-tag app-tag-blue text-[10px] font-mono">{{ $apiKeys->count() }} ACTIVE KEYS</span>
             </div>
 
             @if($apiKeys->isEmpty())
-                <div class="p-8 text-center text-xs text-slate-400 font-medium bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                <div class="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-medium bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                     Belum ada API Key yang dibuat. Klik tombol <strong>"Buat API Key Baru"</strong> di atas.
                 </div>
             @else
@@ -113,11 +113,11 @@
                         <tbody>
                             @foreach($apiKeys as $key)
                                 <tr>
-                                    <td class="p-3.5 font-bold text-slate-900">{{ $key->name }}</td>
-                                    <td class="p-3.5 font-mono text-slate-700"><code>{{ $key->key_prefix }}...</code></td>
+                                    <td class="p-3.5 font-bold text-slate-900 dark:text-white">{{ $key->name }}</td>
+                                    <td class="p-3.5 font-mono text-slate-700 dark:text-slate-300"><code>{{ $key->key_prefix }}...</code></td>
                                     <td class="p-3.5 font-mono">{{ $key->rate_limit_per_minute }} req/min</td>
-                                    <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}</td>
-                                    <td class="p-3.5 font-mono text-slate-400 whitespace-nowrap">{{ $key->created_at->format('d M Y') }}</td>
+                                    <td class="p-3.5 font-mono text-slate-400 dark:text-slate-500 whitespace-nowrap">{{ $key->last_used_at ? $key->last_used_at->diffForHumans() : 'Belum pernah' }}</td>
+                                    <td class="p-3.5 font-mono text-slate-400 dark:text-slate-500 whitespace-nowrap">{{ $key->created_at->format('d M Y') }}</td>
                                     <td class="p-3.5 text-right whitespace-nowrap">
                                         <button type="button" @click="$confirm({
                                             title: 'Revoke API Key',
@@ -125,7 +125,7 @@
                                             confirmText: 'Hapus Key',
                                             type: 'danger',
                                             onConfirm: () => document.getElementById('delete-key-{{ $key->id }}').submit()
-                                        })" class="app-btn app-btn-secondary text-rose-600 hover:bg-rose-50 border-rose-200 text-[11px] py-1 px-2.5 cursor-pointer">
+                                        })" class="app-btn app-btn-secondary text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 border-rose-200 dark:border-rose-500/20 text-[11px] py-1 px-2.5 cursor-pointer">
                                             Revoke Key
                                         </button>
                                         <form id="delete-key-{{ $key->id }}" method="POST" action="{{ route('api-keys.destroy', $key) }}" class="hidden">
@@ -150,10 +150,10 @@
             
             <!-- Webhook Form (7 cols) -->
             <div class="lg:col-span-7 space-y-4">
-                <div class="app-card p-6 bg-white space-y-4">
-                    <div class="border-b border-slate-100 pb-3">
-                        <h2 class="font-bold text-base text-slate-900">Konfigurasi Target Webhook</h2>
-                        <p class="text-xs text-slate-500 font-medium">Tentukan URL target HTTPS yang akan menerima kiriman data event WhatsApp secara realtime.</p>
+                <div class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+                    <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <h2 class="font-bold text-base text-slate-900 dark:text-white">Konfigurasi Target Webhook</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Tentukan URL target HTTPS yang akan menerima kiriman data event WhatsApp secara realtime.</p>
                     </div>
 
                     <form method="POST" action="{{ route('webhooks.store') }}" class="space-y-4">
@@ -161,7 +161,7 @@
 
                         <!-- Target URL -->
                         <div class="space-y-1.5">
-                            <label for="target_url" class="block font-bold text-xs text-slate-700">Target Webhook URL <span class="text-rose-500">*</span></label>
+                            <label for="target_url" class="block font-bold text-xs text-slate-700 dark:text-slate-300">Target Webhook URL <span class="text-rose-500">*</span></label>
                             <input 
                                 type="url" 
                                 name="target_url" 
@@ -175,7 +175,7 @@
 
                         <!-- Secret Key -->
                         <div class="space-y-1.5">
-                            <label for="secret_key" class="block font-bold text-xs text-slate-700">Secret Signature Key (Opsional)</label>
+                            <label for="secret_key" class="block font-bold text-xs text-slate-700 dark:text-slate-300">Secret Signature Key (Opsional)</label>
                             <input 
                                 type="text" 
                                 name="secret_key" 
@@ -184,39 +184,39 @@
                                 placeholder="whsec_xxxxxxxxxxxx" 
                                 class="input-text text-xs font-mono"
                             >
-                            <p class="text-[10px] text-slate-400 font-medium">Dikirim melalui header <code>X-WAGateway-Secret</code> untuk verifikasi keaslian payload.</p>
+                            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Dikirim melalui header <code>X-WAGateway-Secret</code> untuk verifikasi keaslian payload.</p>
                         </div>
 
                         <!-- Events Subscription Checkboxes -->
-                        <div class="space-y-2.5 pt-2 border-t border-slate-100">
-                            <label class="block font-bold text-xs text-slate-700">Berlangganan Event Realtime</label>
+                        <div class="space-y-2.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <label class="block font-bold text-xs text-slate-700 dark:text-slate-300">Berlangganan Event Realtime</label>
                             
                             @php
                                 $subscribedEvents = $webhook->events ?? ['message.received', 'device.connected', 'device.disconnected'];
                             @endphp
 
                             <div class="space-y-2 text-xs">
-                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors">
                                     <input type="checkbox" name="events[]" value="message.received" {{ in_array('message.received', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
                                     <div>
-                                        <strong class="text-slate-900 font-mono text-xs">message.received</strong>
-                                        <div class="text-[11px] text-slate-500">Dipicu saat ada pesan WhatsApp masuk dari kontak atau grup.</div>
+                                        <strong class="text-slate-900 dark:text-white font-mono text-xs">message.received</strong>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400">Dipicu saat ada pesan WhatsApp masuk dari kontak atau grup.</div>
                                     </div>
                                 </label>
 
-                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors">
                                     <input type="checkbox" name="events[]" value="device.connected" {{ in_array('device.connected', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
                                     <div>
-                                        <strong class="text-slate-900 font-mono text-xs">device.connected</strong>
-                                        <div class="text-[11px] text-slate-500">Dipicu saat nomor WhatsApp berhasil terhubung (Scan QR / Pairing Code).</div>
+                                        <strong class="text-slate-900 dark:text-white font-mono text-xs">device.connected</strong>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400">Dipicu saat nomor WhatsApp berhasil terhubung (Scan QR / Pairing Code).</div>
                                     </div>
                                 </label>
 
-                                <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors">
+                                <label class="flex items-start gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer transition-colors">
                                     <input type="checkbox" name="events[]" value="device.disconnected" {{ in_array('device.disconnected', $subscribedEvents) ? 'checked' : '' }} class="w-4 h-4 mt-0.5 rounded text-blue-600 focus:ring-blue-500">
                                     <div>
-                                        <strong class="text-slate-900 font-mono text-xs">device.disconnected</strong>
-                                        <div class="text-[11px] text-slate-500">Dipicu jika koneksi WhatsApp terputus atau logout.</div>
+                                        <strong class="text-slate-900 dark:text-white font-mono text-xs">device.disconnected</strong>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400">Dipicu jika koneksi WhatsApp terputus atau logout.</div>
                                     </div>
                                 </label>
                             </div>
@@ -266,15 +266,15 @@
     <div x-show="showNewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;" x-cloak>
         <div class="fixed inset-0 bg-slate-900/60 transition-opacity" @click="showNewModal = false"></div>
 
-        <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full p-6 space-y-4 z-10">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="relative bg-white dark:bg-[#111A2E] rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-md w-full p-6 space-y-4 z-10">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold">
+                    <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="key" class="w-4 h-4"></i>
                     </div>
-                    <h3 class="font-bold text-sm text-slate-900">Buat API Key Baru</h3>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Buat API Key Baru</h3>
                 </div>
-                <button @click="showNewModal = false" class="text-slate-400 hover:text-slate-600 p-1">
+                <button @click="showNewModal = false" class="text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-white p-1">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -283,14 +283,14 @@
                 @csrf
 
                 <div class="space-y-1.5">
-                    <label for="name" class="font-bold text-slate-700">Nama Aplikasi / Kunci <span class="text-rose-500">*</span></label>
+                    <label for="name" class="font-bold text-slate-700 dark:text-slate-300">Nama Aplikasi / Kunci <span class="text-rose-500">*</span></label>
                     <input type="text" name="name" id="name" required placeholder="Contoh: Website Main Server, Apps Node.js" class="input-text text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label for="rate_limit" class="font-bold text-slate-700">Batas Request (Per Menit)</label>
+                    <label for="rate_limit" class="font-bold text-slate-700 dark:text-slate-300">Batas Request (Per Menit)</label>
                     <input type="number" name="rate_limit" id="rate_limit" value="60" min="10" max="1000" class="input-text text-xs">
-                    <p class="text-[10px] text-slate-400">Default: 60 request per menit per API key.</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500">Default: 60 request per menit per API key.</p>
                 </div>
 
                 <div class="pt-2 flex items-center justify-end gap-2">

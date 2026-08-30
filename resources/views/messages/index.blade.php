@@ -6,22 +6,22 @@
 <div class="space-y-6" x-data="{ messageType: 'text', msgContent: '' }">
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
                 <span class="app-tag app-tag-blue">MESSAGING ENGINE</span>
-                <span class="font-mono text-[11px] font-semibold text-slate-500">REST SENDER</span>
+                <span class="font-mono text-[11px] font-semibold text-slate-500 dark:text-slate-400">REST SENDER</span>
             </div>
             <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-navy">Kirim Pesan WhatsApp</h1>
-            <p class="text-xs text-slate-500 font-medium">Uji coba kirim pesan teks atau berkas media langsung melalui perangkat aktif.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Uji coba kirim pesan teks atau berkas media langsung melalui perangkat aktif.</p>
         </div>
     </div>
 
     <!-- Message Sender Box -->
-    <div class="app-card p-6 bg-white space-y-4 shadow-2xs">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+    <div class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4 shadow-2xs">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold text-xs">
+                <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center font-bold text-xs">
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </div>
                 <h2 class="font-bold text-sm text-navy">Form Pengiriman Pesan</h2>
@@ -30,12 +30,12 @@
         </div>
 
         @if($devices->isEmpty())
-            <div class="p-4 bg-amber-50/80 border border-amber-200 rounded-xl text-xs space-y-2">
-                <p class="font-bold text-amber-900 flex items-center gap-2">
-                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+            <div class="p-4 bg-amber-50/80 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl text-xs space-y-2">
+                <p class="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-2">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600 dark:text-amber-400"></i>
                     <span>Belum ada perangkat WhatsApp yang terhubung!</span>
                 </p>
-                <p class="text-slate-600 text-xs">
+                <p class="text-slate-600 dark:text-slate-400 text-xs">
                     Hubungkan minimal satu perangkat WhatsApp terlebih dahulu untuk mulai mengirim pesan.
                 </p>
                 <div class="pt-1">
@@ -52,7 +52,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Device Selector -->
                     <div class="space-y-1.5">
-                        <label for="device_id" class="block font-bold text-xs uppercase tracking-wider text-slate-600">Perangkat Pengirim</label>
+                        <label for="device_id" class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Perangkat Pengirim</label>
                         <select name="device_id" id="device_id" required class="input-text text-xs font-semibold cursor-pointer">
                             @foreach($devices as $dev)
                                 <option value="{{ $dev->id }}">
@@ -64,26 +64,26 @@
 
                     <!-- Target Phone -->
                     <div class="space-y-1.5">
-                        <label for="phone" class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nomor WhatsApp Tujuan</label>
+                        <label for="phone" class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Nomor WhatsApp Tujuan</label>
                         <input type="text" name="phone" id="phone" value="{{ old('phone') }}" placeholder="6281234567890 atau 08123456789" required class="input-text text-xs font-mono font-bold">
                     </div>
                 </div>
 
                 <!-- Message Type Tabs -->
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Tipe Pesan</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">Tipe Pesan</label>
                     <div class="flex items-center gap-2">
-                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'text' ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold shadow-2xs' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'">
+                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'text' ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold shadow-2xs' : 'bg-white dark:bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'">
                             <input type="radio" name="message_type" value="text" x-model="messageType" class="hidden">
                             <i data-lucide="message-square" class="w-4 h-4"></i>
                             <span>Teks Biasa</span>
                         </label>
-                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'image' ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold shadow-2xs' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'">
+                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'image' ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold shadow-2xs' : 'bg-white dark:bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'">
                             <input type="radio" name="message_type" value="image" x-model="messageType" class="hidden">
                             <i data-lucide="image" class="w-4 h-4"></i>
                             <span>Gambar (URL)</span>
                         </label>
-                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'document' ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold shadow-2xs' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'">
+                        <label class="flex items-center gap-2 py-2 px-3.5 rounded-xl cursor-pointer text-xs font-semibold transition-all border" :class="messageType === 'document' ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold shadow-2xs' : 'bg-white dark:bg-transparent border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'">
                             <input type="radio" name="message_type" value="document" x-model="messageType" class="hidden">
                             <i data-lucide="file-text" class="w-4 h-4"></i>
                             <span>Dokumen (PDF URL)</span>
@@ -93,15 +93,15 @@
 
                 <!-- Media URL -->
                 <div x-show="messageType !== 'text'" class="space-y-1.5" style="display: none;">
-                    <label for="media_url" class="block font-bold text-xs uppercase tracking-wider text-slate-600">URL Direct Berkas Media</label>
+                    <label for="media_url" class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300">URL Direct Berkas Media</label>
                     <input type="url" name="media_url" id="media_url" placeholder="https://example.com/invoice.pdf atau gambar.png" class="input-text text-xs font-mono">
                 </div>
 
                 <!-- Message Content -->
                 <div class="space-y-1.5">
                     <div class="flex items-center justify-between">
-                        <label for="message" class="block font-bold text-xs uppercase tracking-wider text-slate-600" x-text="messageType === 'text' ? 'Isi Pesan Teks' : 'Keterangan / Caption'"></label>
-                        <span class="text-[11px] font-mono text-slate-400" x-text="msgContent.length + ' karakter'"></span>
+                        <label for="message" class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-300" x-text="messageType === 'text' ? 'Isi Pesan Teks' : 'Keterangan / Caption'"></label>
+                        <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500" x-text="msgContent.length + ' karakter'"></span>
                     </div>
                     <textarea name="message" id="message" rows="3" x-model="msgContent" placeholder="Tulis isi pesan di sini..." class="input-text text-xs">{{ old('message') }}</textarea>
                 </div>
@@ -138,7 +138,7 @@
         </div>
 
         @if($messages->isEmpty())
-            <div class="app-card p-8 text-center text-xs text-slate-400 font-medium bg-white">
+            <div class="app-card p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-medium bg-white dark:bg-[#111A2E]">
                 Belum ada data pesan yang sesuai dengan filter pencarian.
             </div>
         @else
@@ -158,18 +158,18 @@
                     <tbody>
                         @foreach($messages as $msg)
                             <tr>
-                                <td class="p-3.5 font-bold text-slate-900 truncate max-w-[140px]">
+                                <td class="p-3.5 font-bold text-slate-900 dark:text-white truncate max-w-[140px]">
                                     {{ $msg->device->name ?? 'Device' }}
                                 </td>
-                                <td class="p-3.5 font-mono font-bold text-slate-900">
+                                <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
                                     {{ $msg->clean_phone }}
                                 </td>
                                 <td class="p-3.5">
-                                    <span class="font-mono text-[10px] uppercase bg-slate-100 px-2 py-0.5 rounded-md font-bold text-slate-700">
+                                    <span class="font-mono text-[10px] uppercase bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md font-bold text-slate-700 dark:text-slate-300">
                                         {{ $msg->message_type }}
                                     </span>
                                 </td>
-                                <td class="p-3.5 max-w-xs truncate text-slate-700">
+                                <td class="p-3.5 max-w-xs truncate text-slate-700 dark:text-slate-300">
                                     {{ $msg->message_content }}
                                 </td>
                                 <td class="p-3.5">
@@ -177,7 +177,7 @@
                                         {{ strtoupper($msg->status) }}
                                     </span>
                                 </td>
-                                <td class="p-3.5 font-mono text-[11px] text-slate-400 whitespace-nowrap">
+                                <td class="p-3.5 font-mono text-[11px] text-slate-400 dark:text-slate-500 whitespace-nowrap">
                                     {{ $msg->created_at->diffForHumans() }}
                                 </td>
                             </tr>

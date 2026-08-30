@@ -74,23 +74,23 @@
 
         <!-- Sticky Sidebar Navigation (3 cols) -->
         <aside class="lg:col-span-3 space-y-4">
-            <div class="app-card p-4 bg-white sticky top-4 space-y-3 font-medium text-xs">
-                <div class="font-bold text-slate-900 uppercase text-[10px] tracking-wider border-b border-slate-100 pb-2">
+            <div class="app-card p-4 bg-white dark:bg-[#111A2E] sticky top-4 space-y-3 font-medium text-xs">
+                <div class="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider border-b border-slate-100 dark:border-slate-800 pb-2">
                     Daftar Isi Dokumentasi
                 </div>
 
                 <nav class="space-y-1">
-                    <button @click="activeSection = 'all'" :class="activeSection === 'all' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                    <button @click="activeSection = 'all'" :class="activeSection === 'all' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="layers" class="w-4 h-4"></i>
                         <span>Semua Dokumentasi</span>
                     </button>
 
-                    <button @click="activeSection = 'auth'" :class="activeSection === 'auth' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                    <button @click="activeSection = 'auth'" :class="activeSection === 'auth' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>
                         <span>Autentikasi & Header</span>
                     </button>
 
-                    <button @click="activeSection = 'ratelimit'" :class="activeSection === 'ratelimit' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                    <button @click="activeSection = 'ratelimit'" :class="activeSection === 'ratelimit' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="gauge" class="w-4 h-4"></i>
                         <span>Batas Limit (Rate Limit)</span>
                     </button>
@@ -99,28 +99,28 @@
                         REST Endpoints
                     </div>
 
-                    <button @click="activeSection = 'send-text'" :class="activeSection === 'send-text' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">POST</span>
+                    <button @click="activeSection = 'send-text'" :class="activeSection === 'send-text' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400">POST</span>
                         <span class="truncate">Kirim Pesan Teks</span>
                     </button>
 
-                    <button @click="activeSection = 'send-template'" :class="activeSection === 'send-template' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700">POST</span>
+                    <button @click="activeSection = 'send-template'" :class="activeSection === 'send-template' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400">POST</span>
                         <span class="truncate">Kirim Template Pesan</span>
                     </button>
 
-                    <button @click="activeSection = 'send-button'" :class="activeSection === 'send-button' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-purple-100 text-purple-700">POST</span>
+                    <button @click="activeSection = 'send-button'" :class="activeSection === 'send-button' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-400">POST</span>
                         <span class="truncate">Kirim Button Message</span>
                     </button>
 
-                    <button @click="activeSection = 'send-media'" :class="activeSection === 'send-media' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 text-emerald-700">POST</span>
+                    <button @click="activeSection = 'send-media'" :class="activeSection === 'send-media' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400">POST</span>
                         <span class="truncate">Kirim Gambar / File</span>
                     </button>
 
-                    <button @click="activeSection = 'device-status'" :class="activeSection === 'device-status' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700">GET</span>
+                    <button @click="activeSection = 'device-status'" :class="activeSection === 'device-status' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400">GET</span>
                         <span class="truncate">Status Device WA</span>
                     </button>
 
@@ -128,12 +128,12 @@
                         Callbacks & Errors
                     </div>
 
-                    <button @click="activeSection = 'webhooks'" :class="activeSection === 'webhooks' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                    <button @click="activeSection = 'webhooks'" :class="activeSection === 'webhooks' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="webhook" class="w-4 h-4"></i>
                         <span>Webhook Signature</span>
                     </button>
 
-                    <button @click="activeSection = 'status-codes'" :class="activeSection === 'status-codes' ? 'bg-blue-50 text-blue-700 font-bold border-l-2 border-blue-600' : 'text-slate-600 hover:bg-slate-50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                    <button @click="activeSection = 'status-codes'" :class="activeSection === 'status-codes' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>
                         <span>Status Kode & Errors</span>
                     </button>
@@ -145,48 +145,48 @@
         <main class="lg:col-span-9 space-y-8">
 
             <!-- 1. AUTENTIKASI & HEADER -->
-            <section id="section-auth" x-show="activeSection === 'all' || activeSection === 'auth'" class="app-card p-6 bg-white space-y-4">
-                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <div class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold">
+            <section id="section-auth" x-show="activeSection === 'all' || activeSection === 'auth'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="w-8 h-8 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="shield-check" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h2 class="text-base font-bold text-slate-900">1. Autentikasi API Key</h2>
-                        <p class="text-xs text-slate-500 font-medium">Setiap HTTP Request ke REST API wajib menyertakan kunci API yang valid.</p>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">1. Autentikasi API Key</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Setiap HTTP Request ke REST API wajib menyertakan kunci API yang valid.</p>
                     </div>
                 </div>
 
-                <div class="space-y-3 text-xs text-slate-600 font-medium">
+                <div class="space-y-3 text-xs text-slate-600 dark:text-slate-400 font-medium">
                     <p>
                         Anda dapat menyertakan API Key dalam request header menggunakan salah satu metode di bawah ini:
                     </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono">
-                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Metode 1: Standard Bearer Token</span>
-                            <code class="text-blue-700 font-bold">Authorization: Bearer {{ $userApiKey }}</code>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl space-y-1">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase block">Metode 1: Standard Bearer Token</span>
+                            <code class="text-blue-700 dark:text-blue-400 font-bold">Authorization: Bearer {{ $userApiKey }}</code>
                         </div>
-                        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Metode 2: Custom Header</span>
-                            <code class="text-blue-700 font-bold">X-API-KEY: {{ $userApiKey }}</code>
+                        <div class="p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl space-y-1">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase block">Metode 2: Custom Header</span>
+                            <code class="text-blue-700 dark:text-blue-400 font-bold">X-API-KEY: {{ $userApiKey }}</code>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- 2. RATE LIMITING -->
-            <section id="section-ratelimit" x-show="activeSection === 'all' || activeSection === 'ratelimit'" class="app-card p-6 bg-white space-y-4">
-                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <div class="w-8 h-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center font-bold">
+            <section id="section-ratelimit" x-show="activeSection === 'all' || activeSection === 'ratelimit'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="w-8 h-8 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="gauge" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h2 class="text-base font-bold text-slate-900">2. Batas Request (Rate Limiting)</h2>
-                        <p class="text-xs text-slate-500 font-medium">Melindungi stabilitas server dari lonjakan trafik tak terduga.</p>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">2. Batas Request (Rate Limiting)</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Melindungi stabilitas server dari lonjakan trafik tak terduga.</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-600 font-medium">
+                <p class="text-xs text-slate-600 dark:text-slate-400 font-medium">
                     Setiap kunci API memiliki kuota default **60 request per menit**. Setiap response API menyertakan header telemetry berikut:
                 </p>
 
@@ -198,11 +198,11 @@
             </section>
 
             <!-- 3. ENDPOINT: KIRIM PESAN TEKS / OTP -->
-            <section id="endpoint-send-text" x-show="activeSection === 'all' || activeSection === 'send-text'" class="app-card p-6 bg-white space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <section id="endpoint-send-text" x-show="activeSection === 'all' || activeSection === 'send-text'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-emerald-500 text-slate-950 font-extrabold rounded-lg font-mono text-xs">POST</span>
-                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-text</h2>
+                        <h2 class="text-base font-bold font-mono text-slate-900 dark:text-white">/api/v1/messages/send-text</h2>
                     </div>
                     <span class="app-tag app-tag-blue text-[10px]">KIRIM OTOMATIS TEKS & OTP</span>
                 </div>
@@ -248,7 +248,7 @@
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-slate-700">Contoh Kode Integrasi:</span>
-                        <span class="text-[10px] font-mono text-slate-400 uppercase" x-text="codeLang">cURL</span>
+                        <span class="text-[10px] font-mono text-slate-400 dark:text-slate-500 uppercase" x-text="codeLang">cURL</span>
                     </div>
 
                     <!-- cURL Snippet -->
@@ -333,16 +333,16 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 4. ENDPOINT: KIRIM TEMPLATE PESAN (DYNAMIC PARAMETERS) -->
-            <section id="endpoint-send-template" x-show="activeSection === 'all' || activeSection === 'send-template'" class="app-card p-6 bg-white space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <section id="endpoint-send-template" x-show="activeSection === 'all' || activeSection === 'send-template'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-blue-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
-                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-template</h2>
+                        <h2 class="text-base font-bold font-mono text-slate-900 dark:text-white">/api/v1/messages/send-template</h2>
                     </div>
                     <span class="app-tag app-tag-blue text-[10px]">TEMPLATE SYSTEM</span>
                 </div>
 
-                <p class="text-xs text-slate-600 leading-relaxed">
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                     Kirim pesan berdasarkan <strong>Template ID</strong> yang telah Anda buat di menu <em>Template Pesan</em>. Variabel seperti <code>{otp}</code>, <code>{name}</code>, <code>{code}</code> akan diisi secara otomatis dari object <code>variables</code>.
                 </p>
 
@@ -406,11 +406,11 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 5. ENDPOINT: KIRIM BUTTON & INTERACTIVE MESSAGE -->
-            <section id="endpoint-send-button" x-show="activeSection === 'all' || activeSection === 'send-button'" class="app-card p-6 bg-white space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <section id="endpoint-send-button" x-show="activeSection === 'all' || activeSection === 'send-button'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-purple-600 text-white font-extrabold rounded-lg font-mono text-xs">POST</span>
-                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-button</h2>
+                        <h2 class="text-base font-bold font-mono text-slate-900 dark:text-white">/api/v1/messages/send-button</h2>
                     </div>
                     <span class="app-tag app-tag-blue text-[10px]">INTERACTIVE BUTTONS</span>
                 </div>
@@ -435,11 +435,11 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 4. ENDPOINT: KIRIM MEDIA / GAMBAR / PDF -->
-            <section id="endpoint-send-media" x-show="activeSection === 'all' || activeSection === 'send-media'" class="app-card p-6 bg-white space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <section id="endpoint-send-media" x-show="activeSection === 'all' || activeSection === 'send-media'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-emerald-500 text-slate-950 font-extrabold rounded-lg font-mono text-xs">POST</span>
-                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/messages/send-media</h2>
+                        <h2 class="text-base font-bold font-mono text-slate-900 dark:text-white">/api/v1/messages/send-media</h2>
                     </div>
                     <span class="app-tag app-tag-blue text-[10px]">KIRIM GAMBAR / DOKUMEN PDF</span>
                 </div>
@@ -501,11 +501,11 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 5. ENDPOINT: STATUS DEVICE -->
-            <section id="endpoint-device-status" x-show="activeSection === 'all' || activeSection === 'device-status'" class="app-card p-6 bg-white space-y-5">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <section id="endpoint-device-status" x-show="activeSection === 'all' || activeSection === 'device-status'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
                         <span class="px-2.5 py-1 bg-blue-600 text-white font-extrabold rounded-lg font-mono text-xs">GET</span>
-                        <h2 class="text-base font-bold font-mono text-slate-900">/api/v1/devices</h2>
+                        <h2 class="text-base font-bold font-mono text-slate-900 dark:text-white">/api/v1/devices</h2>
                     </div>
                     <span class="app-tag app-tag-blue text-[10px]">CEK DAFTAR DEVICE</span>
                 </div>
@@ -534,18 +534,18 @@ print(res.json())</code></pre>
             </section>
 
             <!-- 6. WEBHOOK HMAC SIGNATURE VERIFICATION -->
-            <section id="section-webhooks" x-show="activeSection === 'all' || activeSection === 'webhooks'" class="app-card p-6 bg-white space-y-4">
-                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <div class="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center font-bold">
+            <section id="section-webhooks" x-show="activeSection === 'all' || activeSection === 'webhooks'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="webhook" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h2 class="text-base font-bold text-slate-900">4. Verifikasi Keaslian Webhook Signature</h2>
-                        <p class="text-xs text-slate-500 font-medium">Header <code>X-WAGateway-Secret</code> mengamankan webhook dari manipulasi pihak ketiga.</p>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">4. Verifikasi Keaslian Webhook Signature</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Header <code>X-WAGateway-Secret</code> mengamankan webhook dari manipulasi pihak ketiga.</p>
                     </div>
                 </div>
 
-                <p class="text-xs text-slate-600 font-medium">
+                <p class="text-xs text-slate-600 dark:text-slate-400 font-medium">
                     Setiap request webhook dari server kami menyertakan header <code>X-WAGateway-Secret</code> yang berisi kunci rahasia Anda (<code>{{ $userWebhookSecret }}</code>).
                 </p>
 
@@ -565,14 +565,14 @@ $payload = json_decode(file_get_contents('php://input'), true);
             </section>
 
             <!-- 7. KODE STATUS & ERROR HANDLING -->
-            <section id="section-status-codes" x-show="activeSection === 'all' || activeSection === 'status-codes'" class="app-card p-6 bg-white space-y-4">
-                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <div class="w-8 h-8 bg-rose-50 text-rose-600 rounded-lg flex items-center justify-center font-bold">
+            <section id="section-status-codes" x-show="activeSection === 'all' || activeSection === 'status-codes'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="w-8 h-8 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-lg flex items-center justify-center font-bold">
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h2 class="text-base font-bold text-slate-900">5. Daftar Kode Status Response HTTP</h2>
-                        <p class="text-xs text-slate-500 font-medium">Penjelasan kode HTTP status yang dikembalikan oleh API.</p>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">5. Daftar Kode Status Response HTTP</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Penjelasan kode HTTP status yang dikembalikan oleh API.</p>
                     </div>
                 </div>
 
@@ -587,29 +587,29 @@ $payload = json_decode(file_get_contents('php://input'), true);
                         </thead>
                         <tbody class="font-mono text-[11px]">
                             <tr>
-                                <td class="p-3 font-bold text-emerald-600">200 OK</td>
+                                <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">200 OK</td>
                                 <td class="p-3 font-sans font-bold">Sukses</td>
-                                <td class="p-3 font-sans text-slate-600">Request berhasil diproses & pesan masuk ke antrean pengiriman WhatsApp.</td>
+                                <td class="p-3 font-sans text-slate-600 dark:text-slate-400">Request berhasil diproses & pesan masuk ke antrean pengiriman WhatsApp.</td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-bold text-amber-600">400 Bad Request</td>
+                                <td class="p-3 font-bold text-amber-600 dark:text-amber-400">400 Bad Request</td>
                                 <td class="p-3 font-sans font-bold">Device Disconnected</td>
-                                <td class="p-3 font-sans text-slate-600">Perangkat WhatsApp belum terhubung/logout. Lakukan scan QR terlebih dahulu.</td>
+                                <td class="p-3 font-sans text-slate-600 dark:text-slate-400">Perangkat WhatsApp belum terhubung/logout. Lakukan scan QR terlebih dahulu.</td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-bold text-rose-600">401 Unauthorized</td>
+                                <td class="p-3 font-bold text-rose-600 dark:text-rose-400">401 Unauthorized</td>
                                 <td class="p-3 font-sans font-bold">API Key Invalid</td>
-                                <td class="p-3 font-sans text-slate-600">API Key tidak ditemukan atau sudah di-revoke. Periksa kembali header request.</td>
+                                <td class="p-3 font-sans text-slate-600 dark:text-slate-400">API Key tidak ditemukan atau sudah di-revoked. Periksa kembali header request.</td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-bold text-rose-600">422 Unprocessable</td>
+                                <td class="p-3 font-bold text-rose-600 dark:text-rose-400">422 Unprocessable</td>
                                 <td class="p-3 font-sans font-bold">Validasi Parameter Gagal</td>
-                                <td class="p-3 font-sans text-slate-600">Parameter wajib kurang (seperti `phone` atau `message` tidak diisi).</td>
+                                <td class="p-3 font-sans text-slate-600 dark:text-slate-400">Parameter wajib kurang (seperti `phone` atau `message` tidak diisi).</td>
                             </tr>
                             <tr>
-                                <td class="p-3 font-bold text-rose-600">429 Too Many Requests</td>
+                                <td class="p-3 font-bold text-rose-600 dark:text-rose-400">429 Too Many Requests</td>
                                 <td class="p-3 font-sans font-bold">Batas Kuota Harian/Rate Limit Exceeded</td>
-                                <td class="p-3 font-sans text-slate-600">Anda telah mencapai limit kuota harian atau rate limit per menit.</td>
+                                <td class="p-3 font-sans text-slate-600 dark:text-slate-400">Anda telah mencapai limit kuota harian atau rate limit per menit.</td>
                             </tr>
                         </tbody>
                     </table>

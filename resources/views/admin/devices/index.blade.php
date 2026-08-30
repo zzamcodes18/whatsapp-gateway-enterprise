@@ -6,14 +6,14 @@
 <div class="space-y-6" x-data="adminDevicesManager()">
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 pb-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
         <div>
             <div class="flex items-center gap-2">
                 <span class="app-tag app-tag-blue">ADMINISTRATOR</span>
-                <span class="font-mono text-[11px] font-semibold text-slate-500">GLOBAL SESSIONS</span>
+                <span class="font-mono text-[11px] font-semibold text-slate-500 dark:text-slate-400">GLOBAL SESSIONS</span>
             </div>
             <h1 class="font-extrabold text-xl sm:text-2xl mt-1 text-navy">Seluruh Perangkat Terdaftar</h1>
-            <p class="text-xs text-slate-500 font-medium">Pantau dan kelola seluruh sesi WhatsApp dari semua akun pengguna di sistem.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Pantau dan kelola seluruh sesi WhatsApp dari semua akun pengguna di sistem.</p>
         </div>
 
         <div class="flex items-center gap-2">
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Filters -->
-    <div class="app-card p-4 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+    <div class="app-card p-4 bg-white dark:bg-[#111A2E] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
         <form method="GET" action="{{ route('admin.devices.index') }}" class="flex flex-wrap items-center gap-2.5 flex-1">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari device, nomor, session, user..." class="input-text py-2 px-3 text-xs w-60 font-medium">
             
@@ -42,7 +42,7 @@
             </button>
         </form>
 
-        <div class="text-xs font-mono font-semibold text-slate-500">
+        <div class="text-xs font-mono font-semibold text-slate-500 dark:text-slate-400">
             Total: {{ $devices->total() }} Sesi
         </div>
     </div>
@@ -65,7 +65,7 @@
                 @forelse($devices as $device)
                     <tr>
                         <td class="p-3.5">
-                            <div class="font-bold text-slate-900 flex items-center gap-1.5">
+                            <div class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                 <span>{{ $device->name }}</span>
                                 @if($device->is_system_bot)
                                     <span class="app-tag app-tag-blue text-[8px] py-0 px-1.5">BOT OTP</span>
@@ -75,16 +75,16 @@
                         </td>
                         <td class="p-3.5">
                             @if($device->user)
-                                <div class="font-bold text-slate-900">{{ $device->user->name }}</div>
-                                <div class="font-mono text-[11px] text-slate-500">{{ $device->user->email }}</div>
+                                <div class="font-bold text-slate-900 dark:text-white">{{ $device->user->name }}</div>
+                                <div class="font-mono text-[11px] text-slate-500 dark:text-slate-400">{{ $device->user->email }}</div>
                             @else
-                                <span class="text-slate-400">Tanpa Pemilik</span>
+                                <span class="text-slate-400 dark:text-slate-500">Tanpa Pemilik</span>
                             @endif
                         </td>
-                        <td class="p-3.5 font-mono font-bold text-slate-900">
+                        <td class="p-3.5 font-mono font-bold text-slate-900 dark:text-white">
                             {{ $device->phone_number ? '+' . $device->phone_number : '-' }}
                         </td>
-                        <td class="p-3.5 font-mono uppercase text-[10px] text-slate-600 font-semibold">
+                        <td class="p-3.5 font-mono uppercase text-[10px] text-slate-600 dark:text-slate-400 font-semibold">
                             {{ $device->connection_type }}
                         </td>
                         <td class="p-3.5">
@@ -92,7 +92,7 @@
                                 {{ strtoupper($device->status) }}
                             </span>
                         </td>
-                        <td class="p-3.5 font-mono text-slate-400 text-[11px]">
+                        <td class="p-3.5 font-mono text-slate-400 dark:text-slate-500 text-[11px]">
                             {{ $device->connected_at ? $device->connected_at->format('d M Y H:i') : '-' }}
                         </td>
                         <td class="p-3.5 text-right space-x-1 whitespace-nowrap">
@@ -129,7 +129,7 @@
                                 confirmText: 'Hapus',
                                 type: 'danger',
                                 onConfirm: () => document.getElementById('admin-del-{{ $device->id }}').submit()
-                            })" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" title="Hapus Device">
+                            })" class="p-1.5 text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer" title="Hapus Device">
                                 <i data-lucide="trash-2" class="w-4 h-4 inline"></i>
                             </button>
                             <form id="admin-del-{{ $device->id }}" method="POST" action="{{ route('admin.devices.destroy', $device) }}" class="hidden">
@@ -140,7 +140,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="p-8 text-center text-xs text-slate-400 font-medium">
+                        <td colspan="7" class="p-8 text-center text-xs text-slate-400 dark:text-slate-500 font-medium">
                             Belum ada perangkat yang terdaftar di sistem.
                         </td>
                     </tr>
@@ -156,10 +156,10 @@
 
     <!-- ================= ADMIN ADD DEVICE MODAL ================= -->
     <div x-show="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs" style="display: none;" x-cloak>
-        <div class="app-card bg-white max-w-md w-full p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 custom-scrollbar" @click.away="showCreateModal = false">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="app-card bg-white dark:bg-[#111A2E] max-w-md w-full p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 dark:border-slate-800 custom-scrollbar" @click.away="showCreateModal = false">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <h3 class="font-bold text-base text-navy">Tambah Device Pengguna</h3>
-                <button @click="showCreateModal = false" class="p-1 text-slate-400 hover:text-slate-800 rounded-lg">
+                <button @click="showCreateModal = false" class="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -167,7 +167,7 @@
             <form method="POST" action="{{ route('admin.devices.store') }}" class="space-y-3.5">
                 @csrf
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Pilih Pemilik Akun</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Pilih Pemilik Akun</label>
                     <select name="user_id" required class="input-text text-xs font-semibold cursor-pointer">
                         @foreach($allUsers as $u)
                             <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
@@ -176,12 +176,12 @@
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nama Perangkat</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Nama Perangkat</label>
                     <input type="text" name="name" required placeholder="Contoh: CS Official Admin" class="input-text text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Metode Koneksi</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Metode Koneksi</label>
                     <select name="connection_type" class="input-text text-xs font-semibold cursor-pointer">
                         <option value="qr">Scan QR Code</option>
                         <option value="pairing_code">Pairing Code 8-Digit</option>
@@ -189,11 +189,11 @@
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nomor Telepon (Wajib jika Pairing Code)</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Nomor Telepon (Wajib jika Pairing Code)</label>
                     <input type="text" name="phone_number" placeholder="628123456789" class="input-text text-xs font-mono">
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
                     <button type="button" @click="showCreateModal = false" class="app-btn app-btn-secondary text-xs py-2 px-3.5">
                         Batal
                     </button>
@@ -208,13 +208,13 @@
 
     <!-- ================= ADMIN EDIT DEVICE MODAL ================= -->
     <div x-show="showEditModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs" style="display: none;" x-cloak>
-        <div class="app-card bg-white max-w-md w-full p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 custom-scrollbar" @click.away="showEditModal = false">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="app-card bg-white dark:bg-[#111A2E] max-w-md w-full p-6 space-y-4 max-h-[92vh] overflow-y-auto shadow-2xl border-slate-100 dark:border-slate-800 custom-scrollbar" @click.away="showEditModal = false">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
                     <h3 class="font-bold text-base text-navy">Edit Data Perangkat</h3>
-                    <p class="text-xs text-slate-500 font-mono" x-text="'UUID: ' + editForm.session_id"></p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-mono" x-text="'UUID: ' + editForm.session_id"></p>
                 </div>
-                <button @click="showEditModal = false" class="p-1 text-slate-400 hover:text-slate-800 rounded-lg">
+                <button @click="showEditModal = false" class="p-1 text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-lg">
                     <i data-lucide="x" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -224,7 +224,7 @@
                 @method('PUT')
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Pemilik Akun</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Pemilik Akun</label>
                     <select name="user_id" x-model="editForm.user_id" required class="input-text text-xs font-semibold cursor-pointer">
                         @foreach($allUsers as $u)
                             <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
@@ -233,17 +233,17 @@
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nama Perangkat</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Nama Perangkat</label>
                     <input type="text" name="name" x-model="editForm.name" required class="input-text text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Nomor WhatsApp</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Nomor WhatsApp</label>
                     <input type="text" name="phone_number" x-model="editForm.phone_number" placeholder="628123456789" class="input-text text-xs font-mono">
                 </div>
 
                 <div class="space-y-1.5">
-                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600">Status Koneksi</label>
+                    <label class="block font-bold text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400">Status Koneksi</label>
                     <select name="status" x-model="editForm.status" class="input-text text-xs font-semibold cursor-pointer">
                         <option value="connected">Connected</option>
                         <option value="disconnected">Disconnected</option>
@@ -253,7 +253,7 @@
                     </select>
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
                     <button type="button" @click="showEditModal = false" class="app-btn app-btn-secondary text-xs py-2 px-3.5">
                         Batal
                     </button>
