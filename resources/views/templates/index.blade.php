@@ -427,8 +427,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Isi Nilai Sampel Variabel (Key = Value)</label>
-                        <textarea name="sample_variables" rows="3" placeholder="otp=884920&#10;name=Budi Santoso&#10;code=PROMO2026" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono"></textarea>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-slate-700">Isi Nilai Sampel Variabel (Key = Value)</label>
+                            <button type="button" @click="testSampleVariables = generateVariablesFromText((activeTemplate.title || '') + ' ' + (activeTemplate.content || '') + ' ' + (activeTemplate.footer || ''))" class="text-[10px] font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded border border-blue-200 cursor-pointer flex items-center gap-1">
+                                <span>⚡ Auto-isi Variabel</span>
+                            </button>
+                        </div>
+                        <textarea name="sample_variables" x-model="testSampleVariables" rows="3" placeholder="otp=884920&#10;name=Budi Santoso&#10;code=PROMO2026" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono"></textarea>
                         <span class="text-[10px] text-slate-400">Tulis satu variabel per baris (format <code>nama_var=nilai</code>)</span>
                     </div>
 
@@ -505,8 +510,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Isi Nilai Sampel Variabel (Key = Value)</label>
-                        <textarea name="sample_variables" rows="3" placeholder="otp=884920&#10;name=Budi Santoso&#10;code=PROMO2026" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono"></textarea>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-slate-700">Isi Nilai Sampel Variabel (Key = Value)</label>
+                            <button type="button" @click="testSampleVariables = generateVariablesFromText((formData.title || '') + ' ' + (formData.content || '') + ' ' + (formData.footer || ''))" class="text-[10px] font-bold text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 px-2 py-0.5 rounded border border-amber-200 cursor-pointer flex items-center gap-1">
+                                <span>⚡ Auto-isi Variabel</span>
+                            </button>
+                        </div>
+                        <textarea name="sample_variables" x-model="testSampleVariables" rows="3" placeholder="otp=884920&#10;name=Budi Santoso&#10;code=PROMO2026" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono"></textarea>
                         <span class="text-[10px] text-slate-400">Tulis satu variabel per baris (format <code>nama_var=nilai</code>)</span>
                     </div>
 
@@ -536,6 +546,7 @@ function templateManager() {
         showTestDraftModal: false,
         isEditMode: false,
         activeTemplate: {},
+        testSampleVariables: '',
         formData: {
             id: null,
             name: '',
@@ -545,6 +556,43 @@ function templateManager() {
             content: '',
             footer: '',
             buttons: []
+        },
+
+        generateVariablesFromText(text) {
+            if (!text) text = '';
+            const regex = /\{([a-zA-Z0-9_\-\.]+)\}/g;
+            const matches = new Set();
+            let match;
+            while ((match = regex.exec(text)) !== null) {
+                matches.add(match[1].trim());
+            }
+
+            const varList = Array.from(matches);
+            if (varList.length === 0) {
+                return "otp=884920\nname=Budi Santoso\ncode=PROMO2026";
+            }
+
+            const sampleDefaults = {
+                'otp': '884920',
+                'code': 'PROMO2026',
+                'kode': 'PROMO2026',
+                'name': 'Budi Santoso',
+                'nama': 'Budi Santoso',
+                'phone': '6281234567890',
+                'wa': '6281234567890',
+                'amount': '150000',
+                'total': '150000',
+                'nominal': '150000',
+                'harga': '150000',
+                'link': 'https://transaksikita.com',
+                'url': 'https://transaksikita.com'
+            };
+
+            return varList.map(k => {
+                const lowerK = k.toLowerCase();
+                const defaultVal = sampleDefaults[lowerK] || ('Nilai ' + k);
+                return `${k}=${defaultVal}`;
+            }).join('\n');
         },
 
         openCreateModal() {
@@ -584,6 +632,16 @@ function templateManager() {
 
         openTestModal(template) {
             this.activeTemplate = template;
+            let fullText = (template.title || '') + ' ' + (template.content || '') + ' ' + (template.footer || '');
+            if (template.buttons && template.buttons.length) {
+                const btns = typeof template.buttons === 'string' ? JSON.parse(template.buttons) : template.buttons;
+                if (Array.isArray(btns)) {
+                    btns.forEach(btn => {
+                        fullText += ' ' + (btn.text || '') + ' ' + (btn.code || '') + ' ' + (btn.url || '');
+                    });
+                }
+            }
+            this.testSampleVariables = this.generateVariablesFromText(fullText);
             this.showTestModal = true;
         },
 
@@ -592,6 +650,13 @@ function templateManager() {
                 alert('Silakan isi "Isi Pesan Template" terlebih dahulu sebelum melakukan uji kirim.');
                 return;
             }
+            let fullText = (this.formData.title || '') + ' ' + (this.formData.content || '') + ' ' + (this.formData.footer || '');
+            if (this.formData.buttons && this.formData.buttons.length) {
+                this.formData.buttons.forEach(btn => {
+                    fullText += ' ' + (btn.text || '') + ' ' + (btn.code || '') + ' ' + (btn.url || '');
+                });
+            }
+            this.testSampleVariables = this.generateVariablesFromText(fullText);
             this.showTestDraftModal = true;
         },
 
