@@ -50,9 +50,16 @@ class MessageTemplateController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
 
+        $category = $request->input('category');
+        if ($category === 'other' && $request->filled('custom_category')) {
+            $category = trim($request->input('custom_category'));
+        }
+
+        $request->merge(['category' => $category]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:otp,promo,notification,button,general'],
+            'category' => ['required', 'string', 'max:50'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string'],
             'footer' => ['nullable', 'string', 'max:255'],
@@ -95,9 +102,16 @@ class MessageTemplateController extends Controller
             abort(403);
         }
 
+        $category = $request->input('category');
+        if ($category === 'other' && $request->filled('custom_category')) {
+            $category = trim($request->input('custom_category'));
+        }
+
+        $request->merge(['category' => $category]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:otp,promo,notification,button,general'],
+            'category' => ['required', 'string', 'max:50'],
             'title' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string'],
             'footer' => ['nullable', 'string', 'max:255'],
@@ -243,5 +257,108 @@ class MessageTemplateController extends Controller
         }
 
         return back()->withErrors(['phone' => 'Gagal mengirim test pesan template: '.($result['message'] ?? 'Unknown error')]);
+    }
+
+    /**
+     * Test send unsaved draft template to WhatsApp number.
+     */
+    public function testDraft(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'device_id' => ['required', 'exists:devices,id'],
+            'phone' => ['required', 'string', 'min:8'],
+            'content' => ['required', 'string'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'footer' => ['nullable', 'string', 'max:255'],
+            'buttons' => ['nullable', 'array'],
+            'sample_variables' => ['nullable', 'string'],
+        ]);
+
+        $device = Device::where('id', $validated['device_id'])
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
+
+        if (! $device->isConnected()) {
+            return back()->withErrors(['phone' => 'Perangkat yang dipilih sedang tidak terhubung ke WhatsApp.']);
+        }
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $validated['phone']);
+        if (str_starts_with($cleanPhone, '08')) {
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        }
+
+        // Parse test variables
+        $variables = [];
+        if (! empty($validated['sample_variables'])) {
+            $decoded = json_decode($validated['sample_variables'], true);
+            if (is_array($decoded)) {
+                $variables = $decoded;
+            } else {
+                $lines = explode("\n", str_replace(',', "\n", $validated['sample_variables']));
+                foreach ($lines as $line) {
+                    if (str_contains($line, '=')) {
+                        [$k, $v] = explode('=', $line, 2);
+                        $variables[trim($k)] = trim($v);
+                    }
+                }
+            }
+        }
+
+        // Render placeholders
+        $body = MessageTemplate::renderPlaceholders($validated['content'], $variables);
+        $title = MessageTemplate::renderPlaceholders($validated['title'] ?? '', $variables);
+        $footer = MessageTemplate::renderPlaceholders($validated['footer'] ?? '', $variables);
+
+        $buttons = [];
+        if (! empty($validated['buttons'])) {
+            foreach ($validated['buttons'] as $btn) {
+                if (empty($btn['text'])) continue;
+                $item = $btn;
+                $item['text'] = MessageTemplate::renderPlaceholders($btn['text'] ?? '', $variables);
+                if (! empty($btn['url'])) {
+                    $item['url'] = MessageTemplate::renderPlaceholders($btn['url'], $variables);
+                }
+                if (! empty($btn['code'])) {
+                    $item['code'] = MessageTemplate::renderPlaceholders($btn['code'], $variables);
+                }
+                $buttons[] = $item;
+            }
+        }
+
+        if (! empty($buttons)) {
+            $result = $this->engineService->sendInteractiveMessage(
+                $device->session_id,
+                $cleanPhone,
+                [
+                    'title' => $title ?? '',
+                    'body' => $body,
+                    'footer' => $footer ?? '',
+                    'buttons' => $buttons,
+                ]
+            );
+        } else {
+            $result = $this->engineService->sendTextMessage(
+                $device->session_id,
+                $cleanPhone,
+                $body
+            );
+        }
+
+        if (! empty($result['success']) && $result['success'] === true) {
+            Message::create([
+                'user_id' => $request->user()->id,
+                'device_id' => $device->id,
+                'remote_jid' => $cleanPhone.'@s.whatsapp.net',
+                'message_type' => ! empty($buttons) ? 'interactive' : 'text',
+                'message_content' => $body,
+                'direction' => 'outbound',
+                'status' => 'sent',
+                'wa_message_id' => $result['messageId'] ?? null,
+            ]);
+
+            return back()->with('success', "Test pesan draft template berhasil dikirim ke +{$cleanPhone}!");
+        }
+
+        return back()->withErrors(['phone' => 'Gagal mengirim test pesan draft: '.($result['message'] ?? 'Unknown error')]);
     }
 }

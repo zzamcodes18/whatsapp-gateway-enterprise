@@ -277,11 +277,6 @@
                                     <i data-lucide="user-cog" class="w-4 h-4 text-slate-500"></i>
                                     <span>Profil & Workspace</span>
                                 </a>
-
-                                <a href="{{ route('home') }}" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors">
-                                    <i data-lucide="globe" class="w-4 h-4 text-slate-500"></i>
-                                    <span>Lihat Landing Page</span>
-                                </a>
                             </div>
 
                             <!-- Logout Action -->
@@ -431,18 +426,6 @@
                             <i data-lucide="book-open" class="w-4 h-4"></i>
                             <span>Dokumentasi API</span>
                         </a>
-
-                        @if(auth()->user()->isAdmin())
-                            <div class="pt-3 border-t border-slate-100 mt-3">
-                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold shadow-sm shadow-blue-500/30 hover:from-blue-700 hover:to-indigo-700 transition-all text-xs">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="shield" class="w-4 h-4 text-blue-200"></i>
-                                        <span>Dashboard Admin</span>
-                                    </div>
-                                    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-blue-200"></i>
-                                </a>
-                            </div>
-                        @endif
                     @endif
                 </nav>
             </div>

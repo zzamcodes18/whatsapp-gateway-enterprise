@@ -217,7 +217,12 @@
                                         <option value="notification">Notifikasi</option>
                                         <option value="button">Interactive Button</option>
                                         <option value="general">General</option>
+                                        <option value="other">Lainnya (Input Manual)</option>
                                     </select>
+                                    
+                                    <div x-show="formData.category === 'other'" class="mt-2" x-cloak>
+                                        <input type="text" name="custom_category" x-model="formData.custom_category" placeholder="Kategori Kustom (misal: tagihan)" class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-semibold text-blue-700">
+                                    </div>
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="block text-xs font-bold text-slate-700 mb-1">Nama Template <span class="text-rose-500">*</span></label>
@@ -367,14 +372,21 @@
                     </div>
 
                     <!-- Modal Actions -->
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
-                        <button type="button" @click="showFormModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
-                            Batal
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <button type="button" @click="openTestDraftModal()" class="px-3 py-2 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200/80 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                            <span>Uji Kirim Draft Pesan</span>
                         </button>
-                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-5 font-bold flex items-center gap-2">
-                            <i data-lucide="check" class="w-4 h-4"></i>
-                            <span x-text="isEditMode ? 'Simpan Perubahan' : 'Simpan Template'"></span>
-                        </button>
+
+                        <div class="flex items-center gap-2">
+                            <button type="button" @click="showFormModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer">
+                                Batal
+                            </button>
+                            <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-5 font-bold flex items-center gap-2 cursor-pointer">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                                <span x-text="isEditMode ? 'Simpan Perubahan' : 'Simpan Template'"></span>
+                            </button>
+                        </div>
                     </div>
 
                 </form>
@@ -446,6 +458,84 @@
         </div>
     </div>
 
+    <!-- ========================= TEST DRAFT SEND MODAL (BEFORE SAVE) ========================= -->
+    <div x-show="showTestDraftModal" class="fixed inset-0 z-50 overflow-y-auto" x-cloak>
+        <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-xs" @click="showTestDraftModal = false"></div>
+
+            <div class="inline-block w-full max-w-lg my-auto overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl relative z-10">
+                
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-base">Uji Kirim Draft (Sebelum Disimpan)</h3>
+                    </div>
+                    <button @click="showTestDraftModal = false" class="text-slate-400 hover:text-slate-600 cursor-pointer">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <form action="{{ route('templates.test-draft') }}" method="POST" class="p-6 space-y-4">
+                    @csrf
+                    
+                    <!-- Hidden payload from draft form -->
+                    <input type="hidden" name="title" :value="formData.title">
+                    <input type="hidden" name="content" :value="formData.content">
+                    <input type="hidden" name="footer" :value="formData.footer">
+                    <template x-for="(btn, idx) in formData.buttons" :key="idx">
+                        <div>
+                            <input type="hidden" :name="'buttons[' + idx + '][type]'" :value="btn.type">
+                            <input type="hidden" :name="'buttons[' + idx + '][text]'" :value="btn.text">
+                            <input type="hidden" :name="'buttons[' + idx + '][code]'" :value="btn.code">
+                            <input type="hidden" :name="'buttons[' + idx + '][url]'" :value="btn.url">
+                            <input type="hidden" :name="'buttons[' + idx + '][phone]'" :value="btn.phone">
+                            <input type="hidden" :name="'buttons[' + idx + '][id]'" :value="btn.id">
+                        </div>
+                    </template>
+
+                    <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl space-y-1">
+                        <div class="text-xs font-bold text-amber-900">Mencoba kirim draft: <span x-text="formData.name || 'Draft Template Baru'"></span></div>
+                        <div class="text-[11px] text-amber-700">Pesan ini dikirim secara langsung tanpa perlu menyimpan template terlebih dahulu.</div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Perangkat WhatsApp Sender</label>
+                        <select name="device_id" required class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
+                            @foreach($userDevices as $dev)
+                                <option value="{{ $dev->id }}">{{ $dev->name }} (+{{ $dev->phone_number }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Penerima</label>
+                        <input type="text" name="phone" placeholder="081234567890" required class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Isi Nilai Sampel Variabel (Key = Value)</label>
+                        <textarea name="sample_variables" rows="3" placeholder="otp=884920&#10;name=Budi Santoso&#10;code=PROMO2026" class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono"></textarea>
+                        <span class="text-[10px] text-slate-400">Tulis satu variabel per baris (format <code>nama_var=nilai</code>)</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
+                        <button type="button" @click="showTestDraftModal = false" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" class="app-btn app-btn-primary text-xs py-2 px-5 font-bold flex items-center gap-2 cursor-pointer">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            <span>Kirim Test Draft</span>
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -453,12 +543,14 @@ function templateManager() {
     return {
         showFormModal: false,
         showTestModal: false,
+        showTestDraftModal: false,
         isEditMode: false,
         activeTemplate: {},
         formData: {
             id: null,
             name: '',
             category: 'otp',
+            custom_category: '',
             title: '',
             content: '',
             footer: '',
@@ -471,6 +563,7 @@ function templateManager() {
                 id: null,
                 name: '',
                 category: 'otp',
+                custom_category: '',
                 title: '',
                 content: '',
                 footer: '',
@@ -483,10 +576,14 @@ function templateManager() {
 
         openEditModal(template) {
             this.isEditMode = true;
+            const standardCategories = ['otp', 'promo', 'notification', 'button', 'general'];
+            const isStandard = standardCategories.includes(template.category);
+
             this.formData = {
                 id: template.id,
                 name: template.name,
-                category: template.category,
+                category: isStandard ? template.category : 'other',
+                custom_category: isStandard ? '' : template.category,
                 title: template.title || '',
                 content: template.content,
                 footer: template.footer || '',
@@ -498,6 +595,14 @@ function templateManager() {
         openTestModal(template) {
             this.activeTemplate = template;
             this.showTestModal = true;
+        },
+
+        openTestDraftModal() {
+            if (!this.formData.content) {
+                alert('Silakan isi "Isi Pesan Template" terlebih dahulu sebelum melakukan uji kirim.');
+                return;
+            }
+            this.showTestDraftModal = true;
         },
 
         addButton() {

@@ -97,6 +97,7 @@ Route::middleware('auth')->group(function () {
     // Message Templates Management
     Route::get('/templates', [MessageTemplateController::class, 'index'])->name('templates.index');
     Route::post('/templates', [MessageTemplateController::class, 'store'])->name('templates.store');
+    Route::post('/templates/test-draft', [MessageTemplateController::class, 'testDraft'])->name('templates.test-draft');
     Route::put('/templates/{template}', [MessageTemplateController::class, 'update'])->name('templates.update');
     Route::delete('/templates/{template}', [MessageTemplateController::class, 'destroy'])->name('templates.destroy');
     Route::post('/templates/{template}/test', [MessageTemplateController::class, 'testSend'])->name('templates.test');
