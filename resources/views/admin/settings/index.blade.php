@@ -183,12 +183,20 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     
-                    <div class="space-y-1.5">
-                        <label for="allow_registration" class="app-label">Status Pendaftaran User Baru</label>
-                        <select id="allow_registration" name="allow_registration" class="app-input">
-                            <option value="true" {{ old('allow_registration', $settings['allow_registration'] ?? 'true') === 'true' ? 'selected' : '' }}>✓ Diizinkan (Pendaftaran Terbuka)</option>
-                            <option value="false" {{ old('allow_registration', $settings['allow_registration'] ?? 'true') === 'false' ? 'selected' : '' }}>✕ Ditutup (Hanya Admin yang Bisa Tambah User)</option>
-                        </select>
+                    <div x-data="{ allowReg: {{ old('allow_registration', $settings['allow_registration'] ?? 'true') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                        <label class="app-label">Status Pendaftaran User Baru</label>
+                        <input type="hidden" name="allow_registration" :value="allowReg ? 'true' : 'false'">
+                        
+                        <div class="flex items-center gap-3 pt-1">
+                            <button type="button" 
+                                    @click="allowReg = !allowReg" 
+                                    :class="allowReg ? 'bg-blue-600' : 'bg-slate-300'"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                <span :class="allowReg ? 'translate-x-5' : 'translate-x-0'"
+                                      class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                            </button>
+                            <span class="text-xs font-bold transition-colors" :class="allowReg ? 'text-blue-700' : 'text-slate-500'" x-text="allowReg ? '✓ Pendaftaran Terbuka' : '✕ Ditutup (Nonaktif)'"></span>
+                        </div>
                         <p class="text-[11px] text-slate-400">Jika ditutup, halaman register tidak dapat diakses publik.</p>
                     </div>
 
@@ -251,12 +259,20 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="space-y-1.5">
-                            <label for="enable_google_login" class="app-label">Status Google Login</label>
-                            <select id="enable_google_login" name="enable_google_login" class="app-input">
-                                <option value="true" {{ old('enable_google_login', $settings['enable_google_login'] ?? 'false') === 'true' ? 'selected' : '' }}>✓ Aktif</option>
-                                <option value="false" {{ old('enable_google_login', $settings['enable_google_login'] ?? 'false') === 'false' ? 'selected' : '' }}>✕ Nonaktif</option>
-                            </select>
+                        <div x-data="{ enableGoogle: {{ old('enable_google_login', $settings['enable_google_login'] ?? 'false') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                            <label class="app-label">Status Google Login</label>
+                            <input type="hidden" name="enable_google_login" :value="enableGoogle ? 'true' : 'false'">
+                            
+                            <div class="flex items-center gap-3 pt-1">
+                                <button type="button" 
+                                        @click="enableGoogle = !enableGoogle" 
+                                        :class="enableGoogle ? 'bg-emerald-600' : 'bg-slate-300'"
+                                        class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                    <span :class="enableGoogle ? 'translate-x-5' : 'translate-x-0'"
+                                          class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                                </button>
+                                <span class="text-xs font-bold transition-colors" :class="enableGoogle ? 'text-emerald-700' : 'text-slate-500'" x-text="enableGoogle ? '✓ Aktif' : '✕ Nonaktif'"></span>
+                            </div>
                         </div>
 
                         <div class="space-y-1.5">
@@ -291,12 +307,20 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="space-y-1.5">
-                            <label for="enable_github_login" class="app-label">Status GitHub Login</label>
-                            <select id="enable_github_login" name="enable_github_login" class="app-input">
-                                <option value="true" {{ old('enable_github_login', $settings['enable_github_login'] ?? 'false') === 'true' ? 'selected' : '' }}>✓ Aktif</option>
-                                <option value="false" {{ old('enable_github_login', $settings['enable_github_login'] ?? 'false') === 'false' ? 'selected' : '' }}>✕ Nonaktif</option>
-                            </select>
+                        <div x-data="{ enableGithub: {{ old('enable_github_login', $settings['enable_github_login'] ?? 'false') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                            <label class="app-label">Status GitHub Login</label>
+                            <input type="hidden" name="enable_github_login" :value="enableGithub ? 'true' : 'false'">
+                            
+                            <div class="flex items-center gap-3 pt-1">
+                                <button type="button" 
+                                        @click="enableGithub = !enableGithub" 
+                                        :class="enableGithub ? 'bg-emerald-600' : 'bg-slate-300'"
+                                        class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                    <span :class="enableGithub ? 'translate-x-5' : 'translate-x-0'"
+                                          class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                                </button>
+                                <span class="text-xs font-bold transition-colors" :class="enableGithub ? 'text-emerald-700' : 'text-slate-500'" x-text="enableGithub ? '✓ Aktif' : '✕ Nonaktif'"></span>
+                            </div>
                         </div>
 
                         <div class="space-y-1.5">
