@@ -15,6 +15,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InternalEngineController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageTemplateController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\SocialAuthController;
@@ -91,6 +92,9 @@ Route::post('/api/internal/wa-event', [InternalEngineController::class, 'handleE
 */
 Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Plans & Billing
+    Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
 
     // Devices Management
     Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');

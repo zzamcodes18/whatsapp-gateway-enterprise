@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-# Whatsapp Gateway Enterprise Sub-Module: Platform Updater
+# WHATSAPP GATEWAY ENTERPRISE — Sub-Module: Platform Updater
 # Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
@@ -9,23 +9,24 @@ set -e
 
 update_gateway() {
   print_banner
-  log_info "Memulai Modul Pembaruan (Updater) Whatsapp Gateway Enterprise..."
+  log_info "Memulai modul pembaruan WhatsApp Gateway Enterprise..."
 
   if [ ! -d "$INSTALL_DIR" ]; then
-    log_error "Platform Whatsapp Gateway Enterprise belum terinstall di $INSTALL_DIR!"
-    log_warning "Harap jalankan opsi Instalasi terlebih dahulu."
+    log_error "Platform WhatsApp Gateway Enterprise belum terinstall di ${INSTALL_DIR}!"
+    log_warning "Harap jalankan opsi Install terlebih dahulu."
     exit 1
   fi
 
-  echo -e "${C_BOLD}=== PEMBARUAN PLATFORM (BACKEND & FRONTEND) ===${C_RESET}"
-  log_info "Direktori Target: $INSTALL_DIR"
-  read -p "* Apakah Anda yakin ingin memperbarui kode ke versi terbaru? (y/N): " CONFIRM
-  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+  ui_section "PEMBARUAN PLATFORM (BACKEND & FRONTEND)"
+  log_info "Direktori target: ${C_BOLD}${INSTALL_DIR}${C_RESET}"
+
+  prompt_confirm "Tarik & terapkan versi terbaru dari repositori?" "N"
+  if [[ ! "$PROMPT_RESULT" =~ ^[Yy]$ ]]; then
     log_warning "Pembaruan dibatalkan oleh pengguna."
     exit 0
   fi
 
-  log_info "1/7. Menarik pembaruan kode terbaru dari Git / Repositori..."
+  ui_step 1 7 "Menarik pembaruan kode terbaru dari Git"
   git config --global --add safe.directory "$INSTALL_DIR" 2>/dev/null || true
   git config --global --add safe.directory "*" 2>/dev/null || true
   chown -R root:root "$INSTALL_DIR/.git" 2>/dev/null || true
@@ -36,36 +37,37 @@ update_gateway() {
     git config --local --add safe.directory "$INSTALL_DIR" 2>/dev/null || true
     git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || (git fetch --all && git reset --hard origin/main) 2>/dev/null || true
   else
-    log_warning "Direktori $INSTALL_DIR bukan repositori Git. Mengunduh source code dari repositori utama..."
+    log_warning "Direktori ${INSTALL_DIR} bukan repositori Git. Mengunduh source code dari repositori utama..."
     rm -rf /tmp/lpk_update_tmp 2>/dev/null || true
     git clone "$REPO_URL" /tmp/lpk_update_tmp
     cp -rf /tmp/lpk_update_tmp/* "$INSTALL_DIR"/
     rm -rf /tmp/lpk_update_tmp
   fi
 
-  log_info "2/7. Memperbarui dependensi Composer PHP..."
+  ui_step 2 7 "Memperbarui dependensi Composer PHP"
   export COMPOSER_ALLOW_SUPERUSER=1
   composer install --no-dev --optimize-autoloader --no-interaction --quiet
 
-  log_info "3/7. Memperbarui dependensi Node.js & Membangun ulang Aset Frontend (Vite/Tailwind)..."
+  ui_step 3 7 "Membangun ulang aset frontend (Vite + Tailwind)"
   npm install
   npm run build
 
-  log_info "4/7. Memperbarui dependensi Node.js WhatsApp Engine..."
+  ui_step 4 7 "Memperbarui dependensi WhatsApp Engine (Node.js)"
   cd "$INSTALL_DIR/wa-engine"
   npm install
   cd "$INSTALL_DIR"
 
-  log_info "5/7. Menjalankan migrasi database (bila ada tabel/kolom baru)..."
+  ui_step 5 7 "Menjalankan migrasi database"
   php artisan migrate --force 2>/dev/null || true
 
-  log_info "6/7. Membersihkan cache aplikasi (Config, Cache, Route, View)..."
+  ui_step 6 7 "Menyemai data default (Plan Free & Admin) & membersihkan cache"
+  php artisan db:seed --class=PlanSeeder --force 2>/dev/null || true
   php artisan config:clear
   php artisan cache:clear
   php artisan route:clear
   php artisan view:clear
 
-  log_info "7/7. Memperbarui hak akses folder & merestart service PM2..."
+  ui_step 7 7 "Memperbarui hak akses folder & merestart service PM2"
   chown -R www-data:www-data "$INSTALL_DIR"
   chmod -R 775 "$INSTALL_DIR/storage" "$INSTALL_DIR/bootstrap/cache"
 
@@ -74,13 +76,15 @@ update_gateway() {
   systemctl reload nginx 2>/dev/null || true
 
   echo ""
-  echo -e "${C_GREEN}${C_BOLD}================================================================================"
-  echo " 🎉 PEMBARUAN (UPDATE) WHATSAPP GATEWAY ENTERPRISE BERHASIL!"
-  echo "================================================================================"
-  echo -e "${C_RESET}"
-  echo -e "  • Versi Terbaru        : ${C_GREEN}Berhasil Diaplikasikan${C_RESET}"
-  echo -e "  • Frontend & Assets    : ${C_CYAN}Rebuilt (Vite + Tailwind)${C_RESET}"
-  echo -e "  • Service WaEngine     : ${C_GREEN}Restarted & Active${C_RESET}"
-  echo "================================================================================"
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
+  echo -e "  ${C_GREEN}${C_BOLD}  ✔   PEMBARUAN WHATSAPP GATEWAY ENTERPRISE BERHASIL!${C_RESET}"
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
+  echo ""
+  ui_row "Kode" "Versi terbaru berhasil diterapkan"
+  ui_row "Frontend" "Rebuilt (Vite + Tailwind)"
+  ui_row "Database" "Migrated + Seeded (Plan)"
+  ui_row "WA Engine" "Restarted & Active via PM2"
+  echo ""
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
   echo ""
 }

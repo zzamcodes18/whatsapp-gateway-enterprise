@@ -13,7 +13,7 @@ rm -f /tmp/wagateway_lib.sh /tmp/wagateway_mod_*.sh /tmp/lib.sh /tmp/mod_*.sh 2>
 
 # Base Environment & Config
 export GITHUB_SOURCE="main"
-export SCRIPT_RELEASE="v1.0.0"
+export SCRIPT_RELEASE="v1.1.0"
 export INSTALL_DIR="/var/www/whatsapp-gateway"
 export REPO_URL="https://github.com/muhammadtsaqf/whatsapp-gateway.git"
 
@@ -57,16 +57,18 @@ main_menu() {
   check_root
   check_os
 
-  echo -e "${C_BOLD}Silakan pilih aksi yang ingin Anda lakukan:${C_RESET}"
-  print_divider
-  echo -e " ${C_CYAN}[1]${C_RESET} Install Complete Platform (Laravel Panel + Node.js Engine)"
-  echo -e " ${C_CYAN}[2]${C_RESET} Update Platform (Auto Pull, Rebuild Frontend & Migrate Backend)"
-  echo -e " ${C_CYAN}[3]${C_RESET} Uninstall Platform & Clear Services"
-  echo -e " ${C_CYAN}[4]${C_RESET} Keluar (Exit)"
+  echo -e "  ${C_BOLD}Selamat datang di WhatsApp Gateway Enterprise Installer Suite.${C_RESET}"
+  echo -e "  ${C_DIM}Pilih salah satu aksi berikut untuk dijalankan pada server ini:${C_RESET}"
+  echo ""
+  echo -e "  ${C_CYAN}${C_BOLD}[1]${C_RESET} ${C_BOLD}Install${C_RESET}    ${C_DIM}${SYM_ARROW} Deploy platform lengkap (Laravel Panel + WA Engine)${C_RESET}"
+  echo -e "  ${C_CYAN}${C_BOLD}[2]${C_RESET} ${C_BOLD}Update${C_RESET}     ${C_DIM}${SYM_ARROW} Tarik versi terbaru, rebuild frontend & migrasi DB${C_RESET}"
+  echo -e "  ${C_CYAN}${C_BOLD}[3]${C_RESET} ${C_BOLD}Uninstall${C_RESET}  ${C_DIM}${SYM_ARROW} Hapus platform & bersihkan seluruh service${C_RESET}"
+  echo -e "  ${C_MAGENTA}${C_BOLD}[4]${C_RESET} ${C_BOLD}Exit${C_RESET}      ${C_DIM}${SYM_ARROW} Keluar dari installer suite${C_RESET}"
+  echo ""
   print_divider
   echo ""
 
-  read -p "Masukkan nomor pilihan Anda [1-4]: " ACTION
+  read -r -p "$(echo -e "  Masukkan nomor pilihan Anda ${C_DIM}[1-4]${C_RESET}: ")" ACTION
 
   case "$ACTION" in
     1)
@@ -82,11 +84,13 @@ main_menu() {
       uninstall_gateway
       ;;
     4)
-      log_info "Terima kasih telah menggunakan LAPAKOTP Installer."
+      echo ""
+      log_info "Terima kasih telah menggunakan WhatsApp Gateway Enterprise Installer."
+      echo ""
       exit 0
       ;;
     *)
-      log_error "Pilihan tidak valid!"
+      log_error "Pilihan tidak valid! Masukkan angka 1-4."
       exit 1
       ;;
   esac

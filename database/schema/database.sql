@@ -36,11 +36,71 @@ CREATE TABLE `users` (
   `daily_message_limit` int(10) UNSIGNED NOT NULL DEFAULT 500,
   `messages_sent_today` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `last_limit_reset_at` date DEFAULT NULL,
+  `plan_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `plan_expires_at` timestamp NULL DEFAULT NULL,
+  `monthly_message_limit` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `messages_sent_this_month` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `last_monthly_reset_at` date DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`)
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_plan_id_foreign` (`plan_id`),
+  CONSTRAINT `users_plan_id_foreign` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- Table structure for table `plans`
+-- --------------------------------------------------------
+DROP TABLE IF EXISTS `plans`;
+CREATE TABLE `plans` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `duration_days` int(10) UNSIGNED NOT NULL DEFAULT 30,
+  `device_limit` int(10) UNSIGNED NOT NULL DEFAULT 1,
+  `daily_message_limit` int(10) UNSIGNED NOT NULL DEFAULT 100,
+  `monthly_message_limit` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `plans_slug_unique` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+-- Dumping data for table `plans`
+-- --------------------------------------------------------
+INSERT INTO `plans` (`id`, `name`, `slug`, `description`, `price`, `duration_days`, `device_limit`, `daily_message_limit`, `monthly_message_limit`, `is_active`, `is_default`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin', 'Paket khusus admin sistem. Permanen dengan akses unlimited untuk semua fitur.', 0, 36500, 0, 0, 0, 1, 0, -1, NOW(), NOW()),
+(2, 'Free', 'free', 'Paket gratis permanen untuk mencoba layanan WhatsApp Gateway. Cocok untuk pengguna baru dan pengujian.', 0, 36500, 1, 100, 3000, 1, 1, 0, NOW(), NOW());
+
+-- --------------------------------------------------------
+-- Table structure for table `subscriptions`
+-- --------------------------------------------------------
+DROP TABLE IF EXISTS `subscriptions`;
+CREATE TABLE `subscriptions` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `plan_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
+  `starts_at` timestamp NULL DEFAULT NULL,
+  `ends_at` timestamp NULL DEFAULT NULL,
+  `assigned_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `subscriptions_user_id_index` (`user_id`),
+  KEY `subscriptions_plan_id_index` (`plan_id`),
+  KEY `subscriptions_status_index` (`status`),
+  CONSTRAINT `subscriptions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `subscriptions_plan_id_foreign` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

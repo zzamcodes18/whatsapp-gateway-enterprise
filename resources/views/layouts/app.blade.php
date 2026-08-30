@@ -164,6 +164,16 @@
                             <span>Integrasi & Callback</span>
                         </a>
 
+                        <a href="{{ route('plans.index') }}" class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('plans.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white' }}">
+                            <div class="flex items-center gap-2.5">
+                                <i data-lucide="rocket" class="w-4 h-4 flex-shrink-0"></i>
+                                <span>Upgrade Paket</span>
+                            </div>
+                            @if(!auth()->user()->plan || !auth()->user()->hasActivePlan() || (auth()->user()->plan && auth()->user()->plan->slug === 'free'))
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ request()->routeIs('plans.*') ? 'bg-white/20 text-white' : 'bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-200/50 dark:border-amber-500/20' }}">NEW</span>
+                            @endif
+                        </a>
+
                         <a href="{{ route('docs.index') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all {{ request()->routeIs('docs.*') ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white' }}">
                             <i data-lucide="book-open" class="w-4 h-4 flex-shrink-0"></i>
                             <span>Dokumentasi API</span>

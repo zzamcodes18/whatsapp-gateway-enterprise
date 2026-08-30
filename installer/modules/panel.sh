@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-# LAPAKOTP Installer Sub-Module: Main Gateway Panel & Microservice Engine
+# WHATSAPP GATEWAY ENTERPRISE — Sub-Module: Panel & Engine Installer
 # Developers: Muhammad Zaki (jakisoft) & Muhammad Tsaqif Noor Az Zamil (zzamcode)
 # ==============================================================================
 
@@ -9,83 +9,79 @@ set -e
 
 install_gateway_panel() {
   print_banner
-  log_info "Memulai Modul Instalasi Whatsapp Gateway Enterprise Panel & Engine..."
+  log_info "Memulai modul instalasi WhatsApp Gateway Enterprise Panel & Engine..."
 
   prompt_user_inputs
 
-  log_info "1/5. Installing System Dependencies..."
+  ui_step 1 5 "Menginstall dependensi sistem"
   install_dependencies
 
-  log_info "2/5. Configuring MariaDB / MySQL Database..."
+  ui_step 2 5 "Mengonfigurasi database MariaDB / MySQL"
   setup_database
 
-  log_info "3/5. Deploying Gateway Source Code..."
+  ui_step 3 5 "Mendeploy source code gateway"
   deploy_source_code
 
-  log_info "4/5. Configuring PM2, Nginx, and System Cron Jobs..."
+  ui_step 4 5 "Mengonfigurasi PM2, Nginx & cron jobs"
   setup_services
 
-  log_info "5/5. Finalizing Installation..."
+  ui_step 5 5 "Finalisasi instalasi"
   print_completion
 }
 
 prompt_user_inputs() {
-  print_divider
-  echo -e "${C_BOLD}=== KONFIGURASI INSTALASI PLATFORM ===${C_RESET}"
-  print_divider
+  ui_section "KONFIGURASI INSTALASI PLATFORM"
+  echo -e "  ${C_DIM}Lengkapi parameter berikut. Tekan Enter untuk menggunakan nilai default.${C_RESET}"
+  echo ""
 
-  read -p "* Masukkan Domain Aplikasi (misal: gateway.domain.com): " INPUT_DOMAIN
-  while [ -z "$INPUT_DOMAIN" ]; do
-    log_warning "Domain Aplikasi Wajib diisi!"
-    read -p "* Masukkan Domain Aplikasi (misal: gateway.domain.com): " INPUT_DOMAIN
-  done
-  # Clean domain from http:// or https:// if user accidentally inputs it
+  prompt_input "Masukkan Domain Aplikasi (misal: gateway.domain.com)"
+  INPUT_DOMAIN="$PROMPT_RESULT"
   DOMAIN_CLEAN=$(echo "$INPUT_DOMAIN" | sed -e 's|^[^/]*//||' -e 's|/.*$||')
   APP_URL="https://${DOMAIN_CLEAN}"
 
   DB_NAME="wagateway_db"
   DB_USER="wagateway_user"
 
-  read -p "* Masukkan Password Database MySQL: " INPUT_DB_PASS
-  while [ -z "$INPUT_DB_PASS" ]; do
-    log_warning "Password Database Wajib diisi!"
-    read -p "* Masukkan Password Database MySQL: " INPUT_DB_PASS
+  prompt_secret "Masukkan Password Database MySQL"
+  while [ -z "$PROMPT_RESULT" ]; do
+    log_warning "Password database wajib diisi. Silakan coba lagi."
+    prompt_secret "Masukkan Password Database MySQL"
   done
-  DB_PASS=$INPUT_DB_PASS
+  DB_PASS="$PROMPT_RESULT"
 
   WA_ENGINE_SECRET=$(generate_random_secret)
 
-  read -p "* Masukkan Nama Lengkap Master Admin [Master Admin]: " INPUT_ADMIN_NAME
-  ADMIN_NAME=${INPUT_ADMIN_NAME:-Master Admin}
+  prompt_input "Masukkan Nama Lengkap Master Admin" "Master Admin"
+  ADMIN_NAME="$PROMPT_RESULT"
 
-  read -p "* Masukkan Email Master Admin [admin@example.com]: " INPUT_ADMIN_EMAIL
-  while [ -z "$INPUT_ADMIN_EMAIL" ]; do
-    log_warning "Email Master Admin Wajib diisi!"
-    read -p "* Masukkan Email Master Admin [admin@example.com]: " INPUT_ADMIN_EMAIL
+  prompt_input "Masukkan Email Master Admin" "admin@example.com"
+  while ! echo "$PROMPT_RESULT" | grep -qE '^[^@]+@[^@]+\.[^@]+$'; do
+    log_warning "Format email tidak valid. Silakan coba lagi."
+    prompt_input "Masukkan Email Master Admin" "admin@example.com"
   done
-  ADMIN_EMAIL=$INPUT_ADMIN_EMAIL
+  ADMIN_EMAIL="$PROMPT_RESULT"
 
-  read -p "* Masukkan Password Master Admin [password123]: " INPUT_ADMIN_PASS
-  ADMIN_PASS=${INPUT_ADMIN_PASS:-password123}
+  prompt_secret "Masukkan Password Master Admin" "password123"
+  ADMIN_PASS="$PROMPT_RESULT"
 
-  read -p "* Masukkan Nomor WhatsApp Admin (opsional, misal 628123456789): " INPUT_ADMIN_PHONE
-  ADMIN_PHONE=$INPUT_ADMIN_PHONE
+  prompt_input_opt "Masukkan Nomor WhatsApp Admin (opsional, misal 628123456789)" ""
+  ADMIN_PHONE="$PROMPT_RESULT"
 
-  read -p "* Masukkan Email untuk SSL Certbot [pencet Enter jika samakan dengan email admin]: " INPUT_SSL_EMAIL
-  SSL_EMAIL=${INPUT_SSL_EMAIL:-$ADMIN_EMAIL}
+  prompt_input_opt "Masukkan Email untuk SSL Certbot (Enter = samakan dengan email admin)" "$ADMIN_EMAIL"
+  SSL_EMAIL="$PROMPT_RESULT"
 
   echo ""
-  log_info "Ringkasan Parameter Konfigurasi:"
-  echo "  - Domain APP       : $APP_URL"
-  echo "  - Database Name    : $DB_NAME"
-  echo "  - Database User    : $DB_USER"
-  echo "  - Target Directory : $INSTALL_DIR"
-  echo "  - Admin Name       : $ADMIN_NAME"
-  echo "  - Admin Email      : $ADMIN_EMAIL"
-  echo "  - Admin Password   : $ADMIN_PASS"
+  ui_section "RINGKASAN KONFIGURASI"
+  ui_row "Domain APP" "${APP_URL}"
+  ui_row "Database Name" "${DB_NAME}"
+  ui_row "Database User" "${DB_USER}"
+  ui_row "Target Directory" "${INSTALL_DIR}"
+  ui_row "Admin Name" "${ADMIN_NAME}"
+  ui_row "Admin Email" "${ADMIN_EMAIL}"
   echo ""
-  read -p "Lanjutkan proses instalasi utama? (y/N): " CONFIRM
-  if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+
+  prompt_confirm "Lanjutkan proses instalasi utama?" "N"
+  if [[ ! "$PROMPT_RESULT" =~ ^[Yy]$ ]]; then
     log_warning "Instalasi dibatalkan oleh pengguna."
     exit 0
   fi
@@ -191,6 +187,9 @@ deploy_source_code() {
   log_info "Membuat akun Master Admin kustom..."
   php artisan make:admin --name="${ADMIN_NAME}" --email="${ADMIN_EMAIL}" --password="${ADMIN_PASS}" --phone="${ADMIN_PHONE}"
 
+  log_info "Menyemai data default (Plan Free & Admin)..."
+  php artisan db:seed --class=PlanSeeder --force 2>/dev/null || true
+
   chown -R www-data:www-data "$INSTALL_DIR"
   chmod -R 775 "$INSTALL_DIR/storage" "$INSTALL_DIR/bootstrap/cache"
 }
@@ -252,20 +251,21 @@ EOF
 
 print_completion() {
   echo ""
-  echo -e "${C_GREEN}${C_BOLD}================================================================================"
-  echo " 🎉 INSTALASI WHATSAPP GATEWAY ENTERPRISE BERHASIL!"
-  echo "================================================================================"
-  echo -e "${C_RESET}"
-  echo " Detail Akses Portal Admin:"
-  echo -e "  • URL Portal Dashboard : ${C_CYAN}${APP_URL}${C_RESET}"
-  echo -e "  • Email Master Admin   : ${C_YELLOW}${ADMIN_EMAIL}${C_RESET}"
-  echo -e "  • Password Master Admin: ${C_YELLOW}password123${C_RESET}"
-  echo -e "  • Directory Instalasi  : ${C_CYAN}${INSTALL_DIR}${C_RESET}"
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
+  echo -e "  ${C_GREEN}${C_BOLD}  ✔   INSTALASI WHATSAPP GATEWAY ENTERPRISE BERHASIL!${C_RESET}"
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
   echo ""
-  echo " Status Engine & Database:"
-  echo -e "  • Database Name        : ${C_CYAN}${DB_NAME}${C_RESET}"
-  echo -e "  • WaEngine Service     : ${C_GREEN}Running via PM2 (Port 3000)${C_RESET}"
-  echo -e "  • WaEngine Secret Key  : ${C_YELLOW}${WA_ENGINE_SECRET}${C_RESET}"
-  echo "================================================================================"
+  echo -e "  ${C_BOLD}  Detail Akses Portal Admin:${C_RESET}"
+  ui_row "URL Portal" "${C_CYAN}${APP_URL}${C_RESET}"
+  ui_row "Email Admin" "${C_YELLOW}${ADMIN_EMAIL}${C_RESET}"
+  ui_row "Password Admin" "${C_YELLOW}${ADMIN_PASS}${C_RESET}"
+  ui_row "Directory" "${C_CYAN}${INSTALL_DIR}${C_RESET}"
+  echo ""
+  echo -e "  ${C_BOLD}  Status Engine & Database:${C_RESET}"
+  ui_row "Database" "${C_CYAN}${DB_NAME}${C_RESET}"
+  ui_row "WA Engine" "${C_GREEN}Running via PM2 (Port 3000)${C_RESET}"
+  ui_row "Secret Key" "${C_YELLOW}${WA_ENGINE_SECRET}${C_RESET}"
+  echo ""
+  echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
   echo ""
 }
