@@ -16,6 +16,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MessageTemplateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
+use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AntiBruteForce;
@@ -39,6 +40,12 @@ Route::post('/support', [PublicPageController::class, 'submitSupport'])->name('p
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
+    // OAuth Social Login Routes
+    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+    Route::get('/auth/github', [SocialAuthController::class, 'redirectToGithub'])->name('auth.github');
+    Route::get('/auth/github/callback', [SocialAuthController::class, 'handleGithubCallback'])->name('auth.github.callback');
+
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware(AntiBruteForce::class.':5,1')

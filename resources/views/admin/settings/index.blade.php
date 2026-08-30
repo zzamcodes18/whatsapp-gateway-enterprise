@@ -57,6 +57,13 @@
                 <i data-lucide="cpu" class="w-4 h-4"></i>
                 <span>Engine & Microservice</span>
             </button>
+
+            <button @click="tab = 'oauth'" type="button" 
+                :class="tab === 'oauth' ? 'border-blue-600 text-blue-600 font-bold bg-white shadow-2xs' : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 font-semibold'"
+                class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                <span>OAuth Social Login</span>
+            </button>
         </div>
 
         <!-- Setting Form Content -->
@@ -218,6 +225,94 @@
                         <label for="wa_engine_secret" class="app-label">Engine API Secret Key</label>
                         <input type="password" id="wa_engine_secret" name="wa_engine_secret" value="{{ old('wa_engine_secret', $settings['wa_engine_secret'] ?? 'wagateway_secret_key_2026') }}" class="app-input font-mono text-xs" placeholder="wagateway_secret_key_2026">
                         <p class="text-[11px] text-slate-400">Secret key validasi autentikasi internal antara Laravel dan Node.js.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: OAUTH SOCIAL LOGIN (GOOGLE & GITHUB) -->
+            <div x-show="tab === 'oauth'" class="space-y-6" style="display: none;">
+                <div class="border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-sm text-slate-900">Pengaturan Login / Register via OAuth</h3>
+                    <p class="text-xs text-slate-500">Aktifkan atau nonaktifkan fitur SSO (Single Sign-On) Google dan GitHub untuk pengguna.</p>
+                </div>
+
+                <!-- Google Auth Settings -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs">
+                                G
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-800">Google OAuth 2.0</h4>
+                                <p class="text-[11px] text-slate-500">Login & Register menggunakan akun Google</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="space-y-1.5">
+                            <label for="enable_google_login" class="app-label">Status Google Login</label>
+                            <select id="enable_google_login" name="enable_google_login" class="app-input">
+                                <option value="true" {{ old('enable_google_login', $settings['enable_google_login'] ?? 'false') === 'true' ? 'selected' : '' }}>✓ Aktif</option>
+                                <option value="false" {{ old('enable_google_login', $settings['enable_google_login'] ?? 'false') === 'false' ? 'selected' : '' }}>✕ Nonaktif</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="google_client_id" class="app-label">Google Client ID</label>
+                            <input type="text" id="google_client_id" name="google_client_id" value="{{ old('google_client_id', $settings['google_client_id'] ?? '') }}" class="app-input font-mono text-xs" placeholder="xxxxxx.apps.googleusercontent.com">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="google_client_secret" class="app-label">Google Client Secret</label>
+                            <input type="password" id="google_client_secret" name="google_client_secret" value="{{ old('google_client_secret', $settings['google_client_secret'] ?? '') }}" class="app-input font-mono text-xs" placeholder="GOCSPX-xxxxxx">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-lg border border-slate-200 text-xs text-slate-600 space-y-1">
+                        <p class="font-semibold text-slate-800">Authorized Redirect URI (Google Cloud Console):</p>
+                        <code class="block font-mono bg-slate-100 p-2 rounded text-[11px] text-blue-700 select-all">{{ url('/auth/google/callback') }}</code>
+                    </div>
+                </div>
+
+                <!-- GitHub Auth Settings -->
+                <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+                                GH
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-800">GitHub OAuth App</h4>
+                                <p class="text-[11px] text-slate-500">Login & Register menggunakan akun GitHub</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="space-y-1.5">
+                            <label for="enable_github_login" class="app-label">Status GitHub Login</label>
+                            <select id="enable_github_login" name="enable_github_login" class="app-input">
+                                <option value="true" {{ old('enable_github_login', $settings['enable_github_login'] ?? 'false') === 'true' ? 'selected' : '' }}>✓ Aktif</option>
+                                <option value="false" {{ old('enable_github_login', $settings['enable_github_login'] ?? 'false') === 'false' ? 'selected' : '' }}>✕ Nonaktif</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="github_client_id" class="app-label">GitHub Client ID</label>
+                            <input type="text" id="github_client_id" name="github_client_id" value="{{ old('github_client_id', $settings['github_client_id'] ?? '') }}" class="app-input font-mono text-xs" placeholder="Iv1.xxxxxx">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label for="github_client_secret" class="app-label">GitHub Client Secret</label>
+                            <input type="password" id="github_client_secret" name="github_client_secret" value="{{ old('github_client_secret', $settings['github_client_secret'] ?? '') }}" class="app-input font-mono text-xs" placeholder="xxxxxx">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-lg border border-slate-200 text-xs text-slate-600 space-y-1">
+                        <p class="font-semibold text-slate-800">Authorization Callback URL (GitHub Developer Settings):</p>
+                        <code class="block font-mono bg-slate-100 p-2 rounded text-[11px] text-blue-700 select-all">{{ url('/auth/github/callback') }}</code>
                     </div>
                 </div>
             </div>
