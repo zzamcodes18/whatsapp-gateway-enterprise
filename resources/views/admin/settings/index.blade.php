@@ -163,8 +163,8 @@
             <!-- SECTION 3: LIMIT & PENDAFTARAN (Tab: Pengguna & SSO) -->
             <div x-show="tab === 'users'" class="space-y-5" style="display: none;">
                 <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
-                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Kebijakan Registrasi & Limit Default</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Atur status pendaftaran akun publik dan jatah limit awal bagi pengguna baru.</p>
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Kebijakan Registrasi</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Atur status pendaftaran akun publik. Limit user baru otomatis mengikuti paket default (Free).</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -186,16 +186,11 @@
                         <p class="text-[11px] text-slate-400 dark:text-slate-500">Jika ditutup, halaman register tidak dapat diakses publik.</p>
                     </div>
 
-                    <div class="space-y-1.5">
-                        <label for="default_device_limit" class="app-label">Default Limit Device / Perangkat</label>
-                        <input type="number" min="0" id="default_device_limit" name="default_device_limit" value="{{ old('default_device_limit', $settings['default_device_limit'] ?? 3) }}" class="app-input" placeholder="3">
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Jumlah perangkat WA yang boleh ditambahkan user baru. Isikan <strong>0 untuk Unlimited</strong>.</p>
-                    </div>
-
-                    <div class="space-y-1.5">
-                        <label for="default_daily_message_limit" class="app-label">Default Kuota Pesan Harian</label>
-                        <input type="number" min="0" id="default_daily_message_limit" name="default_daily_message_limit" value="{{ old('default_daily_message_limit', $settings['default_daily_message_limit'] ?? 500) }}" class="app-input" placeholder="500">
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Batas pesan per hari untuk user baru. Isikan <strong>0 untuk Unlimited</strong>.</p>
+                    <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 md:col-span-2 flex items-center gap-3">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0"></i>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Limit device & kuota pesan user baru sekarang ditentukan oleh <strong class="text-slate-700 dark:text-slate-300">paket default (Free)</strong> dari menu <strong class="text-slate-700 dark:text-slate-300">Manajemen Paket</strong>. Ubah limit di sana jika ingin menyesuaikan kuota pendaftar baru.
+                        </p>
                     </div>
 
                 </div>
@@ -299,6 +294,54 @@
                         <input type="password" id="wa_engine_secret" name="wa_engine_secret" value="{{ old('wa_engine_secret', $settings['wa_engine_secret'] ?? 'wagateway_secret_key_2026') }}" class="app-input font-mono text-xs" placeholder="wagateway_secret_key_2026">
                         <p class="text-[11px] text-slate-400 dark:text-slate-500">Secret key validasi autentikasi internal antara Laravel dan Node.js.</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- SECTION 7: CLOUDFLARE TURNSTILE (Tab: Server & Integrasi) -->
+            <div x-show="tab === 'server'" class="space-y-5" style="display: none;">
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-white">Cloudflare Turnstile (Captcha)</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Proteksi anti-bot untuk halaman login menggunakan Cloudflare Turnstile.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div x-data="{ enableTs: {{ old('enable_turnstile', $settings['enable_turnstile'] ?? 'false') === 'true' ? 'true' : 'false' }} }" class="space-y-1.5">
+                        <label class="app-label">Status Turnstile</label>
+                        <input type="hidden" name="enable_turnstile" :value="enableTs ? 'true' : 'false'">
+                        
+                        <div class="flex items-center gap-3 pt-1">
+                            <button type="button" 
+                                    @click="enableTs = !enableTs" 
+                                    :class="enableTs ? 'bg-emerald-600' : 'bg-slate-300 dark:bg-slate-700'"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none shadow-2xs">
+                                <span :class="enableTs ? 'translate-x-5' : 'translate-x-0'"
+                                      class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"></span>
+                            </button>
+                            <span class="text-xs font-bold transition-colors" :class="enableTs ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'" x-text="enableTs ? '✓ Aktif' : '✕ Nonaktif'"></span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Widget captcha hanya muncul di halaman login.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="turnstile_site_key" class="app-label">Site Key</label>
+                        <input type="text" id="turnstile_site_key" name="turnstile_site_key" value="{{ old('turnstile_site_key', $settings['turnstile_site_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="0x4AAAAAAA...">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Public key dari Cloudflare Dashboard &rarr; Turnstile.</p>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label for="turnstile_secret_key" class="app-label">Secret Key</label>
+                        <input type="password" id="turnstile_secret_key" name="turnstile_secret_key" value="{{ old('turnstile_secret_key', $settings['turnstile_secret_key'] ?? '') }}" class="app-input font-mono text-xs" placeholder="0x4AAAAAAA...">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Private key untuk verifikasi server-side.</p>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-white dark:bg-[#0D1526] rounded-lg border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
+                    <p class="font-semibold text-slate-800 dark:text-slate-200">Cara mendapatkan key:</p>
+                    <ol class="list-decimal ml-4 space-y-0.5 text-[11px]">
+                        <li>Buka <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" class="text-blue-600 dark:text-blue-400 underline">Cloudflare Dashboard &rarr; Turnstile</a></li>
+                        <li>Klik <strong>Add site</strong> & masukkan domain aplikasi Anda</li>
+                        <li>Salin <strong>Site Key</strong> & <strong>Secret Key</strong> ke kolom di samping</li>
+                    </ol>
                 </div>
             </div>
 

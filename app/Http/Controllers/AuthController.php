@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\WaEngineService;
+use App\Services\TurnstileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,13 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
+
+        // Verifikasi Cloudflare Turnstile (jika aktif)
+        if (TurnstileService::isEnabled() && ! TurnstileService::verify($request->input('cf-turnstile-response'))) {
+            return back()
+                ->withInput($request->only('email', 'remember'))
+                ->withErrors(['cf-turnstile-response' => 'Verifikasi keamanan Cloudflare gagal. Silakan selesaikan tantangan dan coba lagi.']);
+        }
 
         $throttleKey = 'login_attempt:'.sha1(Str::lower($credentials['email']).'|'.$request->ip());
 
@@ -191,9 +199,6 @@ class AuthController extends Controller
             return back()->withErrors(['otp' => 'Kode OTP yang Anda masukkan tidak cocok. Silakan periksa kembali WhatsApp Anda.']);
         }
 
-        $defaultDeviceLimit = (int) SystemSetting::get('default_device_limit', 3);
-        $defaultDailyLimit = (int) SystemSetting::get('default_daily_message_limit', 500);
-
         // Assign plan default (Free) jika tersedia — limit akan otomatis mengikuti plan
         $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
 
@@ -206,8 +211,8 @@ class AuthController extends Controller
             'is_active' => true,
             'plan_id' => $defaultPlan?->id,
             'plan_expires_at' => $defaultPlan ? now()->addDays($defaultPlan->duration_days) : null,
-            'device_limit' => $defaultDeviceLimit,
-            'daily_message_limit' => $defaultDailyLimit,
+            'device_limit' => $defaultPlan?->device_limit ?? 3,
+            'daily_message_limit' => $defaultPlan?->daily_message_limit ?? 500,
             'last_login_at' => now(),
             'last_login_ip' => $request->ip(),
         ]);

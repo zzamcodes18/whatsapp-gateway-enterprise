@@ -273,9 +273,6 @@ class SocialAuthController extends Controller
             return redirect()->route('login')->with('error', 'Pendaftaran pengguna baru sedang ditutup oleh Administrator.');
         }
 
-        $deviceLimit = (int) SystemSetting::get('default_device_limit', 1);
-        $dailyMessageLimit = (int) SystemSetting::get('default_daily_message_limit', 100);
-
         // Assign plan default (Free) jika tersedia — limit akan otomatis mengikuti plan
         $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
 
@@ -288,8 +285,8 @@ class SocialAuthController extends Controller
             'avatar' => $picture,
             'plan_id' => $defaultPlan?->id,
             'plan_expires_at' => $defaultPlan ? now()->addDays($defaultPlan->duration_days) : null,
-            'device_limit' => $deviceLimit,
-            'daily_message_limit' => $dailyMessageLimit,
+            'device_limit' => $defaultPlan?->device_limit ?? 3,
+            'daily_message_limit' => $defaultPlan?->daily_message_limit ?? 500,
             $column => $providerId,
         ]);
 

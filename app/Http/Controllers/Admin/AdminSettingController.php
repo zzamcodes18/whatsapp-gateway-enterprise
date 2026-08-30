@@ -27,8 +27,7 @@ class AdminSettingController extends Controller
             'site_keywords' => ['nullable', 'string', 'max:255'],
             'support_email' => ['nullable', 'email', 'max:100'],
             'support_whatsapp' => ['nullable', 'string', 'max:30'],
-            'default_device_limit' => ['required', 'integer', 'min:0'],
-            'default_daily_message_limit' => ['required', 'integer', 'min:0'],
+            'allow_registration' => ['nullable', 'string'],
             'allow_registration' => ['required', 'in:true,false'],
             'smtp_host' => ['nullable', 'string', 'max:255'],
             'smtp_port' => ['nullable', 'integer'],
@@ -45,6 +44,9 @@ class AdminSettingController extends Controller
             'github_client_secret' => ['nullable', 'string', 'max:255'],
             'wa_engine_url' => ['nullable', 'url', 'max:255'],
             'wa_engine_secret' => ['nullable', 'string', 'max:255'],
+            'enable_turnstile' => ['nullable', 'in:true,false'],
+            'turnstile_site_key' => ['nullable', 'string', 'max:255'],
+            'turnstile_secret_key' => ['nullable', 'string', 'max:255'],
             'site_logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:2048'],
             'site_favicon' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,ico,webp', 'max:1024'],
         ]);
@@ -55,8 +57,7 @@ class AdminSettingController extends Controller
             'site_keywords',
             'support_email',
             'support_whatsapp',
-            'default_device_limit',
-            'default_daily_message_limit',
+            'allow_registration',
             'allow_registration',
             'smtp_host',
             'smtp_port',
@@ -73,6 +74,9 @@ class AdminSettingController extends Controller
             'github_client_secret',
             'wa_engine_url',
             'wa_engine_secret',
+            'enable_turnstile',
+            'turnstile_site_key',
+            'turnstile_secret_key',
         ];
 
         foreach ($keysToUpdate as $key) {
