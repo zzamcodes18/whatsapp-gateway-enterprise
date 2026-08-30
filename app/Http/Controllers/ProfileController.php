@@ -81,12 +81,10 @@ class ProfileController extends Controller
         }
 
         $file = $request->file('avatar');
-        $extension = $file->getClientOriginalExtension() ?: 'png';
-        $filename = 'avatar_' . $user->id . '_' . time() . '.' . $extension;
-        $path = $file->storeAs('avatars', $filename, 'public');
-        $avatarUrl = '/storage/' . $path;
+        $mime = $file->getMimeType() ?: 'image/png';
+        $base64Data = 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($file->getRealPath()));
 
-        $user->update(['avatar' => $avatarUrl]);
+        $user->update(['avatar' => $base64Data]);
         $user->logActivity('user.avatar_update', 'Memperbarui foto profil baru');
 
         return redirect()->back()->with('success', 'Foto profil berhasil diperbarui!');

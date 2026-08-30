@@ -210,8 +210,8 @@
                             <!-- Category & Name -->
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
-                                    <select name="category" x-model="formData.category" class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Kategori <span class="text-rose-500">*</span></label>
+                                    <select name="category" x-model="formData.category" required class="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
                                         <option value="otp">OTP Code</option>
                                         <option value="promo">Promosi</option>
                                         <option value="notification">Notifikasi</option>
@@ -238,18 +238,8 @@
 
                             <!-- Body Content Textarea -->
                             <div>
-                                <div class="flex items-center justify-between mb-1">
-                                    <label class="block text-xs font-bold text-slate-700">Isi Pesan Template <span class="text-rose-500">*</span></label>
-                                    
-                                    <!-- Quick Insert Tags -->
-                                    <div class="flex items-center gap-1">
-                                        <span class="text-[10px] text-slate-400 font-semibold">Sisipkan:</span>
-                                        <button type="button" @click="insertTag('{otp}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {otp}</button>
-                                        <button type="button" @click="insertTag('{name}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {name}</button>
-                                        <button type="button" @click="insertTag('{code}')" class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-mono font-bold hover:bg-blue-100 cursor-pointer">+ {code}</button>
-                                    </div>
-                                </div>
-                                <textarea name="content" x-model="formData.content" rows="4" required placeholder="Halo {name}, kode OTP rahasia Anda adalah *{otp}*. Berlaku selama 5 menit. Jangan bagikan kepada siapa pun." class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-sans leading-relaxed"></textarea>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Isi Pesan Template <span class="text-rose-500">*</span></label>
+                                <textarea name="content" x-model="formData.content" rows="4" required placeholder="Halo, terima kasih telah mendaftar. Kode verifikasi Anda adalah 884920. Berlaku selama 5 menit." class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-sans leading-relaxed"></textarea>
                             </div>
 
                             <!-- Footer Text -->
@@ -294,7 +284,7 @@
                                                 <!-- Dynamic Value Input -->
                                                 <div class="col-span-10 sm:col-span-3">
                                                     <template x-if="btn.type === 'copy'">
-                                                        <input type="text" :name="'buttons[' + index + '][code]'" x-model="btn.code" placeholder="Kode / {otp}" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
+                                                        <input type="text" :name="'buttons[' + index + '][code]'" x-model="btn.code" placeholder="Kode / 884920" class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
                                                     </template>
                                                     <template x-if="btn.type === 'url'">
                                                         <input type="text" :name="'buttons[' + index + '][url]'" x-model="btn.url" placeholder="https://..." class="w-full text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1.5 outline-none font-mono">
@@ -568,7 +558,7 @@ function templateManager() {
                 content: '',
                 footer: '',
                 buttons: [
-                    { type: 'copy', text: 'Salin Kode', code: '{otp}' }
+                    { type: 'copy', text: 'Salin Kode', code: '884920' }
                 ]
             };
             this.showFormModal = true;
@@ -610,7 +600,7 @@ function templateManager() {
                 this.formData.buttons.push({
                     type: 'copy',
                     text: 'Salin Kode',
-                    code: '{otp}',
+                    code: '884920',
                     url: '',
                     phone: '',
                     id: ''

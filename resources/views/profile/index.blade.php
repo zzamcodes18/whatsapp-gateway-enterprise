@@ -17,7 +17,7 @@
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                 
                 <!-- Avatar Circle with Interactive Direct Upload Form -->
-                <div x-data="{ uploading: false }" class="relative group flex-shrink-0">
+                <div x-data="{ uploading: false, imgError: false }" class="relative group flex-shrink-0">
                     <form x-ref="avatarForm" action="{{ route('profile.update-avatar') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -28,7 +28,10 @@
 
                     <div class="relative cursor-pointer" @click="$refs.avatarInput.click()">
                         @if($user->avatar)
-                            <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-20 h-20 rounded-2xl object-cover shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
+                            <img x-show="!imgError" src="{{ $user->avatar }}" @error="imgError = true" alt="{{ $user->name }}" class="w-20 h-20 rounded-2xl object-cover shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
+                            <div x-show="imgError" style="display: none;" class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-extrabold text-2xl uppercase shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
+                                {{ substr($user->name ?? 'U', 0, 2) }}
+                            </div>
                         @else
                             <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center font-extrabold text-2xl uppercase shadow-md border-2 border-white ring-2 ring-blue-100 group-hover:brightness-90 transition-all">
                                 {{ substr($user->name ?? 'U', 0, 2) }}
