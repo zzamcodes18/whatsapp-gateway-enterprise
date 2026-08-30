@@ -321,7 +321,7 @@
             </div>
         </div>
 
-        <!-- 4. HUBUNGKAN AKUN SOSIAL (GOOGLE & GITHUB) -->
+        <!-- 4. HUBUNGKAN AKUN (GOOGLE & GITHUB) -->
         @php
             $enableGoogle = \App\Models\SystemSetting::get('enable_google_login', 'false') === 'true';
             $enableGithub = \App\Models\SystemSetting::get('enable_github_login', 'false') === 'true';
@@ -331,11 +331,11 @@
             <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
                 <div class="flex items-center gap-2.5">
                     <div class="w-9 h-9 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center font-bold shadow-2xs">
-                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                        <i data-lucide="link-2" class="w-4 h-4"></i>
                     </div>
                     <div>
-                        <h3 class="font-bold text-sm text-slate-900">Hubungkan Akun Sosial</h3>
-                        <p class="text-[11px] text-slate-500 font-medium">Tautkan akun Google atau GitHub Anda untuk login instan.</p>
+                        <h3 class="font-bold text-sm text-slate-900">Akun Terhubung (OAuth SSO)</h3>
+                        <p class="text-[11px] text-slate-500 font-medium">Tautkan akun Google atau GitHub Anda untuk akses login cepat dan praktis.</p>
                     </div>
                 </div>
             </div>

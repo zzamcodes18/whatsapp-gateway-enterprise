@@ -62,7 +62,7 @@
                 :class="tab === 'oauth' ? 'border-blue-600 text-blue-600 font-bold bg-white shadow-2xs' : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 font-semibold'"
                 class="px-4 py-2.5 border-b-2 rounded-t-xl text-xs sm:text-sm transition-all flex items-center gap-2 flex-shrink-0 cursor-pointer">
                 <i data-lucide="share-2" class="w-4 h-4"></i>
-                <span>OAuth Social Login</span>
+                <span>OAuth & SSO Login</span>
             </button>
         </div>
 
@@ -237,11 +237,11 @@
                 </div>
             </div>
 
-            <!-- TAB 5: OAUTH SOCIAL LOGIN (GOOGLE & GITHUB) -->
+            <!-- TAB 5: OAUTH & SINGLE SIGN-ON (GOOGLE & GITHUB) -->
             <div x-show="tab === 'oauth'" class="space-y-6" style="display: none;">
                 <div class="border-b border-slate-100 pb-3">
-                    <h3 class="font-bold text-sm text-slate-900">Pengaturan Login / Register via OAuth</h3>
-                    <p class="text-xs text-slate-500">Aktifkan atau nonaktifkan fitur SSO (Single Sign-On) Google dan GitHub untuk pengguna.</p>
+                    <h3 class="font-bold text-sm text-slate-900">Pengaturan Single Sign-On (SSO)</h3>
+                    <p class="text-xs text-slate-500">Aktifkan atau nonaktifkan fitur SSO Google dan GitHub untuk pengguna.</p>
                 </div>
 
                 <!-- Google Auth Settings -->

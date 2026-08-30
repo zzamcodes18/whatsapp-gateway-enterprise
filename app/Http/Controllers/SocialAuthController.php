@@ -16,7 +16,7 @@ class SocialAuthController extends Controller
     /**
      * Redirect to Google OAuth.
      */
-    public function redirectToGoogle(): RedirectResponse
+    public function redirectToGoogle(Request $request): RedirectResponse
     {
         $enabled = SystemSetting::get('enable_google_login', 'false') === 'true';
         $clientId = SystemSetting::get('google_client_id');
@@ -26,7 +26,11 @@ class SocialAuthController extends Controller
         }
 
         $state = Str::random(40);
-        session(['oauth_state' => $state]);
+        $action = $request->query('action', 'login');
+        session([
+            'oauth_state' => $state,
+            'oauth_action' => $action,
+        ]);
 
         $query = http_build_query([
             'client_id' => $clientId,
@@ -88,7 +92,8 @@ class SocialAuthController extends Controller
                 return redirect()->route('login')->with('error', 'Email dari akun Google tidak ditemukan.');
             }
 
-            return $this->authenticateSocialUser($request, 'google', $googleId, $email, $name, $picture);
+            $action = session('oauth_action', 'login');
+            return $this->authenticateSocialUser($request, 'google', $googleId, $email, $name, $picture, $action);
 
         } catch (\Throwable $e) {
             return redirect()->route('login')->with('error', 'Terjadi kesalahan sistem saat login Google: ' . $e->getMessage());
@@ -98,7 +103,7 @@ class SocialAuthController extends Controller
     /**
      * Redirect to GitHub OAuth.
      */
-    public function redirectToGithub(): RedirectResponse
+    public function redirectToGithub(Request $request): RedirectResponse
     {
         $enabled = SystemSetting::get('enable_github_login', 'false') === 'true';
         $clientId = SystemSetting::get('github_client_id');
@@ -108,7 +113,11 @@ class SocialAuthController extends Controller
         }
 
         $state = Str::random(40);
-        session(['oauth_state' => $state]);
+        $action = $request->query('action', 'login');
+        session([
+            'oauth_state' => $state,
+            'oauth_action' => $action,
+        ]);
 
         $query = http_build_query([
             'client_id' => $clientId,
@@ -180,7 +189,8 @@ class SocialAuthController extends Controller
                 return redirect()->route('login')->with('error', 'Email dari akun GitHub tidak ditemukan.');
             }
 
-            return $this->authenticateSocialUser($request, 'github', $githubId, $email, $name, $picture);
+            $action = session('oauth_action', 'login');
+            return $this->authenticateSocialUser($request, 'github', $githubId, $email, $name, $picture, $action);
 
         } catch (\Throwable $e) {
             return redirect()->route('login')->with('error', 'Terjadi kesalahan sistem saat login GitHub: ' . $e->getMessage());
@@ -190,7 +200,7 @@ class SocialAuthController extends Controller
     /**
      * Common Authenticate Social User logic.
      */
-    protected function authenticateSocialUser(Request $request, string $provider, string $providerId, string $email, string $name, ?string $picture): RedirectResponse
+    protected function authenticateSocialUser(Request $request, string $provider, string $providerId, string $email, string $name, ?string $picture, string $action = 'login'): RedirectResponse
     {
         $column = $provider . '_id';
 
@@ -216,7 +226,7 @@ class SocialAuthController extends Controller
             return redirect()->route('profile.edit')->with('success', 'Akun ' . ucfirst($provider) . ' berhasil dihubungkan ke profil Anda!');
         }
 
-        // B. JIKA PENGGUNA BELUM LOGIN (Login / Register via OAuth)
+        // B. JIKA PENGGUNA BELUM LOGIN
         // 1. Cari user berdasarkan provider_id
         $user = User::where($column, $providerId)->first();
 
@@ -225,7 +235,7 @@ class SocialAuthController extends Controller
             $user = User::where('email', $email)->first();
         }
 
-        // 3. Jika user sudah ada
+        // 3. Jika user sudah ada -> Otomatis tautkan & Loginkan (Tidak duplikat)
         if ($user) {
             if (! $user->is_active) {
                 return redirect()->route('login')->with('error', 'Akun Anda dinonaktifkan oleh administrator.');
@@ -251,7 +261,13 @@ class SocialAuthController extends Controller
             return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 
-        // 4. Jika user belum terdaftar -> buat akun baru
+        // 4. Jika user BELUM terdaftar
+        // Jika mencoba dari Halaman LOGIN -> Tolak dan berikan notifikasi
+        if ($action === 'login') {
+            return redirect()->route('login')->with('error', 'Akun dengan email (' . $email . ') belum terdaftar. Silakan gunakan halaman pendaftaran (Sign Up) terlebih dahulu.');
+        }
+
+        // Jika mencoba dari Halaman REGISTER -> Buat akun baru
         $allowRegister = SystemSetting::get('allow_registration', 'true') === 'true';
         if (! $allowRegister) {
             return redirect()->route('login')->with('error', 'Pendaftaran pengguna baru sedang ditutup oleh Administrator.');
