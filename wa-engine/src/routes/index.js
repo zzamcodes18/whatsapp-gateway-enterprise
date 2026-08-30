@@ -8,6 +8,7 @@ import {
 import {
   sendTextMessage,
   sendMediaMessage,
+  sendInteractiveMessage,
 } from '../controllers/message.controller.js';
 
 const router = Router();
@@ -33,5 +34,7 @@ router.post('/session/:sessionId/logout', logoutSession);
 // Message endpoints
 router.post('/message/send-text', sendTextMessage);
 router.post('/message/send-media', sendMediaMessage);
+router.post('/message/send-interactive', sendInteractiveMessage);
+router.post('/message/send-button', sendInteractiveMessage);
 
 export default router;

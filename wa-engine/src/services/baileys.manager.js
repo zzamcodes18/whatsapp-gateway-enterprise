@@ -12,6 +12,7 @@ import fs from 'fs';
 import QRCode from 'qrcode';
 import axios from 'axios';
 import { config } from '../config/index.js';
+import { Button } from './button.builder.js';
 
 class BaileysManager {
   constructor() {
@@ -316,6 +317,64 @@ class BaileysManager {
       messageId: result?.key?.id,
       remoteJid: jid,
       timestamp: result?.messageTimestamp,
+    };
+  }
+
+  async sendInteractiveMessage(sessionId, targetPhone, options) {
+    const session = this.sessions.get(sessionId);
+    if (!session || session.status !== 'connected' || !session.sock) {
+      throw new Error(`Device session '${sessionId}' is not connected`);
+    }
+
+    const cleanPhone = targetPhone.replace(/[^0-9]/g, '');
+    const jid = cleanPhone.includes('@s.whatsapp.net') || cleanPhone.includes('@g.us')
+      ? cleanPhone
+      : `${cleanPhone}@s.whatsapp.net`;
+
+    const btn = new Button(session.sock);
+
+    if (options.body) btn.setBody(options.body);
+    if (options.footer) btn.setFooter(options.footer);
+    if (options.title) btn.setTitle(options.title);
+    if (options.subtitle) btn.setSubtitle(options.subtitle);
+
+    if (options.image) btn.setImage(options.image);
+    else if (options.video) btn.setVideo(options.video);
+    else if (options.document) btn.setDocument(options.document);
+
+    if (Array.isArray(options.buttons)) {
+      for (const b of options.buttons) {
+        if (b.type === 'reply' || b.name === 'quick_reply') {
+          btn.addReply(b.text || b.display_text, b.id || b.displayText || '');
+        } else if (b.type === 'url' || b.name === 'cta_url') {
+          btn.addUrl(b.text || b.display_text, b.url || '');
+        } else if (b.type === 'copy' || b.name === 'cta_copy') {
+          btn.addCopy(b.text || b.display_text, b.code || b.copy_code || '');
+        } else if (b.type === 'call' || b.name === 'cta_call') {
+          btn.addCall(b.text || b.display_text, b.phone || b.id || '');
+        } else if (b.type === 'select' || b.name === 'single_select') {
+          btn.addSelection(b.title || 'Pilihan');
+          if (Array.isArray(b.sections)) {
+            for (const sec of b.sections) {
+              btn.makeSection(sec.title || '', sec.highlight_label || '');
+              if (Array.isArray(sec.rows)) {
+                for (const row of sec.rows) {
+                  btn.makeRow(row.header || '', row.title || '', row.description || '', row.id || '');
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const msg = await btn.send(jid);
+
+    return {
+      success: true,
+      messageId: msg.key.id,
+      remoteJid: jid,
+      timestamp: msg.messageTimestamp,
     };
   }
 

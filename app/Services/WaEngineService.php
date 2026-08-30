@@ -118,4 +118,20 @@ class WaEngineService
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
+
+    public function sendInteractiveMessage(string $sessionId, string $phone, array $payload): array
+    {
+        try {
+            $response = $this->client()->post('/message/send-interactive', array_merge([
+                'sessionId' => $sessionId,
+                'phone' => $phone,
+            ], $payload));
+
+            return $response->json() ?? ['success' => false, 'message' => 'Failed to send interactive button message'];
+        } catch (\Throwable $e) {
+            Log::error('WaEngineService sendInteractiveMessage error: '.$e->getMessage());
+
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
 }

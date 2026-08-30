@@ -41,3 +41,33 @@ export const sendMediaMessage = async (req, res) => {
     });
   }
 };
+
+export const sendInteractiveMessage = async (req, res) => {
+  try {
+    const { sessionId, phone, title, subtitle, body, footer, image, video, document, buttons } = req.body;
+
+    if (!sessionId || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'sessionId and phone are required',
+      });
+    }
+
+    const result = await baileysManager.sendInteractiveMessage(sessionId, phone, {
+      title,
+      subtitle,
+      body,
+      footer,
+      image,
+      video,
+      document,
+      buttons,
+    });
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

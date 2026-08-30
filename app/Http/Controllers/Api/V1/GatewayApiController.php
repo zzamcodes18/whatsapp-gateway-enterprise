@@ -131,4 +131,78 @@ class GatewayApiController extends Controller
             'status' => $messageRecord->status,
         ], ($result['success'] ?? false) ? 200 : 500);
     }
+
+    public function sendButtonMessage(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'device_id' => ['required', 'integer'],
+            'phone' => ['required', 'string', 'min:8'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'body' => ['nullable', 'string'],
+            'footer' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'string', 'url'],
+            'video' => ['nullable', 'string', 'url'],
+            'document' => ['nullable', 'string', 'url'],
+            'buttons' => ['required', 'array', 'min:1'],
+        ]);
+
+        $user = $request->user();
+
+        if (! $user->canSendMessage()) {
+            return response()->json([
+                'success' => false,
+                'message' => "Daily message quota reached ({$user->daily_message_limit} msg/day).",
+            ], 429);
+        }
+
+        $device = $user->devices()->where('id', $validated['device_id'])->first();
+
+        if (! $device || ! $device->isConnected()) {
+            return response()->json(['success' => false, 'message' => 'Device not found or not connected'], 400);
+        }
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $validated['phone']);
+        if (str_starts_with($cleanPhone, '08')) {
+            $cleanPhone = '62'.substr($cleanPhone, 1);
+        }
+
+        $result = $this->engineService->sendInteractiveMessage(
+            $device->session_id,
+            $cleanPhone,
+            [
+                'title' => $validated['title'] ?? '',
+                'subtitle' => $validated['subtitle'] ?? '',
+                'body' => $validated['body'] ?? '',
+                'footer' => $validated['footer'] ?? '',
+                'image' => $validated['image'] ?? null,
+                'video' => $validated['video'] ?? null,
+                'document' => $validated['document'] ?? null,
+                'buttons' => $validated['buttons'],
+            ]
+        );
+
+        if (! empty($result['success']) && $result['success'] === true) {
+            $user->incrementMessageCount();
+        }
+
+        $messageRecord = Message::create([
+            'user_id' => $user->id,
+            'device_id' => $device->id,
+            'remote_jid' => $cleanPhone.'@s.whatsapp.net',
+            'message_type' => 'interactive',
+            'message_content' => json_encode(['body' => $validated['body'] ?? '', 'buttons' => $validated['buttons']]),
+            'direction' => 'outbound',
+            'status' => ($result['success'] ?? false) ? 'sent' : 'failed',
+            'wa_message_id' => $result['messageId'] ?? null,
+            'error_message' => $result['message'] ?? null,
+        ]);
+
+        return response()->json([
+            'success' => $result['success'] ?? false,
+            'message_id' => $messageRecord->id,
+            'wa_id' => $result['messageId'] ?? null,
+            'status' => $messageRecord->status,
+        ], ($result['success'] ?? false) ? 200 : 500);
+    }
 }
