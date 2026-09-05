@@ -651,7 +651,7 @@ $payload = json_decode(file_get_contents('php://input'), true);
                                 Notifikasi WhatsApp untuk 23 event WHMCS (invoice, order, tiket, domain, suspend), template pesan yang bisa dikustomisasi, tombol CTA "Bayar Sekarang", dan floating support button di client area.
                             </p>
                         </div>
-                        <a href="{{ $baseUrl }}/download/wagateway-whmcs-module.zip" download
+                        <a href="{{ route('download.whmcs-module') }}" download
                            class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-400/40 hover:-translate-y-0.5">
                             <i data-lucide="download" class="w-4 h-4"></i>
                             Download .ZIP
