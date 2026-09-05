@@ -130,6 +130,11 @@ class AdminPlanController extends Controller
 
         $plan = Plan::findOrFail($validated['plan_id']);
 
+        // Guard: plan sistem (Admin) hanya boleh untuk user dengan role admin
+        if ($plan->slug === 'admin' && !$user->isAdmin()) {
+            return back()->withErrors(['error' => 'Paket sistem (Admin) tidak dapat ditetapkan ke user biasa.']);
+        }
+
         $user->assignPlan($plan, auth()->user()->email);
 
         auth()->user()->logActivity('admin.plan_assign', "Admin menetapkan paket {$plan->name} untuk user {$user->email}");

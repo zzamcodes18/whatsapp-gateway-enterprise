@@ -36,7 +36,8 @@ class AdminUserController extends Controller
 
         return view('admin.users.index', [
             'users' => $users,
-            'plans' => Plan::active()->orderBy('sort_order')->orderBy('price')->get(),
+            // Exclude plan sistem (Admin) dari dropdown assign — tidak boleh diberikan ke user biasa
+            'plans' => Plan::active()->where('slug', '!=', 'admin')->orderBy('sort_order')->orderBy('price')->get(),
         ]);
     }
 
