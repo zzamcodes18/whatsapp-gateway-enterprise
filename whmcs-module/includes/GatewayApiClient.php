@@ -41,7 +41,7 @@ class GatewayApiClient
     public function sendText($deviceId, $phone, $message)
     {
         return $this->request('POST', '/api/v1/messages/send-text', [
-            'device_id' => $deviceId,
+            'device_id' => (int) $deviceId,
             'phone'     => $phone,
             'message'   => $message,
         ]);
@@ -53,7 +53,7 @@ class GatewayApiClient
     public function sendButton($deviceId, $phone, $body, array $buttons, $footer = '')
     {
         $payload = [
-            'device_id' => $deviceId,
+            'device_id' => (int) $deviceId,
             'phone'     => $phone,
             'body'      => $body,
             'buttons'   => array_values($buttons),
