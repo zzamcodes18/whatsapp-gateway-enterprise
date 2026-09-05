@@ -22,6 +22,22 @@ if (!defined('WHMCS')) {
 
 use WHMCS\Database\Capsule;
 
+/*
+ * hooks.php dimuat WHMCS pada SETIAP request, terpisah dari wagateway.php.
+ * Karena itu semua dependensi (helpers + class) harus di-require di sini.
+ * Guard function_exists/class_exists mencegah fatal error redeclare jika
+ * wagateway.php sudah lebih dulu memuat file yang sama dalam request yang sama.
+ */
+if (!function_exists('wagateway_normalize_phone')) {
+    require_once __DIR__ . '/includes/helpers.php';
+}
+if (!class_exists('GatewayApiClient')) {
+    require_once __DIR__ . '/includes/GatewayApiClient.php';
+}
+if (!class_exists('NotificationManager')) {
+    require_once __DIR__ . '/includes/NotificationManager.php';
+}
+
 /**
  * Ambil konfigurasi module (cache statis per-request).
  */
