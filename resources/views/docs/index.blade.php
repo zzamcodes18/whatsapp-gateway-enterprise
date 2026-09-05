@@ -633,7 +633,7 @@ $payload = json_decode(file_get_contents('php://input'), true);
                     </div>
                     <div>
                         <h2 class="text-base font-bold text-slate-900 dark:text-white">6. Module WHMCS — Notifikasi Otomatis untuk Bisnis Hosting</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Integrasikan WhatsApp Gateway ke WHMCS: notifikasi invoice, order, tiket, domain + floating support button.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Integrasikan WhatsApp Gateway ke WHMCS: notifikasi invoice, order, tiket, domain, dan lainnya.</p>
                     </div>
                 </div>
 
@@ -648,7 +648,7 @@ $payload = json_decode(file_get_contents('php://input'), true);
                             </div>
                             <h3 class="text-lg font-extrabold text-white">WhatsApp Gateway for WHMCS</h3>
                             <p class="text-xs text-slate-400 max-w-lg font-medium leading-relaxed">
-                                Notifikasi WhatsApp untuk 23 event WHMCS (invoice, order, tiket, domain, suspend), template pesan yang bisa dikustomisasi, tombol CTA "Bayar Sekarang", dan floating support button di client area.
+                                Notifikasi WhatsApp untuk 23 event WHMCS (invoice, order, tiket, domain, suspend), template pesan yang bisa dikustomisasi, dan tombol CTA "Bayar Sekarang".
                             </p>
                         </div>
                         <a href="{{ route('download.whmcs-module') }}" download
@@ -670,11 +670,6 @@ $payload = json_decode(file_get_contents('php://input'), true);
                         <i data-lucide="mouse-pointer-click" class="w-5 h-5 text-emerald-500"></i>
                         <h4 class="text-sm font-bold text-slate-900 dark:text-white">Tombol CTA Interaktif</h4>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Notifikasi invoice dikirim dengan tombol "Bayar Sekarang" & "Client Area" langsung di WhatsApp.</p>
-                    </div>
-                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
-                        <i data-lucide="message-circle" class="w-5 h-5 text-green-500"></i>
-                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Floating Support Button</h4>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Tombol "Chat Support" muncul di client area WHMCS, langsung terhubung ke WhatsApp support Anda.</p>
                     </div>
                     <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
                         <i data-lucide="pencil-ruler" class="w-5 h-5 text-amber-500"></i>

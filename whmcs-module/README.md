@@ -6,7 +6,7 @@ Addon module WHMCS untuk mengirim notifikasi WhatsApp otomatis untuk **23 event 
 
 - ✅ **23 Event Notifikasi** — Invoice (dibuat, reminder, jatuh tempo, lunas, refund, batal), Order (baru, dibayar, batal), Klien (registrasi, ganti password, login), Tiket (baru, balasan, ditutup), Domain (registrasi, perpanjangan, kedaluwarsa), Layanan (addon, suspend, unsuspend, terminasi)
 - 🔘 **Tombol CTA Interaktif** — Notifikasi invoice dikirim dengan tombol "Bayar Sekarang" & "Client Area" (interactive message)
-- 💬 **Floating Support Button** — Tombol "Chat Support" WhatsApp di client area WHMCS
+- � **23 Event Notifikasi** — Invoice, order, tiket, domain, suspend/unsuspend, dan lainnya
 - ✏️ **Template Editor** — Edit pesan per event dari admin WHMCS dengan merge field (`{firstname}`, `{invoicenum}`, `{total}`, dll)
 - 📜 **Log Notifikasi** — Riwayat semua notifikasi tersimpan di database WHMCS
 - 🔌 **Test Koneksi & Test Kirim** — Verifikasi integrasi langsung dari admin area
@@ -27,7 +27,6 @@ Addon module WHMCS untuk mengirim notifikasi WhatsApp otomatis untuk **23 event 
    - **Gateway API URL** — URL panel gateway, contoh `https://wa.domain-anda.com`
    - **API Key** — token `lpk_...`
    - **Device ID** — ID device yang terhubung
-   - **Nomor Support WhatsApp** — untuk floating button (opsional)
    - Beri akses ke admin group → *Save*
 5. **Verifikasi**: buka module → tab *Dashboard* → *Test Koneksi* → *Kirim Test Message*.
 
@@ -36,7 +35,7 @@ Addon module WHMCS untuk mengirim notifikasi WhatsApp otomatis untuk **23 event 
 ```
 wagateway/
 ├── wagateway.php                  # Entry point addon (config, activate, output)
-├── hooks.php                      # Hook semua event WHMCS + support button
+├── hooks.php                      # Hook semua event WHMCS (notifikasi otomatis)
 ├── includes/
 │   ├── helpers.php                # Template default, normalisasi nomor, logging
 │   ├── GatewayApiClient.php       # HTTP client API v1 (send-text, send-button, devices)

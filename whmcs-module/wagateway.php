@@ -55,18 +55,6 @@ function wagateway_config()
                 'Description'  => 'ID device WhatsApp yang terhubung (lihat menu Devices di panel).',
                 'Default'      => '',
             ],
-            'supportNumber' => [
-                'FriendlyName' => 'Nomor Support WhatsApp',
-                'Type'         => 'text',
-                'Description'  => 'Nomor WA support untuk floating button, format: 628123456789',
-                'Default'      => '',
-            ],
-            'supportMessage' => [
-                'FriendlyName' => 'Pesan Awal Support',
-                'Type'         => 'text',
-                'Description'  => 'Pesan otomatis saat user klik tombol support.',
-                'Default'      => 'Halo support, saya butuh bantuan mengenai layanan saya',
-            ],
             'enableProvisioning' => [
                 'FriendlyName' => 'Auto-Provisioning',
                 'Type'         => 'yesno',
