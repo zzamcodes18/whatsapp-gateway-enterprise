@@ -63,6 +63,11 @@ prompt_user_inputs() {
 
   prompt_secret "Masukkan Password Master Admin" "password123"
   ADMIN_PASS="$PROMPT_RESULT"
+  while [ -z "$ADMIN_PASS" ] || [ "$ADMIN_PASS" = "password123" ] || [ ${#ADMIN_PASS} -lt 8 ]; do
+    log_warning "Password admin minimal 8 karakter dan tidak boleh 'password123'. Silakan coba lagi."
+    prompt_secret "Masukkan Password Master Admin" "password123"
+    ADMIN_PASS="$PROMPT_RESULT"
+  done
 
   prompt_input_opt "Masukkan Nomor WhatsApp Admin (opsional, misal 628123456789)" ""
   ADMIN_PHONE="$PROMPT_RESULT"
@@ -125,9 +130,8 @@ setup_database() {
   mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';"
   mysql -e "ALTER USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASS}';"
   mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';"
-  mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';"
-  mysql -e "ALTER USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASS}';"
-  mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';"
+  # Hapus user remote '%' jika ada dari instalasi lama — DB hanya boleh diakses lokal
+  mysql -e "DROP USER IF EXISTS '${DB_USER}'@'%';"
   mysql -e "FLUSH PRIVILEGES;"
 
   log_success "Database '${DB_NAME}' dan User '${DB_USER}' berhasil siap digunakan."
@@ -174,7 +178,22 @@ deploy_source_code() {
   sed -i "s|DB_DATABASE=.*|DB_DATABASE=${DB_NAME}|g" .env
   sed -i "s|DB_USERNAME=.*|DB_USERNAME=${DB_USER}|g" .env
   sed -i "s|DB_PASSWORD=.*|DB_PASSWORD=\"${DB_PASS}\"|g" .env
-  sed -i "s|WA_ENGINE_SECRET=.*|WA_ENGINE_SECRET=${WA_ENGINE_SECRET}|g" .env
+
+  # Pastikan baris WA_ENGINE_SECRET ada, lalu isi dengan secret acak
+  if ! grep -q "^WA_ENGINE_SECRET=" .env; then
+    echo "WA_ENGINE_SECRET=${WA_ENGINE_SECRET}" >> .env
+  else
+    sed -i "s|^WA_ENGINE_SECRET=.*|WA_ENGINE_SECRET=${WA_ENGINE_SECRET}|" .env
+  fi
+
+  # Buat .env untuk wa-engine (secret yang sama, bind localhost)
+  cat <<ENVEOF > "$INSTALL_DIR/wa-engine/.env"
+PORT=3000
+HOST=127.0.0.1
+ENGINE_SECRET=${WA_ENGINE_SECRET}
+LARAVEL_SECRET=${WA_ENGINE_SECRET}
+LARAVEL_WEBHOOK_URL=${APP_URL}/api/internal/wa-event
+ENVEOF
 
   php artisan key:generate --force
 
@@ -192,6 +211,8 @@ deploy_source_code() {
 
   chown -R www-data:www-data "$INSTALL_DIR"
   chmod -R 775 "$INSTALL_DIR/storage" "$INSTALL_DIR/bootstrap/cache"
+  chmod 640 "$INSTALL_DIR/.env" "$INSTALL_DIR/wa-engine/.env"
+  chown www-data:www-data "$INSTALL_DIR/.env" "$INSTALL_DIR/wa-engine/.env"
 }
 
 setup_services() {

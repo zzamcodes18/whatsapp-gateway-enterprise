@@ -249,10 +249,9 @@ CREATE TABLE `api_keys` (
 
 -- --------------------------------------------------------
 -- Dumping data for table `api_keys`
--- Admin Master Key Token: lpk_admin_prod_key_1234567890abcdef
+-- NOTE: API key dibuat oleh masing-masing user/admin via dashboard.
+-- Jangan pernah seed API key di schema (bocor = akses unlimited).
 -- --------------------------------------------------------
-INSERT INTO `api_keys` (`id`, `user_id`, `name`, `key_hash`, `key_prefix`, `permissions`, `rate_limit_per_minute`, `last_used_at`, `expires_at`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Master Admin API Key', 'ca63f0df6eb894ffaa225ec617fa7bf89d5336bf72c72bdfb39e6c27fc1b6fb8', 'lpk_admin_', '[\"send_message\",\"read_devices\",\"read_logs\"]', 0, NOW(), NULL, 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 -- Table structure for table `messages`

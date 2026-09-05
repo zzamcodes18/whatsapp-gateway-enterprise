@@ -74,9 +74,63 @@ update_gateway() {
   php artisan route:clear
   php artisan view:clear
 
+  # ============================================================================
+  # SECURITY MIGRATION (server instalasi lama) — jalankan sekali per update
+  # ============================================================================
+  ui_section "MIGRASI KEAMANAN (INSTALASI LAMA)"
+
+  # 1. Pastikan WA_ENGINE_SECRET ada di .env Laravel (generate jika belum ada)
+  cd "$INSTALL_DIR"
+  if ! grep -q "^WA_ENGINE_SECRET=.\+" .env 2>/dev/null; then
+    NEW_SECRET=$(generate_random_secret)
+    if grep -q "^WA_ENGINE_SECRET=" .env 2>/dev/null; then
+      sed -i "s|^WA_ENGINE_SECRET=.*|WA_ENGINE_SECRET=${NEW_SECRET}|" .env
+    else
+      echo "WA_ENGINE_SECRET=${NEW_SECRET}" >> .env
+    fi
+    log_success "WA_ENGINE_SECRET baru digenerate di .env Laravel"
+  else
+    NEW_SECRET=$(grep "^WA_ENGINE_SECRET=" .env | head -n1 | cut -d'=' -f2-)
+    log_info "WA_ENGINE_SECRET sudah ada di .env Laravel"
+  fi
+
+  # 2. Buat/refresh wa-engine/.env dengan secret yang sama + bind localhost
+  cat <<ENVEOF > "$INSTALL_DIR/wa-engine/.env"
+PORT=3000
+HOST=127.0.0.1
+ENGINE_SECRET=${NEW_SECRET}
+LARAVEL_SECRET=${NEW_SECRET}
+LARAVEL_WEBHOOK_URL=$(grep "^APP_URL=" .env | head -n1 | cut -d'=' -f2-)/api/internal/wa-event
+ENVEOF
+  log_success "wa-engine/.env dibuat (secret sinkron, engine bind 127.0.0.1)"
+
+  # 3. Hapus user MySQL remote '%' jika ada (DB hanya boleh lokal)
+  DB_NAME_MIG=$(grep "^DB_DATABASE=" .env | head -n1 | cut -d'=' -f2-)
+  DB_USER_MIG=$(grep "^DB_USERNAME=" .env | head -n1 | cut -d'=' -f2-)
+  if [ -n "$DB_USER_MIG" ]; then
+    mysql -e "DROP USER IF EXISTS '${DB_USER_MIG}'@'%';" 2>/dev/null && \
+      log_success "User MySQL remote '${DB_USER_MIG}'@'%' dihapus (akses DB kini lokal saja)" || \
+      log_info "Tidak ada user MySQL remote yang perlu dihapus"
+  fi
+
+  # 4. Hapus API key master bawaan lama jika masih ada (dari schema lama)
+  if [ -n "$DB_NAME_MIG" ]; then
+    mysql "${DB_NAME_MIG}" -e "DELETE FROM api_keys WHERE name = 'Master Admin API Key' AND key_prefix = 'lpk_admin_';" 2>/dev/null && \
+      log_success "Master API key bawaan (lpk_admin_) dihapus — buat key baru via dashboard" || true
+  fi
+
+  # 5. Perketat permission file .env
+  chmod 640 "$INSTALL_DIR/.env" "$INSTALL_DIR/wa-engine/.env" 2>/dev/null || true
+  chown www-data:www-data "$INSTALL_DIR/.env" "$INSTALL_DIR/wa-engine/.env" 2>/dev/null || true
+  log_success "Permission .env diperketat (640, owner www-data)"
+
+  # 6. Sinkronkan secret ke SystemSetting Laravel (agar admin settings konsisten)
+  php artisan tinker --execute="\\App\\Models\\SystemSetting::set('wa_engine_secret', getenv('WA_ENGINE_SECRET') ?: config('services.wa_engine.secret'));" 2>/dev/null || true
+
   ui_step 7 7 "Memperbarui hak akses folder & merestart service PM2"
   chown -R www-data:www-data "$INSTALL_DIR"
   chmod -R 775 "$INSTALL_DIR/storage" "$INSTALL_DIR/bootstrap/cache"
+  chmod 640 "$INSTALL_DIR/.env" "$INSTALL_DIR/wa-engine/.env" 2>/dev/null || true
 
   pm2 restart wa-engine 2>/dev/null || pm2 start "$INSTALL_DIR/wa-engine/src/server.js" --name "wa-engine"
   systemctl restart php8.3-fpm 2>/dev/null || true
@@ -90,7 +144,13 @@ update_gateway() {
   ui_row "Kode" "Versi terbaru berhasil diterapkan"
   ui_row "Frontend" "Rebuilt (Vite + Tailwind)"
   ui_row "Database" "Migrated + Seeded (Plan)"
-  ui_row "WA Engine" "Restarted & Active via PM2"
+  ui_row "WA Engine" "Restarted & Active via PM2 (bind 127.0.0.1)"
+  ui_row "Keamanan" "Secret engine sinkron, DB lokal-only, .env 640"
+  echo ""
+  echo -e "  ${C_YELLOW}${C_BOLD}  CATATAN PENTING:${C_RESET}"
+  echo -e "  ${C_YELLOW}  - Jika sebelumnya memakai secret default, API key engine lama tidak valid lagi.${C_RESET}"
+  echo -e "  ${C_YELLOW}  - Master API key bawaan (lpk_admin_) telah dihapus — buat key baru via dashboard.${C_RESET}"
+  echo -e "  ${C_YELLOW}  - Pastikan tidak ada aturan firewall/port-forward yang mengekspos port 3000.${C_RESET}"
   echo ""
   echo -e "  ${C_GREEN}${C_BOLD}==============================================================================${C_RESET}"
   echo ""

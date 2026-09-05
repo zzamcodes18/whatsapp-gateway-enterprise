@@ -30,11 +30,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(config.port, () => {
-  console.log(`⚡ Whatsapp Gateway Enterprise Core Engine running on port ${config.port}`);
-  console.log(`🔑 Engine Secret Auth: ENABLED`);
+app.listen(config.port, config.host, () => {
+  console.log(`⚡ Whatsapp Gateway Enterprise Core Engine running on ${config.host}:${config.port}`);
+  console.log(`🔑 Engine Secret Auth: ${config.engineSecret ? 'ENABLED' : 'MISSING — set ENGINE_SECRET in wa-engine/.env!'}`);
   console.log(`📦 Engine: Enterprise Core Engine v1.0.0`);
-  
+
   // Auto restore sessions on startup
   baileysManager.restoreAllSessions();
 });

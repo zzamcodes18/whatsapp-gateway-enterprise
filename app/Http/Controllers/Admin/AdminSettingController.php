@@ -27,7 +27,6 @@ class AdminSettingController extends Controller
             'site_keywords' => ['nullable', 'string', 'max:255'],
             'support_email' => ['nullable', 'email', 'max:100'],
             'support_whatsapp' => ['nullable', 'string', 'max:30'],
-            'allow_registration' => ['nullable', 'string'],
             'allow_registration' => ['required', 'in:true,false'],
             'smtp_host' => ['nullable', 'string', 'max:255'],
             'smtp_port' => ['nullable', 'integer'],
@@ -92,9 +91,16 @@ class AdminSettingController extends Controller
             'hcaptcha_secret_key',
         ];
 
+        // Field secret: kosong = pertahankan nilai lama (value tidak pernah dikirim balik ke form)
+        $secretKeepIfEmpty = ['smtp_password', 'wa_engine_secret', 'google_client_secret', 'github_client_secret', 'turnstile_secret_key', 'recaptcha_secret_key', 'hcaptcha_secret_key'];
+
         foreach ($keysToUpdate as $key) {
             if ($request->has($key)) {
-                SystemSetting::set($key, (string) $request->input($key));
+                $value = (string) $request->input($key);
+                if ($value === '' && in_array($key, $secretKeepIfEmpty, true)) {
+                    continue;
+                }
+                SystemSetting::set($key, $value);
             }
         }
 

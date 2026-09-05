@@ -230,7 +230,7 @@
 
                     <div class="space-y-1.5">
                         <label for="smtp_password" class="app-label">SMTP Password / App Password</label>
-                        <input type="password" id="smtp_password" name="smtp_password" value="{{ old('smtp_password', $settings['smtp_password'] ?? '') }}" class="app-input font-mono text-xs" placeholder="••••••••••••">
+                        <input type="password" id="smtp_password" name="smtp_password" value="" class="app-input font-mono text-xs" placeholder="@if(!empty($settings['smtp_password'])) •••••••• (tersimpan — biarkan kosong jika tidak diubah) @else Masukkan password SMTP @endif">
                     </div>
 
                     <div class="space-y-1.5">
@@ -291,8 +291,8 @@
 
                     <div class="space-y-1.5">
                         <label for="wa_engine_secret" class="app-label">Engine API Secret Key</label>
-                        <input type="password" id="wa_engine_secret" name="wa_engine_secret" value="{{ old('wa_engine_secret', $settings['wa_engine_secret'] ?? 'wagateway_secret_key_2026') }}" class="app-input font-mono text-xs" placeholder="wagateway_secret_key_2026">
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Secret key validasi autentikasi internal antara Laravel dan Node.js.</p>
+                        <input type="password" id="wa_engine_secret" name="wa_engine_secret" value="" class="app-input font-mono text-xs" placeholder="@if(!empty($settings['wa_engine_secret'])) •••••••• (tersimpan — biarkan kosong jika tidak diubah) @else Masukkan secret key engine @endif">
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500">Secret key validasi autentikasi internal antara Laravel dan Node.js. Wajib sama dengan ENGINE_SECRET di wa-engine/.env.</p>
                     </div>
                 </div>
             </div>

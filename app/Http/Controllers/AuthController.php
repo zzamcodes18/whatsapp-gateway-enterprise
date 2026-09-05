@@ -188,8 +188,8 @@ class AuthController extends Controller
             }
         }
 
-        // Generasi Kode OTP
-        $otp = (string) rand(100000, 999999);
+        // Generasi Kode OTP (CSPRNG, bukan rand())
+        $otp = (string) random_int(100000, 999999);
         $method = 'whatsapp'; // Default pengiriman via WhatsApp
 
         // Jika bot WA aktif, kirim via WA terlebih dahulu
@@ -267,9 +267,19 @@ class AuthController extends Controller
             return back()->withErrors(['otp' => 'Kode OTP telah kadaluwarsa. Silakan klik tombol kirim ulang OTP.']);
         }
 
-        if ($validated['otp'] !== $pending['otp']) {
+        // Rate limit percobaan OTP: maksimal 5 salah per sesi, lockout 15 menit
+        $otpThrottleKey = 'otp-verify:'.($pending['email'] ?? '').'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($otpThrottleKey, 5)) {
+            $seconds = RateLimiter::availableIn($otpThrottleKey);
+            return back()->withErrors(['otp' => "Terlalu banyak percobaan salah. Coba lagi dalam {$seconds} detik atau klik kirim ulang OTP."]);
+        }
+
+        if (! hash_equals((string) $pending['otp'], (string) $validated['otp'])) {
+            RateLimiter::hit($otpThrottleKey, 900); // 15 menit decay
             return back()->withErrors(['otp' => 'Kode OTP yang Anda masukkan tidak cocok. Silakan periksa kembali WhatsApp Anda.']);
         }
+
+        RateLimiter::clear($otpThrottleKey);
 
         // Assign plan default (Free) jika tersedia — limit akan otomatis mengikuti plan
         $defaultPlan = \App\Models\Plan::where('is_default', true)->where('is_active', true)->first();
@@ -326,7 +336,15 @@ class AuthController extends Controller
 
         $targetChannel = $request->input('channel', $pending['otp_method'] ?? 'whatsapp');
 
-        $otp = (string) rand(100000, 999999);
+        // Rate limit resend OTP: maksimal 3x per 10 menit (anti spam WhatsApp/email)
+        $resendThrottleKey = 'otp-resend:'.($pending['email'] ?? '').'|'.$request->ip();
+        if (RateLimiter::tooManyAttempts($resendThrottleKey, 3)) {
+            $seconds = RateLimiter::availableIn($resendThrottleKey);
+            return back()->withErrors(['otp' => "Permintaan kirim ulang terlalu sering. Coba lagi dalam {$seconds} detik."]);
+        }
+        RateLimiter::hit($resendThrottleKey, 600);
+
+        $otp = (string) random_int(100000, 999999);
         $pending['otp'] = $otp;
         $pending['otp_method'] = $targetChannel;
         $pending['expires_at'] = now()->addMinutes(5)->timestamp;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\UrlGuardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -28,6 +29,9 @@ class WebhookController extends Controller
             'secret_key' => ['nullable', 'string', 'max:100'],
         ]);
 
+        // Guard SSRF: blokir URL internal/private/metadata
+        UrlGuardService::assertSafeUrl($validated['target_url']);
+
         $user = Auth::user();
 
         $webhook = $user->webhooks()->updateOrCreate(
@@ -52,6 +56,13 @@ class WebhookController extends Controller
 
         if (! $webhook) {
             return back()->withErrors(['target_url' => 'Harap konfigurasikan URL webhook terlebih dahulu.']);
+        }
+
+        // Guard SSRF: pastikan URL target masih aman saat test
+        try {
+            UrlGuardService::assertSafeUrl($webhook->target_url);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()->withErrors(['target_url' => 'URL webhook mengarah ke alamat internal dan tidak dapat diuji. Silakan ubah konfigurasi webhook.']);
         }
 
         try {

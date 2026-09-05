@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\MessageTemplate;
+use App\Services\UrlGuardService;
 use App\Services\WaEngineService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -94,6 +95,26 @@ class GatewayApiController extends Controller
         ]);
 
         $user = $request->user();
+
+        // Cek kuota pesan (sama seperti send-text — media tidak boleh bypass kuota)
+        if (! $user->canSendMessage()) {
+            $reason = $user->sendMessageBlockReason() ?? 'Message quota reached.';
+            return response()->json([
+                'success' => false,
+                'message' => $reason,
+            ], 429);
+        }
+
+        // Guard SSRF: blokir media_url yang mengarah ke internal/metadata IP
+        try {
+            UrlGuardService::assertSafeUrl($validated['media_url'], 'media_url');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'media_url mengarah ke alamat yang tidak diizinkan.',
+            ], 422);
+        }
+
         $device = $user->devices()->where('id', $validated['device_id'])->first();
 
         if (! $device || ! $device->isConnected()) {
@@ -112,6 +133,11 @@ class GatewayApiController extends Controller
             $validated['media_type'],
             $validated['caption'] ?? ''
         );
+
+        // Hitung kuota hanya jika pengiriman sukses
+        if (! empty($result['success']) && $result['success'] === true) {
+            $user->incrementMessageCount();
+        }
 
         $messageRecord = Message::create([
             'user_id' => $user->id,

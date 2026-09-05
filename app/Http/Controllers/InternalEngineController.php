@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Device;
 use App\Models\Message;
 use App\Models\Webhook;
+use App\Services\UrlGuardService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -14,9 +15,10 @@ class InternalEngineController extends Controller
     public function handleEvent(Request $request)
     {
         $secret = $request->header('X-Engine-Secret');
-        $expected = config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'wagateway_secret_key_2026'));
+        $expected = (string) config('services.wa_engine.secret');
 
-        if ($secret !== $expected) {
+        // Secret wajib dikonfigurasi & dibandingkan timing-safe
+        if ($expected === '' || ! is_string($secret) || ! hash_equals($expected, $secret)) {
             return response()->json(['success' => false, 'message' => 'Unauthorized Engine Callback'], 401);
         }
 
@@ -119,6 +121,15 @@ class InternalEngineController extends Controller
 
         // Check if event is subscribed
         if (! empty($webhook->events) && ! in_array($event, $webhook->events) && ! in_array('*', $webhook->events)) {
+            return;
+        }
+
+        // Guard SSRF: jangan kirim webhook ke URL internal/private
+        try {
+            UrlGuardService::assertSafeUrl($webhook->target_url);
+        } catch (\Throwable $e) {
+            Log::warning('Blocked SSRF-suspect webhook dispatch', ['url' => $webhook->target_url]);
+
             return;
         }
 

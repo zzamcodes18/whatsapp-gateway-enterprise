@@ -14,7 +14,13 @@ class WaEngineService
     public function __construct()
     {
         $this->baseUrl = \App\Models\SystemSetting::get('wa_engine_url', config('services.wa_engine.url', env('WA_ENGINE_URL', 'http://127.0.0.1:3000')));
-        $this->secret = \App\Models\SystemSetting::get('wa_engine_secret', config('services.wa_engine.secret', env('WA_ENGINE_SECRET', 'wagateway_secret_key_2026')));
+        $this->secret = (string) \App\Models\SystemSetting::get('wa_engine_secret', config('services.wa_engine.secret'));
+
+        if ($this->secret === '') {
+            throw new \RuntimeException(
+                'WA_ENGINE_SECRET belum dikonfigurasi. Set nilai ini di file .env atau Admin Settings untuk keamanan engine.'
+            );
+        }
     }
 
     protected function client()
