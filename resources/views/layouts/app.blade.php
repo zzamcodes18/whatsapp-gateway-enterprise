@@ -188,43 +188,6 @@
 
             <!-- Bottom: Quota Widget -->
             <div class="p-4 border-t border-slate-200/80 dark:border-slate-800 space-y-3 bg-slate-50/50 dark:bg-transparent transition-colors">
-                
-                <!-- Current Plan Widget -->
-                @if(!auth()->user()->isAdmin() && auth()->user()->plan)
-                    <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">
-                        <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
-                            <span>Paket Aktif</span>
-                            <i data-lucide="package" class="w-3.5 h-3.5 text-amber-500"></i>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-slate-900 dark:text-white">{{ auth()->user()->plan->name }}</span>
-                            @if(auth()->user()->hasActivePlan())
-                                <span class="app-tag app-tag-emerald text-[9px]">AKTIF</span>
-                            @else
-                                <span class="app-tag app-tag-rose text-[9px]">EXPIRED</span>
-                            @endif
-                        </div>
-                        @if(auth()->user()->plan_expires_at)
-                            <div class="text-[10px] font-mono {{ auth()->user()->hasActivePlan() ? 'text-slate-400 dark:text-slate-500' : 'text-rose-500 font-bold' }}">
-                                {{ auth()->user()->hasActivePlan() ? 'Berakhir: ' . auth()->user()->plan_expires_at->format('d M Y') : 'Paket telah kedaluwarsa' }}
-                            </div>
-                        @endif
-                    </div>
-                @elseif(auth()->user()->isAdmin())
-                    <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">
-                        <div class="flex items-center justify-between font-bold text-slate-800 dark:text-slate-200 text-[11px]">
-                            <span>Paket Aktif</span>
-                            <i data-lucide="package" class="w-3.5 h-3.5 text-amber-500"></i>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-slate-900 dark:text-white">Admin</span>
-                            <span class="app-tag app-tag-indigo text-[9px]">PERMANENT</span>
-                        </div>
-                        <div class="text-[10px] font-mono text-slate-400 dark:text-slate-500">
-                            Unlimited Device &bull; Unlimited Pesan
-                        </div>
-                    </div>
-                @endif
 
                 <!-- Quota Widget -->
                 <div class="p-3 bg-white dark:bg-[#111A2E] border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-2 text-xs shadow-2xs transition-colors">

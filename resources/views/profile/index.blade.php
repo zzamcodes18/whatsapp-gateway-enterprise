@@ -110,6 +110,89 @@
         </div>
     </div>
 
+    <!-- ================= ACTIVE PACKAGE CARD ================= -->
+    @if($user->isAdmin())
+        <div class="app-card p-5 bg-gradient-to-r from-indigo-500/10 via-blue-500/5 to-transparent dark:from-indigo-500/15 dark:via-blue-500/10 border border-indigo-200/70 dark:border-indigo-500/20 overflow-hidden relative">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Paket Aktif</span>
+                            <span class="app-tag app-tag-indigo text-[9px]">PERMANENT</span>
+                        </div>
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white tracking-tight">Admin</h3>
+                        <p class="text-[11px] font-mono text-slate-400 dark:text-slate-500">Unlimited Device &bull; Unlimited Pesan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @elseif($user->plan)
+        <div class="app-card p-5 {{ $user->hasActivePlan() ? 'bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-500/15 dark:via-teal-500/10 border border-emerald-200/70 dark:border-emerald-500/20' : 'bg-gradient-to-r from-rose-500/10 via-rose-500/5 to-transparent dark:from-rose-500/15 dark:via-rose-500/10 border border-rose-200/70 dark:border-rose-500/20' }} overflow-hidden relative">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 {{ $user->hasActivePlan() ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400' : 'bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400' }} rounded-2xl flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <i data-lucide="package" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Paket Aktif</span>
+                            @if($user->hasActivePlan())
+                                <span class="app-tag app-tag-emerald text-[9px]">AKTIF</span>
+                            @else
+                                <span class="app-tag app-tag-rose text-[9px]">EXPIRED</span>
+                            @endif
+                        </div>
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white tracking-tight">{{ $user->plan->name }}</h3>
+                        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-mono {{ $user->hasActivePlan() ? 'text-slate-400 dark:text-slate-500' : 'text-rose-500 font-bold' }}">
+                            @if($user->plan_expires_at)
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="calendar-clock" class="w-3.5 h-3.5"></i>
+                                    {{ $user->hasActivePlan() ? 'Berakhir: ' . $user->plan_expires_at->format('d M Y') : 'Paket telah kedaluwarsa' }}
+                                </span>
+                            @endif
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                                {{ $user->plan->formatDeviceLimit() }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                                {{ $user->plan->formatMessageLimit() }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{{ route('plans.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 {{ $user->hasActivePlan() ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-700 dark:hover:bg-slate-200' : 'bg-rose-600 hover:bg-rose-700 text-white' }} rounded-xl text-xs font-bold shadow-2xs transition-all hover:scale-[1.02] flex-shrink-0">
+                    <i data-lucide="{{ $user->hasActivePlan() ? 'arrow-up-circle' : 'refresh-cw' }}" class="w-4 h-4"></i>
+                    {{ $user->hasActivePlan() ? 'Upgrade Paket' : 'Perpanjang Sekarang' }}
+                </a>
+            </div>
+        </div>
+    @else
+        <div class="app-card p-5 bg-gradient-to-r from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-500/15 dark:via-indigo-500/10 border border-blue-200/70 dark:border-blue-500/20 overflow-hidden relative">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <i data-lucide="rocket" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Paket Aktif</span>
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white tracking-tight">Belum Berlangganan</h3>
+                        <p class="text-[11px] font-mono text-slate-400 dark:text-slate-500">Upgrade untuk membuka device & kuota pesan lebih besar</p>
+                    </div>
+                </div>
+
+                <a href="{{ route('plans.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-2xs transition-all hover:scale-[1.02] flex-shrink-0">
+                    <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                    Lihat Paket
+                </a>
+            </div>
+        </div>
+    @endif
+
     <!-- ================= MAIN SETTINGS SECTIONS GRID ================= -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
