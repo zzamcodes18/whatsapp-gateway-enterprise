@@ -126,7 +126,7 @@
 
                             <div class="flex-1 space-y-1">
                                 <label for="site_logo" class="app-label">Pilih File Logo Baru (Otomatis Kompres)</label>
-                                <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="compressImageOnUpload($event, 500)" class="text-xs text-slate-600 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-500/10 file:text-blue-700 dark:file:text-blue-400 hover:file:bg-blue-100 dark:hover:file:bg-blue-500/20 cursor-pointer">
+                                <input type="file" id="site_logo" name="site_logo" accept="image/*" @change="compressImageOnUpload($event, 500, true)" class="text-xs text-slate-600 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 dark:file:bg-blue-500/10 file:text-blue-700 dark:file:text-blue-400 hover:file:bg-blue-100 dark:hover:file:bg-blue-500/20 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
 
                             <div class="flex-1 space-y-1">
                                 <label for="site_favicon" class="app-label">Pilih File Favicon Baru (Otomatis Kompres)</label>
-                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="compressImageOnUpload($event, 128)" class="text-xs text-slate-600 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-500/10 file:text-indigo-700 dark:file:text-indigo-400 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-500/20 cursor-pointer">
+                                <input type="file" id="site_favicon" name="site_favicon" accept="image/*,.ico" @change="compressImageOnUpload($event, 128, true)" class="text-xs text-slate-600 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-500/10 file:text-indigo-700 dark:file:text-indigo-400 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-500/20 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -573,7 +573,7 @@
 </div>
 
 <script>
-function compressImageOnUpload(event, maxDimension) {
+function compressImageOnUpload(event, maxDimension, rounded = false) {
     const input = event.target;
     const file = input.files[0];
     if (!file || file.type === 'image/svg+xml' || file.name.endsWith('.ico')) return;
@@ -600,19 +600,37 @@ function compressImageOnUpload(event, maxDimension) {
             canvas.height = height;
 
             const ctx = canvas.getContext('2d');
+
+            // Bulatkan sudut gambar (rounded corners) jika diminta
+            if (rounded) {
+                const radius = Math.round(Math.min(width, height) * 0.22); // 22% dari sisi terpendek
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.lineTo(width - radius, 0);
+                ctx.quadraticCurveTo(width, 0, width, radius);
+                ctx.lineTo(width, height - radius);
+                ctx.quadraticCurveTo(width, height, width - radius, height);
+                ctx.lineTo(radius, height);
+                ctx.quadraticCurveTo(0, height, 0, height - radius);
+                ctx.lineTo(0, radius);
+                ctx.quadraticCurveTo(0, 0, radius, 0);
+                ctx.closePath();
+                ctx.clip();
+            }
+
             ctx.drawImage(img, 0, 0, width, height);
 
             canvas.toBlob(function(blob) {
                 if (blob) {
-                    const resizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
-                        type: 'image/jpeg',
+                    const resizedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".png", {
+                        type: 'image/png',
                         lastModified: Date.now()
                     });
                     const container = new DataTransfer();
                     container.items.add(resizedFile);
                     input.files = container.files;
                 }
-            }, 'image/jpeg', 0.85);
+            }, 'image/png');
         };
         img.src = e.target.result;
     };

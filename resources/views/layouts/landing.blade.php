@@ -36,11 +36,14 @@
     <meta name="twitter:site" content="{{ $siteName }}">
 
     <!-- Favicon -->
-    @if(!empty($siteFavicon))
-        <link rel="shortcut icon" href="{{ $siteFavicon }}">
-        <link rel="icon" type="image/x-icon" href="{{ $siteFavicon }}">
-        <link rel="icon" type="image/png" href="{{ $siteFavicon }}">
-        <link rel="apple-touch-icon" href="{{ $siteFavicon }}">
+    @php
+        $faviconSrc = $siteFavicon ?? $siteLogo;
+    @endphp
+    @if(!empty($faviconSrc))
+        <link rel="shortcut icon" href="{{ $faviconSrc }}">
+        <link rel="icon" type="image/x-icon" href="{{ $faviconSrc }}">
+        <link rel="icon" type="image/png" href="{{ $faviconSrc }}">
+        <link rel="apple-touch-icon" href="{{ $faviconSrc }}">
     @else
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
