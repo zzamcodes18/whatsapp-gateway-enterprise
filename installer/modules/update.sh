@@ -35,6 +35,13 @@ update_gateway() {
 
   if [ -d "$INSTALL_DIR/.git" ]; then
     git config --local --add safe.directory "$INSTALL_DIR" 2>/dev/null || true
+    # Pastikan remote origin menunjuk ke repo yang benar (migrasi dari repo lama yang suspended)
+    CURRENT_REMOTE=$(git remote get-url origin 2>/dev/null || echo "")
+    if [ -n "$CURRENT_REMOTE" ] && [ "$CURRENT_REMOTE" != "$REPO_URL" ]; then
+      log_info "Memperbaiki remote Git: ${CURRENT_REMOTE} -> ${REPO_URL}"
+      git remote set-url origin "$REPO_URL"
+      git fetch origin 2>/dev/null || true
+    fi
     git pull origin main 2>/dev/null || git pull origin master 2>/dev/null || (git fetch --all && git reset --hard origin/main) 2>/dev/null || true
   else
     log_warning "Direktori ${INSTALL_DIR} bukan repositori Git. Mengunduh source code dari repositori utama..."
