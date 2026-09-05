@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/muhammadtsaqf/whatsapp-gateway" target="_blank">
+  <a href="https://github.com/zzamcodes18/whatsapp-gateway-enterprise" target="_blank">
     <div style="font-size: 34px; font-weight: 900; color: #0F172A; letter-spacing: -1.5px; margin-bottom: 4px;">
       WHATSAPP<span style="color: #2563EB;">GATEWAY</span> ENTERPRISE
     </div>
@@ -34,7 +34,7 @@ Dirancang untuk developer, startup, dan enterprise yang membutuhkan solusi pengi
 Pasang seluruh stack platform (Laravel 11, Node.js 20, MariaDB, Nginx, PM2, Cronjob) di VPS Ubuntu/Debian dalam sekali jalan dengan perintah berikut:
 
 ```bash
-bash <(curl -sSL "https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/install.sh?v=$(date +%s)")
+bash <(curl -sSL "https://raw.githubusercontent.com/zzamcodes18/whatsapp-gateway-enterprise/main/installer/install.sh?v=$(date +%s)")
 ```
 
 ---
@@ -123,4 +123,4 @@ graph TD
 Platform ini didistribusikan di bawah lisensi [MIT License](LICENSE).  
 Hak Cipta © 2026 **WhatsApp Gateway Enterprise** — Developed by:
 - **Muhammad Zaki** ([`jakisoft`](https://github.com/jakisoft) / `kiicodeofficial@gmail.com`) — Original Developer & Core Engine
-- **Muhammad Tsaqif Noor Az Zamil** ([`zzamcode`](https://github.com/muhammadtsaqf)) — Co-Developer & Enterprise Maintainer
+- **Muhammad Tsaqif Noor Az Zamil** ([`zzamcode`](https://github.com/zzamcodes18)) — Co-Developer & Enterprise Maintainer

@@ -15,7 +15,7 @@ rm -f /tmp/wagateway_lib.sh /tmp/wagateway_mod_*.sh /tmp/lib.sh /tmp/mod_*.sh 2>
 export GITHUB_SOURCE="main"
 export SCRIPT_RELEASE="v1.1.0"
 export INSTALL_DIR="/var/www/whatsapp-gateway"
-export REPO_URL="https://github.com/muhammadtsaqf/whatsapp-gateway.git"
+export REPO_URL="https://github.com/zzamcodes18/whatsapp-gateway-enterprise.git"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -24,7 +24,7 @@ if [ -f "$SCRIPT_DIR/lib/lib.sh" ]; then
   source "$SCRIPT_DIR/lib/lib.sh"
 else
   CACHE_BUST=$(date +%s)
-  LIB_URL="https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/lib/lib.sh?v=${CACHE_BUST}"
+  LIB_URL="https://raw.githubusercontent.com/zzamcodes18/whatsapp-gateway-enterprise/main/installer/lib/lib.sh?v=${CACHE_BUST}"
   if ! curl -sSLf "$LIB_URL" -o /tmp/wagateway_lib.sh; then
     echo "[ERROR] Gagal mengunduh library installer (lib.sh) dari GitHub."
     echo "URL: $LIB_URL"
@@ -42,7 +42,7 @@ load_module() {
     local tmp_mod="/tmp/wagateway_mod_${module_name}.sh"
     rm -f "$tmp_mod" 2>/dev/null || true
     CACHE_BUST=$(date +%s)
-    MOD_URL="https://raw.githubusercontent.com/muhammadtsaqf/whatsapp-gateway/main/installer/modules/${module_name}.sh?v=${CACHE_BUST}"
+    MOD_URL="https://raw.githubusercontent.com/zzamcodes18/whatsapp-gateway-enterprise/main/installer/modules/${module_name}.sh?v=${CACHE_BUST}"
     if ! curl -sSLf "$MOD_URL" -o "$tmp_mod"; then
       echo "[ERROR] Gagal mengunduh modul installer (${module_name}) dari GitHub."
       echo "URL: $MOD_URL"
