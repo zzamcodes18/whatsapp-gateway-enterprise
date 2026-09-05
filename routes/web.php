@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DocsController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InternalEngineController;
 use App\Http\Controllers\MessageController;
@@ -131,6 +132,9 @@ Route::prefix('users')->middleware('auth')->group(function () {
 
     // Interactive API Documentation
     Route::get('/docs', [DocsController::class, 'index'])->name('docs.index');
+
+    // WHMCS Module Download (ZIP generated on-the-fly)
+    Route::get('/download/wagateway-whmcs-module.zip', [DownloadController::class, 'whmcsModule'])->name('download.whmcs-module');
 
     // Profile & Account Settings
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

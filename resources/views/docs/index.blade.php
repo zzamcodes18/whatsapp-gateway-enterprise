@@ -137,6 +137,15 @@
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>
                         <span>Status Kode & Errors</span>
                     </button>
+
+                    <div class="pt-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3">
+                        Integrasi
+                    </div>
+
+                    <button @click="activeSection = 'whmcs'" :class="activeSection === 'whmcs' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold border-l-2 border-blue-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-left cursor-pointer">
+                        <i data-lucide="plug" class="w-4 h-4"></i>
+                        <span>Module WHMCS</span>
+                    </button>
                 </nav>
             </div>
         </aside>
@@ -613,6 +622,161 @@ $payload = json_decode(file_get_contents('php://input'), true);
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <!-- 8. MODULE WHMCS -->
+            <section id="section-whmcs" x-show="activeSection === 'all' || activeSection === 'whmcs'" class="app-card p-6 bg-white dark:bg-[#111A2E] space-y-6">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div class="w-8 h-8 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg flex items-center justify-center font-bold">
+                        <i data-lucide="plug" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">6. Module WHMCS — Notifikasi Otomatis untuk Bisnis Hosting</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Integrasikan WhatsApp Gateway ke WHMCS: notifikasi invoice, order, tiket, domain + floating support button.</p>
+                    </div>
+                </div>
+
+                <!-- Download Card -->
+                <div class="rounded-2xl bg-slate-950 text-white p-6 relative overflow-hidden border border-slate-800">
+                    <div class="absolute -top-12 -right-12 w-56 h-56 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="space-y-1.5">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold text-[10px] uppercase tracking-wider border border-emerald-500/30">Addon Module WHMCS</span>
+                                <span class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-mono text-[10px] font-bold border border-blue-500/30">v1.0.0</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-white">WhatsApp Gateway for WHMCS</h3>
+                            <p class="text-xs text-slate-400 max-w-lg font-medium leading-relaxed">
+                                Notifikasi WhatsApp untuk 23 event WHMCS (invoice, order, tiket, domain, suspend), template pesan yang bisa dikustomisasi, tombol CTA "Bayar Sekarang", dan floating support button di client area.
+                            </p>
+                        </div>
+                        <a href="{{ $baseUrl }}/download/wagateway-whmcs-module.zip" download
+                           class="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-400/40 hover:-translate-y-0.5">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            Download .ZIP
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Fitur -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="bell-ring" class="w-5 h-5 text-blue-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">23 Event Notifikasi</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Invoice dibuat/jatuh tempo/lunas, order baru, tiket, domain, suspend/unsuspend, dan lainnya.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="mouse-pointer-click" class="w-5 h-5 text-emerald-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Tombol CTA Interaktif</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Notifikasi invoice dikirim dengan tombol "Bayar Sekarang" & "Client Area" langsung di WhatsApp.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="message-circle" class="w-5 h-5 text-green-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Floating Support Button</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Tombol "Chat Support" muncul di client area WHMCS, langsung terhubung ke WhatsApp support Anda.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="pencil-ruler" class="w-5 h-5 text-amber-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Template Editor</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Edit pesan per event dari admin WHMCS dengan merge field <code class="text-emerald-500">{firstname}</code>, <code class="text-emerald-500">{total}</code>, dll.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="scroll-text" class="w-5 h-5 text-purple-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Log Notifikasi</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Riwayat semua notifikasi (terkirim/gagal) tersimpan di database WHMCS untuk audit.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 space-y-1.5">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-rose-500"></i>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">Aman & Ringan</h4>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Komunikasi via HTTPS + API key, tanpa menyimpan kredensial WhatsApp di server WHMCS.</p>
+                    </div>
+                </div>
+
+                <!-- Panduan Pemasangan -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="list-checks" class="w-4 h-4 text-blue-500"></i>
+                        Panduan Pemasangan
+                    </h3>
+
+                    <div class="space-y-3">
+                        <div class="flex gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0">1</div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Siapkan Panel Gateway</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Login ke panel WhatsApp Gateway, pastikan device WhatsApp Anda berstatus <strong class="text-emerald-500">Connected</strong> di menu Devices, lalu buat API Key di menu API Keys dan salin token <code class="text-emerald-500 font-mono">lpk_...</code>.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0">2</div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Upload Module ke WHMCS</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Download ZIP di atas, ekstrak, lalu upload folder <code class="text-emerald-500 font-mono">wagateway</code> ke direktori <code class="text-emerald-500 font-mono">modules/addons/</code> instalasi WHMCS Anda. Struktur akhir: <code class="text-emerald-500 font-mono">modules/addons/wagateway/wagateway.php</code></p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0">3</div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Aktifkan & Konfigurasi</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Masuk WHMCS Admin → <strong>System Settings → Addon Modules</strong> → cari <strong>WhatsApp Gateway Enterprise</strong> → <em>Activate</em> → <em>Configure</em>. Isi API URL, API Key, Device ID, dan (opsional) nomor support WhatsApp untuk floating button.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white font-extrabold text-xs flex items-center justify-center flex-shrink-0">4</div>
+                            <div class="space-y-1">
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">Test & Selesai</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Buka module → tab <strong>Dashboard</strong> → klik <em>Test Koneksi</em> dan <em>Kirim Test Message</em>. Sesuaikan template pesan di tab <strong>Template Notifikasi</strong>. Semua notifikasi event WHMCS kini terkirim via WhatsApp! 🎉</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event yang didukung -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
+                        Event WHMCS yang Didukung
+                    </h3>
+                    <div class="app-table-wrapper">
+                        <table class="w-full text-left text-xs app-table">
+                            <thead>
+                                <tr>
+                                    <th class="p-3">Kategori</th>
+                                    <th class="p-3">Event</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-[11px]">
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Invoice & Billing</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Invoice Dibuat, Reminder Pembayaran, Jatuh Tempo, Pembayaran Berhasil, Refund, Dibatalkan</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Order & Product</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Order Baru, Order Dibayar, Order Dibatalkan</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Klien</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Registrasi Klien Baru, Password Diubah, Login</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Tiket Support</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Tiket Baru, Balasan Klien, Tiket Ditutup</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Domain</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Registrasi, Perpanjangan, Kedaluwarsa</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 dark:text-white">Layanan</td>
+                                    <td class="p-3 text-slate-600 dark:text-slate-400">Addon Diaktifkan, Suspend, Unsuspend, Terminasi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
