@@ -4,6 +4,10 @@ import {
   startSession,
   getSessionStatus,
   logoutSession,
+  stopSession,
+  startStoppedSession,
+  updateFeatures,
+  getConsoleLogs,
 } from '../controllers/session.controller.js';
 import {
   sendTextMessage,
@@ -30,6 +34,12 @@ router.use(requireEngineAuth);
 router.post('/session/start', startSession);
 router.get('/session/:sessionId/status', getSessionStatus);
 router.post('/session/:sessionId/logout', logoutSession);
+router.post('/session/:sessionId/stop', stopSession);
+router.post('/session/:sessionId/start', startStoppedSession);
+router.put('/session/:sessionId/features', updateFeatures);
+
+// Engine console logs
+router.get('/console/logs', getConsoleLogs);
 
 // Message endpoints
 router.post('/message/send-text', sendTextMessage);

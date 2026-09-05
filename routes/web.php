@@ -109,7 +109,10 @@ Route::prefix('users')->middleware('auth')->group(function () {
     Route::get('/devices/{device}', [DeviceController::class, 'show'])->name('devices.show');
     Route::put('/devices/{device}', [DeviceController::class, 'update'])->name('devices.update');
     Route::get('/devices/{device}/status', [DeviceController::class, 'status'])->name('devices.status');
-    Route::post('/devices/{device}/restart', [DeviceController::class, 'restart'])->name('devices.restart');
+    Route::post('/devices/{device}/stop', [DeviceController::class, 'stop'])->name('devices.stop');
+    Route::post('/devices/{device}/start', [DeviceController::class, 'start'])->name('devices.start');
+    Route::put('/devices/{device}/features', [DeviceController::class, 'updateFeatures'])->name('devices.features');
+    Route::get('/devices/{device}/console-logs', [DeviceController::class, 'consoleLogs'])->name('devices.console-logs');
     Route::post('/devices/{device}/disconnect', [DeviceController::class, 'disconnect'])->name('devices.disconnect');
     Route::delete('/devices/{device}', [DeviceController::class, 'destroy'])->name('devices.destroy');
 

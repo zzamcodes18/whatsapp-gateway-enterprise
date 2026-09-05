@@ -22,6 +22,7 @@ export const startSession = async (req, res) => {
       method,
       phoneNumber,
       forceRestart: req.body.forceRestart || false,
+      features: req.body.features || {},
     });
 
     return res.json({
@@ -66,6 +67,97 @@ export const logoutSession = async (req, res) => {
     const result = await baileysManager.logoutSession(sessionId);
 
     return res.json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const stopSession = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const result = await baileysManager.stopSession(sessionId);
+
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const startStoppedSession = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const result = await baileysManager.startStoppedSession(sessionId);
+
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateFeatures = async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    const { alwaysOnline, typingIndicator, autoRead, blockCalls } = req.body;
+
+    const features = {};
+    if (typeof alwaysOnline === 'boolean') features.alwaysOnline = alwaysOnline;
+    if (typeof typingIndicator === 'boolean') features.typingIndicator = typingIndicator;
+    if (typeof autoRead === 'boolean') features.autoRead = autoRead;
+    if (typeof blockCalls === 'boolean') features.blockCalls = blockCalls;
+
+    if (Object.keys(features).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No valid feature flags provided (alwaysOnline, typingIndicator, autoRead, blockCalls)',
+      });
+    }
+
+    const result = await baileysManager.updateSessionFeatures(sessionId, features);
+
+    if (!result.success) {
+      return res.status(404).json(result);
+    }
+
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getConsoleLogs = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit, 10) || 100;
+    const sessionId = req.query.sessionId || null;
+
+    let logs = baileysManager.getConsoleLogs(limit);
+    if (sessionId) {
+      logs = logs.filter((l) => l.message.includes(`[${sessionId}]`));
+    }
+
+    return res.json({
+      success: true,
+      data: logs,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,

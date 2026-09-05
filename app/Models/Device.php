@@ -19,6 +19,10 @@ class Device extends Model
         'connection_type',
         'status',
         'is_system_bot',
+        'always_online',
+        'typing_indicator',
+        'auto_read',
+        'block_calls',
         'qr_code',
         'pairing_code',
         'metadata',
@@ -30,6 +34,10 @@ class Device extends Model
         return [
             'metadata' => 'array',
             'is_system_bot' => 'boolean',
+            'always_online' => 'boolean',
+            'typing_indicator' => 'boolean',
+            'auto_read' => 'boolean',
+            'block_calls' => 'boolean',
             'connected_at' => 'datetime',
         ];
     }
@@ -54,6 +62,11 @@ class Device extends Model
         return $this->status === 'connected';
     }
 
+    public function isStopped(): bool
+    {
+        return $this->status === 'stopped';
+    }
+
     public function getStatusBadgeClass(): string
     {
         return match ($this->status) {
@@ -61,7 +74,21 @@ class Device extends Model
             'connecting' => 'app-tag-amber',
             'qr_ready' => 'app-tag-blue',
             'pairing_ready' => 'app-tag-amber',
+            'stopped' => 'app-tag-slate',
             default => 'app-tag-rose',
+        };
+    }
+
+    public function getStatusLabel(): string
+    {
+        return match ($this->status) {
+            'connected' => 'Terhubung',
+            'connecting' => 'Menghubungkan',
+            'qr_ready' => 'Menunggu QR Scan',
+            'pairing_ready' => 'Menunggu Pairing Code',
+            'stopped' => 'Dihentikan',
+            'disconnected' => 'Terputus',
+            default => 'Tidak Diketahui',
         };
     }
 }

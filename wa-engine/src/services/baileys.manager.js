@@ -16,8 +16,10 @@ import { Button } from './button.builder.js';
 
 class BaileysManager {
   constructor() {
-    this.sessions = new Map(); // sessionId -> { sock, qr, qrBase64, pairingCode, status, info, method, phoneNumber }
+    this.sessions = new Map(); // sessionId -> { sock, qr, qrBase64, pairingCode, status, info, method, phoneNumber, features }
     this.logger = pino({ level: process.env.LOG_LEVEL || 'info' });
+    this.consoleLogs = [];
+    this.maxConsoleLogs = 500;
   }
 
   getSessionPath(sessionId) {
@@ -49,7 +51,7 @@ class BaileysManager {
   }
 
   async initSession(sessionId, options = {}) {
-    const { method = 'qr', phoneNumber = null, forceRestart = false } = options;
+    const { method = 'qr', phoneNumber = null, forceRestart = false, features = {} } = options;
     const sessionDir = this.getSessionPath(sessionId);
 
     if (this.sessions.has(sessionId) && !forceRestart) {
@@ -73,6 +75,15 @@ class BaileysManager {
       isLatest: true,
     }));
 
+    // Fitur device (persist di session agar bisa diubah runtime)
+    const sessionFeatures = {
+      alwaysOnline: features.alwaysOnline ?? false,
+      typingIndicator: features.typingIndicator ?? false,
+      autoRead: features.autoRead ?? false,
+      blockCalls: features.blockCalls ?? false,
+      ...(this.sessions.get(sessionId)?.features || {}),
+    };
+
     const sessionData = {
       sessionId,
       sock: null,
@@ -83,6 +94,8 @@ class BaileysManager {
       info: null,
       method,
       phoneNumber,
+      features: sessionFeatures,
+      stopRequested: false,
     };
 
     this.sessions.set(sessionId, sessionData);
@@ -98,10 +111,11 @@ class BaileysManager {
       browser: Browsers.macOS('Safari'),
       generateHighQualityLinkPreview: true,
       syncFullHistory: false,
-      markOnlineOnConnect: true,
+      markOnlineOnConnect: sessionFeatures.alwaysOnline,
     });
 
     sessionData.sock = sock;
+    this._pushConsoleLog('info', `[${sessionId}] Session initializing (method: ${method})`);
 
     // Handle pairing code if method is pairing_code and not yet registered
     if (method === 'pairing_code' && phoneNumber && !state.creds?.registered) {
@@ -147,6 +161,7 @@ class BaileysManager {
           });
           sessionData.status = 'qr_ready';
           this.logger.info(`QR Code generated for session ${sessionId}`);
+          this._pushConsoleLog('info', `[${sessionId}] QR code generated, waiting for scan`);
 
           await this.notifyLaravel('session.qr', {
             sessionId,
@@ -159,7 +174,7 @@ class BaileysManager {
 
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
         sessionData.status = 'disconnected';
         sessionData.qr = null;
@@ -169,12 +184,20 @@ class BaileysManager {
         this.logger.warn(
           `Session ${sessionId} closed due to ${lastDisconnect?.error?.message} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
         );
+        this._pushConsoleLog('warn', `[${sessionId}] Connection closed: ${lastDisconnect?.error?.message || 'unknown'} (code ${statusCode})`);
 
         await this.notifyLaravel('session.disconnected', {
           sessionId,
-          reason: lastDisconnect?.error?.message || 'Disconnected',
+          reason: sessionData.stopRequested ? 'Stopped by user' : (lastDisconnect?.error?.message || 'Disconnected'),
           statusCode,
         });
+
+        if (sessionData.stopRequested) {
+          // Stop manual: kredensial tetap tersimpan di disk, hanya socket dimatikan
+          sessionData.status = 'stopped';
+          this.logger.info(`Session ${sessionId} stopped by user. Credentials preserved on disk.`);
+          return;
+        }
 
         if (shouldReconnect) {
           this.logger.info(`Attempting reconnect for session ${sessionId}...`);
@@ -201,6 +224,7 @@ class BaileysManager {
         };
 
         this.logger.info(`Session ${sessionId} successfully connected as ${user?.name || user?.id}`);
+        this._pushConsoleLog('success', `[${sessionId}] Connected as ${user?.name || user?.id || 'unknown'}`);
 
         await this.notifyLaravel('session.connected', {
           sessionId,
@@ -217,6 +241,25 @@ class BaileysManager {
         if (!msg.message || msg.key.fromMe) continue;
 
         const remoteJid = msg.key.remoteJid;
+
+        // Auto read: tandai pesan masuk sebagai dibaca otomatis
+        if (sessionData.features.autoRead) {
+          try {
+            await sock.readMessages([msg.key]);
+          } catch (err) {
+            this.logger.warn(`Auto-read failed for ${msg.key.id}: ${err.message}`);
+          }
+        }
+
+        // Typing indicator: kirim presence composing saat pesan masuk
+        if (sessionData.features.typingIndicator) {
+          try {
+            await sock.sendPresenceUpdate('composing', remoteJid);
+          } catch (err) {
+            this.logger.warn(`Typing indicator failed: ${err.message}`);
+          }
+        }
+
         const messageText =
           msg.message.conversation ||
           msg.message.extendedTextMessage?.text ||
@@ -232,6 +275,7 @@ class BaileysManager {
         else if (msg.message.audioMessage) messageType = 'audio';
 
         this.logger.info(`Incoming message on session ${sessionId} from ${remoteJid}: ${messageText.slice(0, 50)}`);
+        this._pushConsoleLog('info', `[${sessionId}] IN from ${remoteJid?.split('@')[0] || remoteJid}: ${messageText.slice(0, 60)}`);
 
         await this.notifyLaravel('message.incoming', {
           sessionId,
@@ -244,6 +288,33 @@ class BaileysManager {
         });
       }
     });
+
+    // Block calls: reject panggilan (voice/video) masuk otomatis
+    sock.ev.on('call', async (callEvents) => {
+      if (!sessionData.features.blockCalls) return;
+
+      for (const call of callEvents) {
+        try {
+          await sock.rejectCall(call.id, call.from);
+          this.logger.info(`Call from ${call.from} rejected (block calls active) on session ${sessionId}`);
+        } catch (err) {
+          this.logger.warn(`Failed to reject call from ${call.from}: ${err.message}`);
+        }
+      }
+    });
+
+    // Always online: broadcast presence available berkala
+    if (sessionData.features.alwaysOnline) {
+      sessionData.presenceTimer = setInterval(async () => {
+        try {
+          if (sessionData.status === 'connected' && sessionData.sock) {
+            await sessionData.sock.sendPresenceUpdate('available');
+          }
+        } catch (err) {
+          // ignore presence errors
+        }
+      }, 60_000);
+    }
 
     return {
       sessionId,
@@ -446,6 +517,10 @@ class BaileysManager {
       }
     }
 
+    if (session?.presenceTimer) {
+      clearInterval(session.presenceTimer);
+    }
+
     this.sessions.delete(sessionId);
     this.deleteSessionStorage(sessionId);
 
@@ -453,6 +528,151 @@ class BaileysManager {
       success: true,
       message: `Session ${sessionId} logged out and credentials deleted`,
     };
+  }
+
+  /**
+   * Stop sesi manual: matikan socket TANPA menghapus kredensial.
+   * Sesi bisa di-start kembali kapan saja.
+   */
+  async stopSession(sessionId) {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      return {
+        success: false,
+        message: `Session '${sessionId}' is not active`,
+      };
+    }
+
+    session.stopRequested = true;
+
+    if (session.presenceTimer) {
+      clearInterval(session.presenceTimer);
+      session.presenceTimer = null;
+    }
+
+    try {
+      session.sock?.end(undefined);
+    } catch (err) {
+      this.logger.warn(`Error ending socket for stop: ${err.message}`);
+    }
+
+    session.status = 'stopped';
+    session.qr = null;
+    session.qrBase64 = null;
+    session.pairingCode = null;
+
+    await this.notifyLaravel('session.stopped', { sessionId });
+
+    return {
+      success: true,
+      message: `Session ${sessionId} stopped. Credentials preserved — use start to resume.`,
+    };
+  }
+
+  /**
+   * Start ulang sesi yang dihentikan (kredensial masih ada di disk).
+   */
+  async startStoppedSession(sessionId) {
+    const sessionDir = this.getSessionPath(sessionId);
+    const credsFile = path.join(sessionDir, 'creds.json');
+
+    if (!fs.existsSync(credsFile)) {
+      return {
+        success: false,
+        message: `No saved credentials for session '${sessionId}'. Please re-pair the device.`,
+      };
+    }
+
+    const existing = this.sessions.get(sessionId);
+    const features = existing?.features || {};
+
+    // Hapus sesi lama dari memori agar initSession bersih
+    if (existing?.presenceTimer) {
+      clearInterval(existing.presenceTimer);
+    }
+    this.sessions.delete(sessionId);
+
+    await this.initSession(sessionId, { forceRestart: true, features });
+
+    await this.notifyLaravel('session.started', { sessionId });
+
+    return {
+      success: true,
+      message: `Session ${sessionId} is starting...`,
+    };
+  }
+
+  /**
+   * Update fitur sesi secara runtime (tanpa restart socket bila memungkinkan).
+   */
+  async updateSessionFeatures(sessionId, features = {}) {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      return {
+        success: false,
+        message: `Session '${sessionId}' is not active`,
+      };
+    }
+
+    if (typeof features.alwaysOnline === 'boolean') {
+      session.features.alwaysOnline = features.alwaysOnline;
+      if (session.status === 'connected' && session.sock) {
+        try {
+          await session.sock.sendPresenceUpdate(features.alwaysOnline ? 'available' : 'unavailable');
+        } catch (err) {
+          this.logger.warn(`Presence update failed: ${err.message}`);
+        }
+      }
+      if (features.alwaysOnline && !session.presenceTimer) {
+        session.presenceTimer = setInterval(async () => {
+          try {
+            if (session.status === 'connected' && session.sock) {
+              await session.sock.sendPresenceUpdate('available');
+            }
+          } catch (err) {
+            // ignore
+          }
+        }, 60_000);
+      } else if (!features.alwaysOnline && session.presenceTimer) {
+        clearInterval(session.presenceTimer);
+        session.presenceTimer = null;
+      }
+    }
+
+    if (typeof features.typingIndicator === 'boolean') {
+      session.features.typingIndicator = features.typingIndicator;
+    }
+    if (typeof features.autoRead === 'boolean') {
+      session.features.autoRead = features.autoRead;
+    }
+    if (typeof features.blockCalls === 'boolean') {
+      session.features.blockCalls = features.blockCalls;
+    }
+
+    return {
+      success: true,
+      message: 'Features updated',
+      data: { sessionId, features: session.features },
+    };
+  }
+
+  /**
+   * Ambil log console engine (ring buffer).
+   */
+  getConsoleLogs(limit = 100) {
+    return this.consoleLogs.slice(-limit);
+  }
+
+  _pushConsoleLog(level, message) {
+    const entry = {
+      timestamp: new Date().toISOString(),
+      level,
+      message,
+    };
+    this.consoleLogs.push(entry);
+    if (this.consoleLogs.length > this.maxConsoleLogs) {
+      this.consoleLogs.shift();
+    }
   }
 
   deleteSessionStorage(sessionId) {

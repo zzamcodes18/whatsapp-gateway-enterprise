@@ -156,6 +156,139 @@ class DeviceController extends Controller
         ]);
     }
 
+    /**
+     * Stop sesi device — matikan koneksi tanpa menghapus kredensial.
+     */
+    public function stop(Device $device)
+    {
+        $this->authorizeAccess($device);
+
+        $result = $this->engineService->stopSession($device->session_id);
+
+        $device->update([
+            'status' => 'stopped',
+            'qr_code' => null,
+            'pairing_code' => null,
+        ]);
+
+        Auth::user()->logActivity('device.stop', "Menghentikan sesi device '{$device->name}' (kredensial tersimpan)");
+
+        if (request()->expectsJson() || request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sesi device berhasil dihentikan. Kredensial tetap tersimpan.',
+                'device' => $device->fresh(),
+                'engine' => $result,
+            ]);
+        }
+
+        return back()->with('success', 'Sesi device berhasil dihentikan. Kredensial tetap tersimpan — gunakan Start untuk mengaktifkan kembali.');
+    }
+
+    /**
+     * Start ulang sesi device yang dihentikan.
+     */
+    public function start(Device $device)
+    {
+        $this->authorizeAccess($device);
+
+        $result = $this->engineService->startStoppedSession($device->session_id);
+
+        if (empty($result['success'])) {
+            $msg = $result['message'] ?? 'Gagal memulai sesi.';
+            if (request()->expectsJson() || request()->wantsJson() || request()->ajax()) {
+                return response()->json(['success' => false, 'message' => $msg], 422);
+            }
+
+            return back()->withErrors(['engine' => $msg]);
+        }
+
+        $device->update([
+            'status' => 'connecting',
+            'qr_code' => null,
+            'pairing_code' => null,
+        ]);
+
+        Auth::user()->logActivity('device.start', "Memulai ulang sesi device '{$device->name}'");
+
+        if (request()->expectsJson() || request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Sesi device sedang dimulai ulang.',
+                'device' => $device->fresh(),
+            ]);
+        }
+
+        return back()->with('success', 'Sesi device sedang dimulai ulang.');
+    }
+
+    /**
+     * Toggle fitur device (always online, typing indicator, auto read, block calls).
+     */
+    public function updateFeatures(Request $request, Device $device)
+    {
+        $this->authorizeAccess($device);
+
+        $validated = $request->validate([
+            'always_online'    => ['nullable', 'boolean'],
+            'typing_indicator' => ['nullable', 'boolean'],
+            'auto_read'        => ['nullable', 'boolean'],
+            'block_calls'      => ['nullable', 'boolean'],
+        ]);
+
+        if (empty(array_filter($validated, fn ($v) => ! is_null($v)))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada fitur yang diubah.',
+            ], 422);
+        }
+
+        $device->fill($validated)->save();
+
+        // Sinkronkan ke engine (best-effort, hanya jika sesi aktif)
+        $engineResult = ['success' => false, 'skipped' => true];
+        if ($device->status === 'connected') {
+            $engineResult = $this->engineService->updateSessionFeatures($device->session_id, [
+                'alwaysOnline'    => $device->always_online,
+                'typingIndicator' => $device->typing_indicator,
+                'autoRead'        => $device->auto_read,
+                'blockCalls'      => $device->block_calls,
+            ]);
+        }
+
+        $enabledFeatures = array_keys(array_filter($validated, fn ($v) => $v));
+        Auth::user()->logActivity('device.features', "Mengubah fitur device '{$device->name}': ".($enabledFeatures ? implode(', ', $enabledFeatures) : 'semua dimatikan'), [
+            'device_id' => $device->id,
+            'features' => $validated,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Fitur device berhasil diperbarui.',
+            'device' => $device->fresh(),
+            'engine' => $engineResult,
+        ]);
+    }
+
+    /**
+     * Console logs device (dari engine, filter per session).
+     */
+    public function consoleLogs(Device $device)
+    {
+        $this->authorizeAccess($device);
+
+        $limit = (int) request()->query('limit', 100);
+        $limit = max(10, min($limit, 300));
+
+        $result = $this->engineService->getConsoleLogs($device->session_id, $limit);
+
+        return response()->json([
+            'success' => ! empty($result['success']),
+            'logs' => $result['data'] ?? [],
+            'message' => $result['message'] ?? null,
+        ]);
+    }
+
     public function status(Device $device)
     {
         $this->authorizeAccess($device);
@@ -197,36 +330,6 @@ class DeviceController extends Controller
         ]);
     }
 
-    public function restart(Device $device)
-    {
-        $this->authorizeAccess($device);
-
-        $device->update([
-            'status' => 'connecting',
-            'qr_code' => null,
-            'pairing_code' => null,
-        ]);
-
-        $this->engineService->startSession(
-            $device->session_id,
-            $device->connection_type,
-            $device->phone_number,
-            true // forceRestart
-        );
-
-        Auth::user()->logActivity('device.restart', "Memulai ulang koneksi device '{$device->name}'");
-
-        if (request()->expectsJson() || request()->wantsJson() || request()->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Koneksi device sedang dimulai ulang.',
-                'device' => $device->fresh(),
-            ]);
-        }
-
-        return back()->with('success', 'Koneksi device sedang dimulai ulang.');
-    }
-
     public function disconnect(Device $device)
     {
         $this->authorizeAccess($device);
@@ -239,17 +342,17 @@ class DeviceController extends Controller
             'pairing_code' => null,
         ]);
 
-        Auth::user()->logActivity('device.disconnect', "Memutuskan koneksi device '{$device->name}'");
+        Auth::user()->logActivity('device.disconnect', "Memutuskan & menghapus sesi WhatsApp device '{$device->name}'");
 
         if (request()->expectsJson() || request()->wantsJson() || request()->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Koneksi device berhasil diputuskan.',
+                'message' => 'Sesi WhatsApp berhasil diputuskan & dihapus. Device harus di-pairing ulang.',
                 'device' => $device->fresh(),
             ]);
         }
 
-        return back()->with('success', 'Koneksi device berhasil diputuskan.');
+        return back()->with('success', 'Sesi WhatsApp berhasil diputuskan & dihapus. Device harus di-pairing ulang.');
     }
 
     public function destroy(Device $device)

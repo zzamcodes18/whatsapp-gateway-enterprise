@@ -88,6 +88,73 @@ class WaEngineService
         }
     }
 
+    /**
+     * Stop sesi manual — matikan socket tanpa menghapus kredensial.
+     */
+    public function stopSession(string $sessionId): array
+    {
+        try {
+            $response = $this->client()->post("/session/{$sessionId}/stop");
+
+            return $response->json() ?? ['success' => false];
+        } catch (\Throwable $e) {
+            Log::error('WaEngineService stopSession error: '.$e->getMessage());
+
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Start ulang sesi yang dihentikan (kredensial masih tersimpan).
+     */
+    public function startStoppedSession(string $sessionId): array
+    {
+        try {
+            $response = $this->client()->post("/session/{$sessionId}/start");
+
+            return $response->json() ?? ['success' => false];
+        } catch (\Throwable $e) {
+            Log::error('WaEngineService startStoppedSession error: '.$e->getMessage());
+
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Update fitur sesi (always online, typing indicator, auto read, block calls).
+     */
+    public function updateSessionFeatures(string $sessionId, array $features): array
+    {
+        try {
+            $response = $this->client()->put("/session/{$sessionId}/features", $features);
+
+            return $response->json() ?? ['success' => false];
+        } catch (\Throwable $e) {
+            Log::error('WaEngineService updateSessionFeatures error: '.$e->getMessage());
+
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Ambil log console engine (opsional filter per sessionId).
+     */
+    public function getConsoleLogs(?string $sessionId = null, int $limit = 100): array
+    {
+        try {
+            $query = ['limit' => $limit];
+            if ($sessionId) {
+                $query['sessionId'] = $sessionId;
+            }
+
+            $response = $this->client()->get('/console/logs', $query);
+
+            return $response->json() ?? ['success' => false];
+        } catch (\Throwable $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
     public function sendTextMessage(string $sessionId, string $phone, string $message): array
     {
         try {
