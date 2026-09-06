@@ -281,21 +281,7 @@ export class Button extends BaseBuilder {
   async send(jid, { ...options } = {}) {
     const msg = await this.build(jid, options);
 
-    await this.#sock.relayMessage(msg.key.remoteJid, msg.message, {
-      messageId: msg.key.id,
-      additionalNodes: [
-        {
-          tag: 'biz',
-          attrs: {},
-          content: [
-            {
-              tag: 'interactive',
-              attrs: { type: 'native_flow', v: '1' },
-              content: [{ tag: 'native_flow', attrs: { v: '9', name: 'mixed' } }],
-            },
-          ],
-        },
-      ],
+    await this.#sock.sendMessage(jid, msg.message, {
       ...options,
     });
     return msg;

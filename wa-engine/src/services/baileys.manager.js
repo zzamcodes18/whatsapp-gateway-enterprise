@@ -108,9 +108,13 @@ class BaileysManager {
         creds: state.creds,
         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
       },
-      browser: Browsers.macOS('Safari'),
-      generateHighQualityLinkPreview: true,
-      syncFullHistory: false,
+      browser: Browsers.macOS('WhatsApp'),
+      disconnectOnMissingCredential: false,
+      connectTimeoutMs: 60000,
+      defaultQueryTimeoutMs: 30000,
+      keepAliveIntervalMs: 30000,
+      qrTimeout: 45000,
+      emitOwnEvents: false,
       markOnlineOnConnect: sessionFeatures.alwaysOnline,
     });
 
@@ -174,15 +178,11 @@ class BaileysManager {
 
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
+        const isDisconnectWithError = lastDisconnect?.error;
         const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
-        sessionData.status = 'disconnected';
-        sessionData.qr = null;
-        sessionData.qrBase64 = null;
-        sessionData.pairingCode = null;
-
         this.logger.warn(
-          `Session ${sessionId} closed due to ${lastDisconnect?.error?.message} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
+          `Session ${sessionId} closed due to ${lastDisconnect?.error?.message || 'unknown'} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
         );
         this._pushConsoleLog('warn', `[${sessionId}] Connection closed: ${lastDisconnect?.error?.message || 'unknown'} (code ${statusCode})`);
 
@@ -199,13 +199,19 @@ class BaileysManager {
           return;
         }
 
-        if (shouldReconnect) {
-          this.logger.info(`Attempting reconnect for session ${sessionId}...`);
+        if (shouldReconnect && isDisconnectWithError) {
+          this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 5s)`);
           setTimeout(() => {
             this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
           }, 5000);
+        } else if (statusCode === DisconnectReason.restartRequired) {
+          this.logger.info(`Session ${sessionId} requires restart. Restarting session...`);
+          setTimeout(() => {
+            this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
+          }, 1000);
         } else {
           // Logged out completely - clean up session directory
+          this.logger.warn(`Session ${sessionId} logged out. Removing credentials.`);
           this.deleteSessionStorage(sessionId);
           this.sessions.delete(sessionId);
         }
