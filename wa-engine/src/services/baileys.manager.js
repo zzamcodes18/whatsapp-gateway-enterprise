@@ -108,13 +108,14 @@ class BaileysManager {
         creds: state.creds,
         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
       },
-      browser: Browsers.macOS('WhatsApp'),
+      browser: Browsers.macOS('Safari'),
       disconnectOnMissingCredential: false,
       connectTimeoutMs: 60000,
       defaultQueryTimeoutMs: 30000,
       keepAliveIntervalMs: 30000,
       qrTimeout: 45000,
       emitOwnEvents: false,
+      generateHighQualityLinkPreview: true,
       markOnlineOnConnect: sessionFeatures.alwaysOnline,
     });
 
@@ -179,7 +180,6 @@ class BaileysManager {
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
         const isDisconnectWithError = lastDisconnect?.error;
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
         this.logger.warn(
           `Session ${sessionId} closed due to ${lastDisconnect?.error?.message || 'unknown'} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
@@ -200,12 +200,12 @@ class BaileysManager {
         }
 
         if (shouldReconnect && isDisconnectWithError) {
-          this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 5s)`);
+          this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 2s)`);
           setTimeout(() => {
-            this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
-          }, 5000);
+            this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
+          }, 2000);
         } else if (statusCode === DisconnectReason.restartRequired) {
-          this.logger.info(`Session ${sessionId} requires restart. Restarting session...`);
+          this.logger.info(`Session ${sessionId} requires restart. Restarting in 1s...`);
           setTimeout(() => {
             this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
           }, 1000);
