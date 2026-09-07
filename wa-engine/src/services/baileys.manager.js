@@ -124,13 +124,17 @@ class BaileysManager {
 
     // Handle pairing code if method is pairing_code and not yet registered
     if (method === 'pairing_code' && phoneNumber && !state.creds?.registered) {
-      setTimeout(async () => {
+      // Check if pairing code already requested to prevent duplicates
+      if (!sessionData.pairingCode && sessionData.status !== 'pairing_ready') {
+        sessionData.status = 'requesting_pairing';
+        
         try {
           const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
           this.logger.info(`Requesting pairing code for session ${sessionId} with phone ${cleanNumber}`);
           const code = await sock.requestPairingCode(cleanNumber);
           sessionData.pairingCode = code;
           sessionData.status = 'pairing_ready';
+          sessionData.phoneNumber = cleanNumber;
           this.logger.info(`Pairing code generated for ${sessionId}: ${code}`);
           
           await this.notifyLaravel('session.pairing_code', {
@@ -142,8 +146,9 @@ class BaileysManager {
           this.logger.error(`Error requesting pairing code: ${err.message}`);
           sessionData.status = 'error';
           sessionData.error = err.message;
+          throw err;
         }
-      }, 3000);
+      }
     }
 
     // Credentials update
@@ -198,6 +203,14 @@ class BaileysManager {
           this.logger.info(`Session ${sessionId} stopped by user. Credentials preserved on disk.`);
           return;
         }
+
+        // For pairing mode, don't try to reconnect until code is entered
+        if (method === 'pairing_code' && sessionData.pairingCode && sessionData.status !== 'connected') {
+          this.logger.info(`Pairing code pending for ${sessionId}, waiting for user input...`);
+          return; // Don't reconnect, keep waiting
+        }
+
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
         if (shouldReconnect && isDisconnectWithError) {
           this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 2s)`);
