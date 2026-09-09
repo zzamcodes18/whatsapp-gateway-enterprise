@@ -202,11 +202,11 @@ class BaileysManager {
 
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
-        const isDisconnectWithError = lastDisconnect?.error;
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
+        const isLoggedOut = statusCode === DisconnectReason.loggedOut;
+        const shouldReconnect = !isLoggedOut && !sessionData.stopRequested;
 
         this.logger.warn(
-          `Session ${sessionId} closed due to ${lastDisconnect?.error?.message || 'unknown'} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
+          `Session ${sessionId} closed due to ${lastDisconnect?.error?.message || 'unknown'} (status: ${statusCode}). Registered: ${state.creds?.registered ?? false}. Reconnect: ${shouldReconnect}`
         );
         this._pushConsoleLog('warn', `[${sessionId}] Connection closed: ${lastDisconnect?.error?.message || 'unknown'} (code ${statusCode})`);
 
@@ -223,31 +223,60 @@ class BaileysManager {
           return;
         }
 
-        // For pairing mode: only skip reconnect if pairing code is ready and waiting for user to enter code in phone
-        const credsFileExists = fs.existsSync(path.join(sessionDir, 'creds.json'));
-        const shouldSkipReconnectForPairing = 
-          method === 'pairing_code' && 
-          sessionData.pairingCode && 
-          credsFileExists;
-
-        if (shouldSkipReconnectForPairing) {
-          this.logger.info(`Pairing code active (${sessionData.pairingCode}), waiting for phone pairing input...`);
-          return;
-        }
-
-        if (shouldReconnect && isDisconnectWithError) {
-          this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 2s)`);
-          setTimeout(() => {
-            this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
-          }, 2000);
-        } else if (statusCode === DisconnectReason.restartRequired) {
-          this.logger.info(`Session ${sessionId} requires restart. Restarting in 1s...`);
-          setTimeout(() => {
-            this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
-          }, 1000);
+        // RECONNECT RULES (EXACTLY LIKE WORKING WHATSAPP-BOT):
+        // Only auto-reconnect if credentials are registered and not logged out
+        if (state.creds?.registered && !isLoggedOut) {
+          // Already paired & registered - safe to reconnect
+          switch (statusCode) {
+            case DisconnectReason.connectionClosed:
+              this.logger.info(`Connection closed after registration, reconnecting for ${sessionId}... (2s)`);
+              setTimeout(() => {
+                this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
+              }, 2000);
+              break;
+              
+            case DisconnectReason.timedOut:
+              this.logger.info(`Connection timed out, reconnecting for ${sessionId}... (3s)`);
+              setTimeout(() => {
+                this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
+              }, 3000);
+              break;
+              
+            case DisconnectReason.connectionLost:
+              this.logger.info(`Connection lost, re-establishing for ${sessionId}... (5s)`);
+              setTimeout(() => {
+                this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
+              }, 5000);
+              break;
+              
+            case DisconnectReason.restartRequired:
+              // Session needs restart (common after pairing code verification)
+              this.logger.info(`Restart required for ${sessionId}, refreshing session in 1s...`);
+              setTimeout(() => {
+                this.initSession(sessionId, { method, phoneNumber, forceRestart: true });
+              }, 1000);
+              break;
+              
+            default:
+              // For any other error, attempt gentle reconnect
+              this.logger.info(`Attempting reconnect for ${sessionId}... (5s)`);
+              setTimeout(() => {
+                this.initSession(sessionId, { method, phoneNumber, forceRestart: false });
+              }, 5000);
+              break;
+          }
+        } else if (isLoggedOut) {
+          // User manually logged out - clean up completely
+          this.logger.warn(`Session ${sessionId} logged out by user. Removing all credentials.`);
+          this.deleteSessionStorage(sessionId);
+          this.sessions.delete(sessionId);
+        } else if (state.creds && !state.creds.registered) {
+          // Pairing code entered but not yet verified by WhatsApp server
+          // Keep waiting - don't disconnect or delete anything
+          this.logger.info(`Pairing pending for ${sessionId} (${sessionData.pairingCode}), waiting for WhatsApp server verification...`);
         } else {
-          // Logged out completely - clean up session directory
-          this.logger.warn(`Session ${sessionId} logged out. Removing credentials.`);
+          // No credentials or unknown state - clear and wait
+          this.logger.warn(`Session ${sessionId} has no valid credentials, cleaning up.`);
           this.deleteSessionStorage(sessionId);
           this.sessions.delete(sessionId);
         }
