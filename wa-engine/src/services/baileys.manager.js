@@ -204,10 +204,17 @@ class BaileysManager {
           return;
         }
 
-        // For pairing mode, don't try to reconnect until code is entered
-        if (method === 'pairing_code' && sessionData.pairingCode && sessionData.status !== 'connected') {
-          this.logger.info(`Pairing code pending for ${sessionId}, waiting for user input...`);
-          return; // Don't reconnect, keep waiting
+        // For pairing mode: only skip reconnect if we have creds but not yet registered
+        // Don't block reconnection during initial setup or when creds don't exist
+        const credsFileExists = fs.existsSync(path.join(sessionDir, 'creds.json'));
+        const shouldSkipReconnectForPairing = 
+          method === 'pairing_code' && 
+          sessionData.pairingCode && 
+          credsFileExists; // Creds exist means setup complete, just waiting for verification
+
+        if (shouldSkipReconnectForPairing) {
+          this.logger.info(`Pairing completed, waiting for verification...`);
+          return; // Wait for verification, don't reconnect
         }
 
         const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
