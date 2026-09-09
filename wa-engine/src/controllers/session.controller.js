@@ -40,9 +40,10 @@ export const startSession = async (req, res) => {
 export const getSessionStatus = async (req, res) => {
   try {
     const { sessionId } = req.params;
-    const session = await baileysManager.ensureSessionConnected(sessionId, 3000);
+    await baileysManager.ensureSessionConnected(sessionId, 2000);
+    const sessionData = baileysManager.getSession(sessionId);
 
-    if (!session) {
+    if (!sessionData) {
       return res.status(404).json({
         success: false,
         message: `Session '${sessionId}' not found or inactive`,
@@ -51,7 +52,7 @@ export const getSessionStatus = async (req, res) => {
 
     return res.json({
       success: true,
-      data: session,
+      data: sessionData,
     });
   } catch (error) {
     return res.status(500).json({

@@ -124,31 +124,49 @@ class BaileysManager {
 
     // Handle pairing code if method is pairing_code and not yet registered
     if (method === 'pairing_code' && phoneNumber && !state.creds?.registered) {
-      // Check if pairing code already requested to prevent duplicates
-      if (!sessionData.pairingCode && sessionData.status !== 'pairing_ready') {
-        sessionData.status = 'requesting_pairing';
-        
+      sessionData.status = 'requesting_pairing';
+      const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
+
+      // Dipanggil secara async setelah socket terinisialisasi awal (jeda 2.5s)
+      setTimeout(async () => {
         try {
-          const cleanNumber = phoneNumber.replace(/[^0-9]/g, '');
-          this.logger.info(`Requesting pairing code for session ${sessionId} with phone ${cleanNumber}`);
-          const code = await sock.requestPairingCode(cleanNumber);
-          sessionData.pairingCode = code;
-          sessionData.status = 'pairing_ready';
-          sessionData.phoneNumber = cleanNumber;
-          this.logger.info(`Pairing code generated for ${sessionId}: ${code}`);
-          
-          await this.notifyLaravel('session.pairing_code', {
-            sessionId,
-            pairingCode: code,
-            phoneNumber: cleanNumber,
-          });
+          this.logger.info(`Requesting pairing code for session ${sessionId} with phone ${cleanNumber}...`);
+          this._pushConsoleLog('info', `[${sessionId}] Requesting 8-digit pairing code for ${cleanNumber}`);
+
+          let code = null;
+          try {
+            code = await sock.requestPairingCode(cleanNumber);
+          } catch (firstErr) {
+            this.logger.warn(`First attempt for pairing code failed (${firstErr.message}), retrying in 3s...`);
+            await delay(3000);
+            code = await sock.requestPairingCode(cleanNumber);
+          }
+
+          if (code) {
+            sessionData.pairingCode = code;
+            sessionData.status = 'pairing_ready';
+            sessionData.phoneNumber = cleanNumber;
+            this.logger.info(`Pairing code generated for ${sessionId}: ${code}`);
+            this._pushConsoleLog('success', `[${sessionId}] Pairing code generated: ${code}`);
+
+            await this.notifyLaravel('session.pairing_code', {
+              sessionId,
+              pairingCode: code,
+              phoneNumber: cleanNumber,
+            });
+          }
         } catch (err) {
-          this.logger.error(`Error requesting pairing code: ${err.message}`);
+          this.logger.error(`Failed to generate pairing code for ${sessionId}: ${err.message}`);
+          this._pushConsoleLog('error', `[${sessionId}] Pairing code error: ${err.message}`);
           sessionData.status = 'error';
           sessionData.error = err.message;
-          throw err;
+
+          await this.notifyLaravel('session.disconnected', {
+            sessionId,
+            reason: `Pairing error: ${err.message}`,
+          });
         }
-      }
+      }, 2500);
     }
 
     // Credentials update
@@ -185,6 +203,7 @@ class BaileysManager {
       if (connection === 'close') {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
         const isDisconnectWithError = lastDisconnect?.error;
+        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
         this.logger.warn(
           `Session ${sessionId} closed due to ${lastDisconnect?.error?.message || 'unknown'} (status: ${statusCode}). Reconnect: ${shouldReconnect}`
@@ -204,20 +223,17 @@ class BaileysManager {
           return;
         }
 
-        // For pairing mode: only skip reconnect if we have creds but not yet registered
-        // Don't block reconnection during initial setup or when creds don't exist
+        // For pairing mode: only skip reconnect if pairing code is ready and waiting for user to enter code in phone
         const credsFileExists = fs.existsSync(path.join(sessionDir, 'creds.json'));
         const shouldSkipReconnectForPairing = 
           method === 'pairing_code' && 
           sessionData.pairingCode && 
-          credsFileExists; // Creds exist means setup complete, just waiting for verification
+          credsFileExists;
 
         if (shouldSkipReconnectForPairing) {
-          this.logger.info(`Pairing completed, waiting for verification...`);
-          return; // Wait for verification, don't reconnect
+          this.logger.info(`Pairing code active (${sessionData.pairingCode}), waiting for phone pairing input...`);
+          return;
         }
-
-        const shouldReconnect = statusCode !== DisconnectReason.loggedOut && !sessionData.stopRequested;
 
         if (shouldReconnect && isDisconnectWithError) {
           this.logger.info(`Attempting reconnect for session ${sessionId}... (waiting 2s)`);
@@ -386,18 +402,15 @@ class BaileysManager {
       session = this.sessions.get(sessionId);
     }
 
-    if (session && session.status !== 'connected' && fs.existsSync(credsFile)) {
-      this.logger.info(`Session '${sessionId}' status is '${session.status}', waiting up to ${timeoutMs}ms for connection...`);
+    if (session && session.status === 'connecting' && fs.existsSync(credsFile)) {
+      this.logger.info(`Session '${sessionId}' status is 'connecting', waiting up to ${timeoutMs}ms...`);
       const start = Date.now();
       while (Date.now() - start < timeoutMs) {
         session = this.sessions.get(sessionId);
-        if (session && session.status === 'connected' && session.sock) {
-          return session;
-        }
-        if (session && session.status === 'disconnected') {
+        if (session && (session.status === 'connected' || session.status === 'disconnected')) {
           break;
         }
-        await delay(500);
+        await delay(300);
       }
     }
 
@@ -414,6 +427,7 @@ class BaileysManager {
       pairingCode: session.pairingCode,
       info: session.info,
       phoneNumber: session.phoneNumber,
+      error: session.error || null,
     };
   }
 
