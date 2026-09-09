@@ -22,6 +22,20 @@
                 Kode verifikasi 6 digit telah dikirimkan melalui pesan WhatsApp ke nomor:
             @endif
         </p>
+        <div class="mt-1 flex items-center gap-2 bg-amber-50 dark:bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-200 dark:border-amber-500/20 max-w-xs" x-data="{
+            expiresAt: {{ $expiresAt }},
+            getTimeRemaining() {
+                const now = Math.floor(Date.now() / 1000);
+                return this.expiresAt - now;
+            },
+            formattedTime() {
+                const remaining = this.getTimeRemaining();
+                if (remaining <= 0) return 'Telah kadaluwarsa';
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                return `${minutes}m ${seconds}s`;
+            }
+        }" x-text="`⏳ Berlaku ${formattedTime()}`"></div>
         <div class="mt-2 inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs font-bold text-slate-800 dark:text-slate-200">
             @if($currentMethod === 'email')
                 <i data-lucide="mail" class="w-4 h-4 text-blue-600 dark:text-blue-400"></i>

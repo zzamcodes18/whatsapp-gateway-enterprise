@@ -192,9 +192,16 @@ class AuthController extends Controller
         $otp = (string) random_int(100000, 999999);
         $method = 'whatsapp'; // Default pengiriman via WhatsApp
 
-        // Jika bot WA aktif, kirim via WA terlebih dahulu
+        // Jika bot WA aktif, kirim via WA dengan buttons terlebih dahulu
         if ($isBotActive && $cleanPhone) {
-            $sent = $this->sendWhatsAppOtp($botDevice, $cleanPhone, $otp);
+            // Coba kirim dengan buttons dulu (interactive message)
+            $sent = $this->sendWhatsAppOtpWithButtons($botDevice, $cleanPhone, $otp);
+            
+            // Jika buttons tidak supported atau gagal, fallback ke text biasa
+            if (! $sent) {
+                $sent = $this->sendWhatsAppOtp($botDevice, $cleanPhone, $otp);
+            }
+            
             if (! $sent && ! empty(SystemSetting::get('smtp_host'))) {
                 // Fallback kirim via Email jika WA gagal tapi SMTP ada
                 $this->sendEmailOtp($validated['email'], $otp);
@@ -365,7 +372,14 @@ class AuthController extends Controller
                 return back()->withErrors(['otp' => 'Perangkat Bot Server WhatsApp OTP saat ini sedang offline.']);
             }
 
-            $sent = $this->sendWhatsAppOtp($botDevice, $pending['phone_number'], $otp);
+            // Coba kirim dengan buttons dulu (interactive message)
+            $sent = $this->sendWhatsAppOtpWithButtons($botDevice, $pending['phone_number'], $otp);
+            
+            // Jika buttons tidak supported atau gagal, fallback ke text biasa
+            if (! $sent) {
+                $sent = $this->sendWhatsAppOtp($botDevice, $pending['phone_number'], $otp);
+            }
+            
             if ($sent) {
                 return back()->with('success', "Kode OTP WhatsApp baru berhasil dikirimkan ke +{$pending['phone_number']}!");
             }
@@ -407,6 +421,73 @@ class AuthController extends Controller
                 'remote_jid' => $phone.'@s.whatsapp.net',
                 'message_type' => 'text',
                 'message_content' => $messageText,
+                'direction' => 'outbound',
+                'status' => 'sent',
+                'wa_message_id' => $result['messageId'] ?? null,
+            ]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Kirim OTP dengan interactive buttons (Copy Code + Confirm)
+     */
+    protected function sendWhatsAppOtpWithButtons(Device $botDevice, string $phone, string $otp): bool
+    {
+        // Template message dengan OTP
+        $messageHeader = '*Kode Verifikasi OTP*';
+        $messageBody = 'Kode OTP Anda: **{*otp}*';
+        $messageFooter = 'Berlaku 5 menit • Jangan bagikan ke orang lain';
+        
+        $messageText = str_replace('{otp}', $otp, $messageBody);
+
+        // Prepare buttons untuk interactive message
+        $buttons = [
+            [
+                'type' => 'copy',
+                'text' => '📋 Salin Kode',
+                'id' => 'copy_otp_' . $otp,
+                'code' => $otp,
+            ],
+            [
+                'type' => 'reply',
+                'text' => '✅ Sudah Terima',
+                'id' => 'otp_confirmed_' . $otp,
+            ],
+            [
+                'type' => 'reply',
+                'text' => '❌ Minta Ulang',
+                'id' => 'otp_request_new',
+            ],
+        ];
+
+        // Send interactive message dengan buttons
+        $result = $this->engineService->sendInteractiveMessage(
+            $botDevice->session_id,
+            $phone,
+            [
+                'header' => $messageHeader,
+                'body' => $messageText,
+                'footer' => $messageFooter,
+                'buttons' => $buttons,
+            ]
+        );
+
+        if (! empty($result['success']) && $result['success'] === true) {
+            Message::create([
+                'user_id' => $botDevice->user_id,
+                'device_id' => $botDevice->id,
+                'remote_jid' => $phone.'@s.whatsapp.net',
+                'message_type' => 'interactive',
+                'message_content' => json_encode([
+                    'header' => $messageHeader,
+                    'body' => $messageText,
+                    'footer' => $messageFooter,
+                    'buttons' => $buttons,
+                ]),
                 'direction' => 'outbound',
                 'status' => 'sent',
                 'wa_message_id' => $result['messageId'] ?? null,
