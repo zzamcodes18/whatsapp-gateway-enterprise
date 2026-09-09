@@ -437,12 +437,19 @@ class AuthController extends Controller
      */
     protected function sendWhatsAppOtpWithButtons(Device $botDevice, string $phone, string $otp): bool
     {
-        // Template message dengan OTP
+        // Template message dengan OTP - include clear instructions in case buttons don't show
         $messageHeader = '*Kode Verifikasi OTP*';
-        $messageBody = 'Kode OTP Anda: **{*otp}*';
+        $messageBody = 'Kode OTP Anda: **' . $otp . '**';
         $messageFooter = 'Berlaku 5 menit • Jangan bagikan ke orang lain';
         
-        $messageText = str_replace('{otp}', $otp, $messageBody);
+        // Add fallback instructions for users when buttons don't render properly
+        $messageText = "{$messageBody}\n\n";
+        $messageText .= "📱 *Cara Menggunakan:*
+";
+        $messageText .= "• Tap tombol '📋 Salin Kode' di bawah jika tersedia\n";
+        $messageText .= "• Atau salin manual kode OTP di atas: **{$otp}**\n";
+        $messageText .= "• Masukkan kode tersebut ke form pendaftaran\n\n";
+        $messageText .= "⏰ Berlaku 5 menit • Harap jangan bagikan kepada siapapun";
 
         // Prepare buttons untuk interactive message
         $buttons = [
